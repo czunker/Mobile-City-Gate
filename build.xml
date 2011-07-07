@@ -1,0 +1,312 @@
+  <project name="mobile-discovery.com Openstreetmaps" default="deploy" basedir=".">
+
+      <property environment="env"/>
+
+      <property name="build.compiler" value="modern"/>
+      <property name="build.dir" value="build/classes"/>
+      <property name="src.dir" value="src"/>
+      <property name="lib.dir" value="lib"/>
+  	  <property name="resources.dir" value="WebContent/resources"/>
+      <property name="war.file" value="mobile_web_app"/>
+      <property name="war.file.name" value="${war.file}.war"/>
+      <property name="tomcat.home" value="/usr/share/tomcat6"/>
+      <property name="deploy.dir" value="/var/lib/tomcat6/webapps"/>
+      <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
+  	<property name="dev.user" value="ec2-user"/>
+  	<property name="dev.server" value="dev.do-it-mobile.de"/>
+  	<property name="dev.key.file" value="/home/xyz/.ssh/dev.do-it-mobile.de"/>
+  	<property name="dev.target.dir" value="/home/ec2-user"/>
+  	
+  	<property name="prod.user" value="ec2-user"/>
+  	  	<property name="prod.server" value="dev.do-it-mobile.de"/>
+  	  	<property name="prod.key.file" value="/home/xyz/.ssh/ec2-user"/>
+  	  	<property name="prod.target.dir" value="/home/ec2-user"/>
+  	
+  	<property name="db.driver" value="com.mysql.jdbc.Driver"/>
+  	<property name="db.url" value="jdbc:mysql://localhost:3306/bnb_db"/>
+  	<property name="db.user" value="root"/>
+  	<property name="db.pw" value=""/>
+  	
+  	<path id="master-classpath">
+  	  <fileset dir="${lib.dir}">
+  	    <include name="*.jar"/>
+  	  </fileset>
+  	</path>
+  	
+  	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+  	
+      <target name="backup">
+      	  <tstamp/>
+      	  <tar destfile="../../${war.file}.${DSTAMP}.tar.gz" compression="gzip" basedir="./" excludes="dist/${war.file.name}, **/*.class, .git/**" />
+          <copy file="../../${war.file}.${DSTAMP}.tar.gz" todir="/mnt/usb_data/WD-10EADSExternal-01/Eigene\\ Dateien/Projects" />
+          <copy file="../../${war.file}.${DSTAMP}.tar.gz" todir="/mnt/data" />
+      </target>
+
+  	<!--http://www.basilv.com/psd/blog/2007/automated-deploys-using-ssh-and-ant-->
+  	<target name="deploy_ec2_dev_war">
+  		<scp remoteTodir="${dev.user}@${dev.server}:${dev.target.dir}"
+  			keyfile="${dev.key.file}"
+  			passphrase=""
+  		  trust="yes"
+  		  sftp="true">
+  		    <fileset dir="dist">
+  		      <include name="**/*"/>
+  		    </fileset>
+  		</scp>
+  		<sshexec host="${dev.server}" username="${dev.user}" keyfile="${dev.key.file}" trust="yes" command="./deploy_war.sh" />
+  	</target>
+  	
+  	<target name="deploy_prod_war">
+  	  		<scp remoteTodir="${prod.user}@${prod.server}:${prod.target.dir}"
+  	  			keyfile="${prod.key.file}"
+  	  		passphrase=""
+  	  		  trust="yes"
+  	  		  sftp="true">
+  	  		    <fileset dir="dist">
+  	  		      <include name="**/*"/>
+  	  		    </fileset>
+  	  		</scp>
+  	  		<sshexec host="${prod.server}" username="${prod.user}" keyfile="${prod.key.file}" trust="yes" command="./deploy_war.sh" />
+  	  	</target>
+  	
+  	<!--http://stackoverflow.com/questions/5498710/ant-how-to-select-the-latest-modified-file-from-a-directory-->
+  	<target name="deploy_ec2_dev_mysql">
+	  	<timestampselector property="latest.modified">
+	  	  <path>
+	  	    <fileset dir="db">
+	  	      <include name="Dump*.sql" />
+	  	    </fileset>
+	  	  </path>
+	  	</timestampselector>
+  		<sshexec host="${dev.server}" username="${dev.user}" keyfile="${dev.key.file}" trust="yes" command="rm -f Dump*.sql" />
+  		<scp remoteTodir="${dev.user}@${dev.server}:${dev.target.dir}"
+  			keyfile="${dev.key.file}"
+  			passphrase=""
+  		  trust="yes"
+  		  sftp="true">
+  		    <fileset dir="db">
+  		      <include name="${latest.modified}"/>
+  		    </fileset>
+  		</scp>
+  		<sshexec host="${dev.server}" username="${dev.user}" keyfile="${dev.key.file}" trust="yes" command='./deploy_db.sh' />
+	</target>
+  	
+  	<!--http://stackoverflow.com/questions/5498710/ant-how-to-select-the-latest-modified-file-from-a-directory-->
+  	  	<target name="deploy_ec2_prod_mysql">
+  		  	<timestampselector property="latest.modified">
+  		  	  <path>
+  		  	    <fileset dir="db">
+  		  	      <include name="Dump*.sql" />
+  		  	    </fileset>
+  		  	  </path>
+  		  	</timestampselector>
+  	  		<scp remoteTodir="${prod.user}@${prod.server}:${prod.target.dir}"
+  	  			keyfile="${prod.key.file}"
+  	  		passphrase=""
+  	  		  trust="yes"
+  	  		  sftp="true">
+  	  		    <fileset dir="db">
+  	  		      <include name="${latest.modified}"/>
+  	  		    </fileset>
+  	  		</scp>
+  	  		<sshexec host="${prod.server}" username="${prod.user}" keyfile="${prod.key.file}" trust="yes" command="cat ${latest.modified} | mysql" />
+  		</target>
+
+  	<target name="minify_js_css">
+	      <exec executable="java">
+	        <arg value="-jar"/>
+	      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+	      	<arg value="-o"/>
+	      	<arg value="${resources.dir}/global/js/poi-map-min.js"/>
+	      	<arg value="${resources.dir}/global/js/poi-map.js"/>
+	      </exec>
+  		  <exec executable="java">
+  			        <arg value="-jar"/>
+  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  			      	<arg value="-o"/>
+  			      	<arg value="${resources.dir}/global/css/map-style-min.css"/>
+  			      	<arg value="${resources.dir}/global/css/map-style.css"/>
+  			      </exec>
+  		<exec executable="java">
+  			        <arg value="-jar"/>
+  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  			      	<arg value="-o"/>
+  			      	<arg value="${resources.dir}/kultohr/css/home-style-min.css"/>
+  			      	<arg value="${resources.dir}/kultohr/css/home-style.css"/>
+  			      </exec>
+  		<exec executable="java">
+  		  			        <arg value="-jar"/>
+  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  		  			      	<arg value="-o"/>
+  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
+  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
+  		  			      </exec>
+  		<exec executable="java">
+  		  			        <arg value="-jar"/>
+  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  		  			      	<arg value="-o"/>
+  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
+  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
+  		  			      </exec>
+  		<concat destfile="${resources.dir}/global/js/map-min.js">
+  		    <filelist dir="${resources.dir}/global/js" files="gears-init-min.js,geo-min.js,poi-map-min.js"/>
+  		</concat>
+	  </target>
+  	<!--
+  	<target name="startMySql">
+  	          <exec executable="/etc/init.d/mysqld">
+  	              <arg value="start"/>
+  	          </exec>
+  	      </target>
+  	
+  	<target name="stopMySql">
+  	  	          <exec executable="/etc/init.d/mysqld">
+  	  	              <arg value="stop"/>
+  	  	          </exec>
+  	  	      </target>
+  	  	      
+  	  	  -->
+
+  	      <target name="startTomcat">
+  	          <exec executable="/etc/init.d/tomcat6">
+  	              <arg value="start"/>
+  	          </exec>
+  	      </target>
+
+  	      <target name="stopTomcat">
+  	          <exec executable="/etc/init.d/tomcat6">
+  	              <arg value="stop"/>
+  	          </exec>
+  	      </target>
+  	
+<!-- Windows Targets
+<target name="backup_win">
+  	      	  <tstamp/>
+  	          <exec executable="c:\Programme\WinRAR\rar" dir="../" >
+  	              <arg value="a"/>
+  	              <arg value="-r"/>
+  	              <arg value="-x*.war"/>
+  	              <arg value="-x*.class"/>
+  	              <arg value="bnb.${DSTAMP}.zip"/>
+  	              <arg value="bnb\"/>
+  	          </exec>
+  	          <copy file="../../bnb.${DSTAMP}.tar.gz" todir="z:/WD-10EADSExternal-01/Eigene\ Dateien/Projects" />
+  	      </target>
+  	      
+      <target name="startMySql">
+          <exec executable="net">
+              <arg value="start"/>
+              <arg value="MySQL55"/>
+          </exec>
+      </target>
+  	
+  	<target name="stopMySql">
+  	          <exec executable="net">
+  	              <arg value="stop"/>
+  	              <arg value="MySQL55"/>
+  	          </exec>
+  	      </target>
+
+      <target name="startTomcat">
+          <exec executable="net">
+              <arg value="start"/>
+              <arg value="Apache Tomcat 6"/>
+          </exec>
+      </target>
+
+      <target name="stopTomcat">
+          <exec executable="net">
+              <arg value="stop"/>
+              <arg value="Apache Tomcat 6"/>
+          </exec>
+      </target>
+  	
+  	<target name="startApache">
+  	          <exec executable="net">
+  	              <arg value="start"/>
+  	              <arg value="Apache2.2"/>
+  	          </exec>
+  	      </target>
+
+  	      <target name="stopApache">
+  	          <exec executable="net">
+  	              <arg value="stop"/>
+  	              <arg value="Apache2.2"/>
+  	          </exec>
+  	      </target>
+
+      <target name="startAll" depends="startTomcat, startMySql" />
+-->
+
+      <target name="cleanWebApp">
+      	<antcall target="stopTomcat"/>
+<!--          <sleep seconds="1"/>-->
+  	      <delete file="${deploy.dir}/${war.file.name}"/>
+<!--          <delete file="${tomcat.home}/logs/stdout.log"/>      	-->
+<!--          <delete file="f://smc.log"/>-->
+          <delete dir="${deploy.dir}/${war.file}" includeEmptyDirs="true"/>
+      	<antcall target="startTomcat"/>
+      </target>
+
+      <target name="war" depends="minify_js_css">
+          <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
+              <webinf dir="WebContent/WEB-INF" includes="**/*" />
+          	  <lib dir="${lib.dir}" excludes="servlet-api.jar"/>
+              <classes dir="${build.dir}" includes="**/*.*"/>
+          	  <zipfileset dir="WebContent/resources" prefix="resources"/>
+          	  <fileset dir="WebContent"/>
+          </war>
+      </target>
+  	
+      <target name="deploy" depends="war">
+      	<copy file="dist/${war.file.name}" todir="${deploy.dir}" />
+      </target>
+
+      <target name="main" depends="cleanWebApp, deploy"/>  	
+
+  	<!--
+  	<target name="sqlCreateTables">
+  	        <echo message="CREATE TABLES USING: ${db.driver} ${db.url}"/>
+  	        <sql driver="${db.driver}"
+  	             url="${db.url}"
+  	             userid="${db.user}"
+  	             password="${db.pw}"
+  	             onerror="continue"
+  	             src="db/create_structure.sql">  
+  	            <classpath refid="master-classpath"/>
+  	        </sql> 
+  	    </target>
+
+  	    <target name="sqlLoadData">
+  	        <echo message="LOAD DATA USING: ${db.driver} ${db.url}"/>
+  	        <sql driver="${db.driver}"
+  	             url="${db.url}"
+  	             userid="${db.user}"
+  	             password="${db.pw}"
+  	             onerror="continue"
+  	             src="db/init_data.sql">  
+  	            <classpath refid="master-classpath"/>
+  	        </sql> 
+  	    </target>
+  	-->
+  	<!-- csvColumnSeparator, output geht nur ab ant 1.8 -->
+  	<!--
+  	<target name="sqlSelectMessages">
+  	  	        <echo message="SELECT MESSAGES USING: ${db.driver} ${db.url}"/>
+  	  	        <sql driver="${db.driver}"
+  	  	             url="${db.url}"
+  	  	             userid="${db.user}"
+  	  	             password="${db.pw}"
+  	  	             onerror="continue"
+  	  	             src="db/select_messages.sql"
+  	  	             csvColumnSeparator="="
+  	  	        	 print="yes"
+  	  	        	 showheaders="no"
+  		 		     showtrailers="no"
+  	  	        	 output="c:\temp\messages.properties">  
+  	  	            <classpath refid="master-classpath"/>
+  	  	        </sql> 
+  	  	    </target>
+  	  	  -->
+  	
+  </project>

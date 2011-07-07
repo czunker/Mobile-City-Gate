@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    <!-- 
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+     
+
+	<http auto-config='true' create-session='never' disable-url-rewriting='true'/>
+	-->
+	<!-- resources exclusions from servlet mapping -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+    <!-- <mvc:resources mapping="/resources/**" location="/resources/" cache-period="31556926"/>-->
+
+	<!-- Scans within the base package of the application for @Components to configure as beans -->
+	<!-- @Controller, @Service, @Configuration, etc. -->
+	<context:component-scan base-package="com.mobilediscovery.bnb" />
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven />
+	
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>
+        <property name="testConnectionOnCheckin" value="${jdbc.testConnectionOnCheckin}"/>
+        <property name="testConnectionOnCheckout" value="${jdbc.testConnectionOnCheckout}"/>
+        <property name="automaticTestTable" value="${jdbc.automaticTestTable}"/>
+    </bean>
+    
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    
+    <bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	    <constructor-arg ref="dataSource"/>
+	</bean>
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+           <property name="prefix">
+               <value>/WEB-INF/views/</value>
+            </property>
+           <property name="suffix">
+              <value>.jsp</value>
+           </property>
+     </bean>
+</beans>

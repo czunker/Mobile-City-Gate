@@ -1,0 +1,192 @@
+  <project name="Mobile City Gate" default="deploy" basedir=".">
+
+      <property environment="env"/>
+
+      <property name="build.compiler" value="modern"/>
+      <property name="build.dir" value="build/classes"/>
+      <property name="src.dir" value="src"/>
+      <property name="lib.dir" value="lib"/>
+  	  <property name="resources.dir" value="WebContent/resources"/>
+      <property name="war.file" value="mobile-city-gate"/>
+      <property name="war.file.name" value="${war.file}.war"/>
+      <property name="tomcat.home" value="C:/Programme/Apache Software Foundation/Tomcat 6.0"/>
+      <property name="deploy.dir" value="${tomcat.home}/webapps"/>
+      <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
+  	
+  	<property name="db.driver" value="com.mysql.jdbc.Driver"/>
+  	<property name="db.url" value="jdbc:mysql://localhost:3306/bnb_db"/>
+  	<property name="db.user" value="root"/>
+  	<property name="db.pw" value=""/>
+  	
+  	<path id="master-classpath">
+  	  <fileset dir="${lib.dir}">
+  	    <include name="*.jar"/>
+  	  </fileset>
+  	</path>
+  	
+ 	
+      <target name="backup">
+      	  <tstamp/>
+          <exec executable="c:\Programme\7-Zip\7z" dir="../" >
+              <arg value="a"/>
+              <arg value="-r"/>
+              <arg value="-x!*.war"/>
+              <arg value="-x!*.class"/>
+              <arg value="${war.file}.${DSTAMP}.zip"/>
+              <arg value="${war.file}\"/>
+          </exec>
+          <copy file="../${war.file}.${DSTAMP}.zip" todir="g:" />
+      </target>
+
+  	<target name="minify_js_css">
+  		      <exec executable="java">
+  		        <arg value="-jar"/>
+  		      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  		      	<arg value="-o"/>
+  		      	<arg value="${resources.dir}/global/js/poi-map-min.js"/>
+  		      	<arg value="${resources.dir}/global/js/poi-map.js"/>
+  		      </exec>
+  	  		  <exec executable="java">
+  	  			        <arg value="-jar"/>
+  	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  			      	<arg value="-o"/>
+  	  			      	<arg value="${resources.dir}/global/css/map-style-min.css"/>
+  	  			      	<arg value="${resources.dir}/global/css/map-style.css"/>
+  	  			      </exec>
+  	  		<exec executable="java">
+  	  			        <arg value="-jar"/>
+  	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  			      	<arg value="-o"/>
+  	  			      	<arg value="${resources.dir}/kultohr/css/home-style-min.css"/>
+  	  			      	<arg value="${resources.dir}/kultohr/css/home-style.css"/>
+  	  			      </exec>
+  	  		<exec executable="java">
+  	  		  			        <arg value="-jar"/>
+  	  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  		  			      	<arg value="-o"/>
+  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
+  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
+  	  		  			      </exec>
+  	  		<concat destfile="${resources.dir}/global/js/map-min.js">
+  	  		    <filelist dir="${resources.dir}/global/js" files="gears-init-min.js,geo-min.js,poi-map-min.js"/>
+  	  		</concat>
+  		  </target>
+
+      <target name="startMySql">
+          <exec executable="net">
+              <arg value="start"/>
+              <arg value="MySQL"/>
+          </exec>
+      </target>
+  	
+  	<target name="stopMySql">
+  	          <exec executable="net">
+  	              <arg value="stop"/>
+  	              <arg value="MySQL"/>
+  	          </exec>
+  	      </target>
+
+      <target name="startTomcat">
+          <exec executable="net">
+              <arg value="start"/>
+              <arg value="Apache Tomcat 6"/>
+          </exec>
+      </target>
+
+      <target name="stopTomcat">
+          <exec executable="net">
+              <arg value="stop"/>
+              <arg value="Apache Tomcat 6"/>
+          </exec>
+      </target>
+  	
+  	<target name="startApache">
+  	          <exec executable="net">
+  	              <arg value="start"/>
+  	              <arg value="Apache2.2"/>
+  	          </exec>
+  	      </target>
+
+  	      <target name="stopApache">
+  	          <exec executable="net">
+  	              <arg value="stop"/>
+  	              <arg value="Apache2.2"/>
+  	          </exec>
+  	      </target>
+
+      <target name="startAll" depends="startTomcat, startMySql" />
+
+      <target name="cleanWebApp">
+      	<antcall target="stopTomcat"/>
+<!--          <sleep seconds="1"/>-->
+  	      <delete file="${deploy.dir}/${war.file.name}"/>
+<!--          <delete file="${tomcat.home}/logs/stdout.log"/>      	-->
+<!--          <delete file="f://smc.log"/>-->
+          <delete dir="${deploy.dir}/${war.file}" includeEmptyDirs="true"/>
+      	<antcall target="startTomcat"/>
+      </target>
+
+      <target name="war" depends="minify_js_css">
+          <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
+              <webinf dir="WebContent/WEB-INF" includes="**/*" />
+          	  <lib dir="${lib.dir}" excludes="servlet-api.jar"/>
+              <classes dir="${build.dir}" includes="**/*.*"/>
+          	  <zipfileset dir="WebContent/resources" prefix="resources"/>
+          	<!--
+          	  <zipfileset dir="WebContent/images" prefix="images"/>
+          	  <zipfileset dir="WebContent/poi" prefix="poi"/>
+          	  <zipfileset dir="WebContent/gpx" prefix="gpx"/>
+          	  -->
+          	  <fileset dir="WebContent"/>
+          </war>
+      </target>
+  	
+      <target name="deploy" depends="war">
+      	<copy file="dist/${war.file.name}" todir="${deploy.dir}" />
+      </target>
+
+      <target name="main" depends="cleanWebApp, deploy"/>  	
+  	
+  	<target name="sqlCreateTables">
+  	        <echo message="CREATE TABLES USING: ${db.driver} ${db.url}"/>
+  	        <sql driver="${db.driver}"
+  	             url="${db.url}"
+  	             userid="${db.user}"
+  	             password="${db.pw}"
+  	             onerror="continue"
+  	             src="db/create_structure.sql">  
+  	            <classpath refid="master-classpath"/>
+  	        </sql> 
+  	    </target>
+
+  	    <target name="sqlLoadData">
+  	        <echo message="LOAD DATA USING: ${db.driver} ${db.url}"/>
+  	        <sql driver="${db.driver}"
+  	             url="${db.url}"
+  	             userid="${db.user}"
+  	             password="${db.pw}"
+  	             onerror="continue"
+  	             src="db/init_data.sql">  
+  	            <classpath refid="master-classpath"/>
+  	        </sql> 
+  	    </target>
+  	
+  	<!-- csvColumnSeparator, output geht nur ab ant 1.8 -->
+  	<target name="sqlSelectMessages">
+  	  	        <echo message="SELECT MESSAGES USING: ${db.driver} ${db.url}"/>
+  	  	        <sql driver="${db.driver}"
+  	  	             url="${db.url}"
+  	  	             userid="${db.user}"
+  	  	             password="${db.pw}"
+  	  	             onerror="continue"
+  	  	             src="db/select_messages.sql"
+  	  	             csvColumnSeparator="="
+  	  	        	 print="yes"
+  	  	        	 showheaders="no"
+  		 		     showtrailers="no"
+  	  	        	 output="c:\temp\messages.properties">  
+  	  	            <classpath refid="master-classpath"/>
+  	  	        </sql> 
+  	  	    </target>
+  	
+  </project>
