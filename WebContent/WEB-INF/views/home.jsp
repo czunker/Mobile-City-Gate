@@ -10,7 +10,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta http-equiv="Content-Language" content="${locale}">
-		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-1.0a4.1.min.css'/>" >
+		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/home-style-min.css'/>" >
 		<title><c:out value="${messagesHome.title}"/></title>
 		<style type="text/css">

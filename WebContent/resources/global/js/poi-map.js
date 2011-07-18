@@ -60,26 +60,26 @@ function makePhoneCall(url) {
 
 //http://www.semicomplete.com/blog/geekery/jquery-mobile-full-height-content.html
 var fixgeometry = function() {
-	$("#north").css('top') = 10;
-	$("#north").css('left') = $(window).width()*0.5;
+	$("#north").css('top', 10);
+	$("#north").css('left', $(window).width()*0.5);
 	
-	$("#south").css('bottom') = 10;
-	$("#south").css('left') = $(window).width()*0.5;
+	$("#south").css('bottom', 10);
+	$("#south").css('left', $(window).width()*0.5);
 	
-	$("#east").css('top') = $(window).height()*0.5;
-	$("#east").css('right') = 10;
+	$("#east").css('top', $(window).height()*0.5);
+	$("#east").css('right', 10);
 	
-	$("#west").css('top') = $(window).height()*0.5;
-	$("#west").css('left') = 10;
+	$("#west").css('top', $(window).height()*0.5);
+	$("#west").css('left', 10);
 	
-	$("#location").css('bottom') = 10;
-	$("#location").css('right') = 10;
+	$("#location").css('bottom', 10);
+	$("#location").css('right', 10);
 	
 	//don't know why it has to be 0, but otherwise it wouldn't on the same height with the other icons
-	$("#navigation").css('bottom') = 0;
-	$("#navigation").css('left') = 10;
+	$("#navigation").css('bottom', 0);
+	$("#navigation").css('left', 10);
 	
-	$('#mappage-content').height($(window).height()*0.9);
+	$('#mappage-content').height($(window).height()*0.98);
     //$('#mappage-content').width($(window).width());
 };
 

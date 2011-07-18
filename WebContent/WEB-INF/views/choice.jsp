@@ -10,7 +10,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta http-equiv="Content-Language" content="de">
 		<title><c:out value="${messages.title}"/></title>
-		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-1.0a4.1.min.css'/>" >
+		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 	</head>
 	<body>
 	<compress:html>

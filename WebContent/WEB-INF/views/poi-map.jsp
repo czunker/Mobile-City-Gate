@@ -13,7 +13,7 @@
 <%-- is needed for screen readers --%>
 <meta http-equiv="Content-Language" content="${locale}">
 <title><c:out value="${messages.title}"/></title>
-<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-1.0a4.1.min.css'/>" >
+<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 <link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/ol-theme/default/style.css'/>" >
 <link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/map-style-min.css'/>" >
 
@@ -216,13 +216,23 @@
 	var poiLayer = new OpenLayers.Layer.Vector("Points of interest");	    	
 	var iconSize = new OpenLayers.Size(24, 24);
 	
+	<%--
+	$(document).bind("mobileinit", function(){
+		$.mobile.ajaxEnabled(false);
+	});
+	
+	$(window).unload(function(){
+	 	$.mobile.hidePageLoadingMsg();
+	});
+	--%>
+	
 	<%-- create event listern for case of call to poi#mappage as bookmark --%>
 	$("#mappage").live('pageshow', function() {
 		//work around for closing dialogs
 		//when dialogs are closed this event is fired an the map is recreated, but this shouldn't be
 		if (!closedDialog) {
 			createMap();
-			createPoisOnMap(getVisiblePOIs());
+			createPoisOnMap(getVisiblePOIs(), centerPoiId);
 			if (centerRouteId >= 0) {
 				createRoutesOnMap([centerRouteId]);
 				centerMapOnRoute(centerRouteId);
@@ -246,8 +256,14 @@
 		$("input.ui-input-text.ui-body-null").attr('placeholder', "<c:out value='${messagesPoiOverview.filter}'/>");
 	});
 	
-	$("#poi-overview").live('pageshow', function() {
-		if (!closedPoiOverviewDialog) {
+	$("#poi-overview").live('pageshow', function(event, ui) {
+		// ui.prevPage[0] will not be defined on first call with a bookmark, so the dummy is a work around for this situation
+		var prevPage = "dummy";
+		if (ui.prevPage[0]) {
+			prevPage = ui.prevPage[0].id;	
+		}
+		// when comming back from mappage (e.g. browser back button), don't get POI and routes a second or third time
+		if (!closedPoiOverviewDialog && prevPage != "mappage") {
 			getRoutesWithPois();
 			getUnassignedPois();
 		}
@@ -351,7 +367,7 @@
 		poiLayer.addFeatures(iconFeature);
 	}
 	
-	function createPoisOnMap(poiIds) {
+	function createPoisOnMap(poiIds, localCenterPoiId) {
 		var baseStyle = {
 		        graphicXOffset:-iconSize.w/2,
 		        graphicYOffset:-iconSize.h,
@@ -367,8 +383,17 @@
 				var point = new OpenLayers.Geometry.Point(poi.lon, poi.lat);
 	    		point.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
 	    		iconFeature = new OpenLayers.Feature.Vector(point);
-	    		iconFeature.style = {
-	    				externalGraphic: "<c:url value='/resources/${client.url}/images/'/>" + poi.icon,
+	    		iconFeature.fid = poi.id.toString();
+	    		var icon = poi.icon;
+	    		if (poi.id == localCenterPoiId) {
+					icon = icon.replace(".png", "_selected.png");
+					iconSize = new OpenLayers.Size(48, 48);
+				}
+	    		else {
+	    			iconSize = new OpenLayers.Size(24, 24);
+	    		}
+				iconFeature.style = {
+	    				externalGraphic: "<c:url value='/resources/${client.url}/images/'/>" + icon,
 		    	        graphicXOffset:-iconSize.w/2,
 		    	        graphicYOffset:-iconSize.h,
 		    	        graphicWidth:iconSize.w,
@@ -395,6 +420,7 @@
 				    social = "<br><a href='" + twitter + "' target='_blank' data-icon='twitter' data-role='button' rel='external' data-transition='pop'>Twitter</a>";
 				    social += "<a href='" + facebook + "' target='_blank' data-icon='facebook' data-role='button' rel='external' data-transition='pop'>Facebook</a>";
 				    social += "<a href='mailto:?subject=<c:out value='${client.name}'/>&body=http://"+host+"<c:url value='/${client.url}/${locale}/' />' data-icon='email' data-role='button' rel='external' data-transition='pop'>E-Mail</a>";
+				    social += "<c:out value='${messagesMap.facebookprivacy}'/>";
 				</c:if>
 		        
 		        var closebutton = "<br><br><a href='#' onClick='closedDialog = true;' data-role='button' data-rel='back' data-transition='pop'><c:out value='${messagesMap.closebutton}'/></a>";
@@ -780,7 +806,6 @@
 		
 		
 		var arrElements = document.getElementsByTagName("li");
-	      
 		var visiblePOIs = [];
 	   	for (var i=0; i<arrElements.length; i++) {
 	   		var element = arrElements[i];
@@ -838,7 +863,7 @@
 	
 	function centerMapOnPoi(poiId) {
 		$.getJSON("<c:url value='/poi/'/>" + poiId + "/", function(poi) {
-			var lonLat = new OpenLayers.LonLat(poi.lon, poi.lat).transform(map.displayProjection,  map.projection);
+			var lonLat = new OpenLayers.LonLat(poi.lon, poi.lat).transform(map.displayProjection, map.projection);
 			map.setCenter (lonLat, <c:out value="${client.startZoom}"/>);
 		});
 	}

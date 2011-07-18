@@ -32,6 +32,7 @@
               <arg value="-r"/>
               <arg value="-x!*.war"/>
               <arg value="-x!*.class"/>
+          	  <arg value="-x!.git"/>
               <arg value="${war.file}.${DSTAMP}.zip"/>
               <arg value="${war.file}\"/>
           </exec>
