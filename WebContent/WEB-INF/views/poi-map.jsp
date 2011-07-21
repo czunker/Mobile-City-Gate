@@ -416,10 +416,9 @@
 			        var twitter = "http://twitter.com/home?status=Das mobile Stadttor%20<c:out value='${client.name}'/>%20<c:out value='${client.shortUrl}'/>";
 				    var facebook = 'http://www.facebook.com/sharer.php?u=http://'+host+"<c:url value='/${client.url}/${locale}/' />";
 				    
-				    
-				    social = "<br><a href='" + twitter + "' target='_blank' data-icon='twitter' data-role='button' rel='external' data-transition='pop'>Twitter</a>";
+				    social = "<br><a href='mailto:?subject=<c:out value='${client.name}'/>&body=http://"+host+"<c:url value='/${client.url}/${locale}/' />' data-icon='email' data-role='button' rel='external' data-transition='pop'>E-Mail</a>";
+				    social += "<a href='" + twitter + "' target='_blank' data-icon='twitter' data-role='button' rel='external' data-transition='pop'>Twitter</a>";
 				    social += "<a href='" + facebook + "' target='_blank' data-icon='facebook' data-role='button' rel='external' data-transition='pop'>Facebook</a>";
-				    social += "<a href='mailto:?subject=<c:out value='${client.name}'/>&body=http://"+host+"<c:url value='/${client.url}/${locale}/' />' data-icon='email' data-role='button' rel='external' data-transition='pop'>E-Mail</a>";
 				    social += "<c:out value='${messagesMap.facebookprivacy}'/>";
 				</c:if>
 		        
