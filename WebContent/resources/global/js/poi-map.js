@@ -1,6 +1,7 @@
-$(window).load($.mobile.silentScroll);
+// $(window).load($.mobile.silentScroll(0));
 
 $(document).ready(function() {
+	$.mobile.silentScroll(0);
   	$(window).bind("orientationchange resize pageshow", fixgeometry);
 });
 

@@ -183,16 +183,18 @@
 <%-- needed for map --%>
 <script type="text/javascript" src="<c:url value='/resources/global/js/ol+osm-min.js'/>" ></script>
 
-<%-- needed for map + poi overview --%>
+<%-- needed for map + poi overview--%> 
 <script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
-<%-- needed for poi overview --%>
+
+<%-- needed for poi overview
 <script type="text/javascript" src="<c:url value='/resources/global/js/jquery-ui-1.8.11.custom.min.js'/>"></script>
+--%>
 
 
 <%--
 <script type="text/javascript" src="<c:url value='/resources/global/js/geo-min.js'/>" ></script>
 <script type="text/javascript" src="<c:url value='/resources/global/js/gears-init-min.js'/>" ></script>
-<script type="text/javascript" src="<c:url value='/resources/global/js/bnb-map.js'/>" ></script>
+<script type="text/javascript" src="<c:url value='/resources/global/js/poi-map.js'/>" ></script>
 --%> 
 <%-- needed for map --%>
 <script type="text/javascript" src="<c:url value='/resources/global/js/map-min.js'/>" ></script>

@@ -22,10 +22,6 @@
 				</c:forEach>
 			</c:if>
 			
-			.ui-icon-share {
-				background: url("http://static.addtoany.com/buttons/favicon.png") no-repeat rgba(0, 0, 0, 0.4) !important;
-			}
-			
 			IMG.center {
 			    display: block;
 			    margin-left: auto;
