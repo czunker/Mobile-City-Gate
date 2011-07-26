@@ -11,7 +11,7 @@
       <property name="war.file.name" value="${war.file}.war"/>
       <property name="tomcat.home" value="/usr/share/tomcat6"/>
       <property name="deploy.dir" value="/usr/share/tomcat6/webapps"/>
-      <property name="servlet.jar" value="lib/servlet-api.jar"/>
+      <property name="servlet.jar" value="lib/tomcat6-servlet-2.5-api-6.0.29.jar"/>
   	<property name="dev.user" value="ec2-user"/>
   	<property name="dev.server" value="dev.do-it-mobile.de"/>
   	<property name="dev.key.file" value="/home/xyz/.ssh/dev.do-it-mobile.de"/>
