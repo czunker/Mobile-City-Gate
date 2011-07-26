@@ -10,8 +10,8 @@
       <property name="war.file" value="mobile_web_app"/>
       <property name="war.file.name" value="${war.file}.war"/>
       <property name="tomcat.home" value="/usr/share/tomcat6"/>
-      <property name="deploy.dir" value="/var/lib/tomcat6/webapps"/>
-      <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
+      <property name="deploy.dir" value="/usr/share/tomcat6/webapps"/>
+      <property name="servlet.jar" value="lib/servlet-api.jar"/>
   	<property name="dev.user" value="ec2-user"/>
   	<property name="dev.server" value="dev.do-it-mobile.de"/>
   	<property name="dev.key.file" value="/home/xyz/.ssh/dev.do-it-mobile.de"/>
@@ -28,9 +28,8 @@
   	<property name="db.pw" value=""/>
   	
   	<path id="master-classpath">
-  	  <fileset dir="${lib.dir}">
-  	    <include name="*.jar"/>
-  	  </fileset>
+  	  	  <fileset dir="${lib.dir}" includes="*.jar"/>
+  	  	  <fileset dir="${tomcat.home}" includes="${servlet.jar}"/>
   	</path>
   	
   	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
@@ -179,73 +178,10 @@
   	          </exec>
   	      </target>
   	
-<!-- Windows Targets
-<target name="backup_win">
-  	      	  <tstamp/>
-  	          <exec executable="c:\Programme\WinRAR\rar" dir="../" >
-  	              <arg value="a"/>
-  	              <arg value="-r"/>
-  	              <arg value="-x*.war"/>
-  	              <arg value="-x*.class"/>
-  	              <arg value="bnb.${DSTAMP}.zip"/>
-  	              <arg value="bnb\"/>
-  	          </exec>
-  	          <copy file="../../bnb.${DSTAMP}.tar.gz" todir="z:/WD-10EADSExternal-01/Eigene\ Dateien/Projects" />
-  	      </target>
-  	      
-      <target name="startMySql">
-          <exec executable="net">
-              <arg value="start"/>
-              <arg value="MySQL55"/>
-          </exec>
-      </target>
-  	
-  	<target name="stopMySql">
-  	          <exec executable="net">
-  	              <arg value="stop"/>
-  	              <arg value="MySQL55"/>
-  	          </exec>
-  	      </target>
-
-      <target name="startTomcat">
-          <exec executable="net">
-              <arg value="start"/>
-              <arg value="Apache Tomcat 6"/>
-          </exec>
-      </target>
-
-      <target name="stopTomcat">
-          <exec executable="net">
-              <arg value="stop"/>
-              <arg value="Apache Tomcat 6"/>
-          </exec>
-      </target>
-  	
-  	<target name="startApache">
-  	          <exec executable="net">
-  	              <arg value="start"/>
-  	              <arg value="Apache2.2"/>
-  	          </exec>
-  	      </target>
-
-  	      <target name="stopApache">
-  	          <exec executable="net">
-  	              <arg value="stop"/>
-  	              <arg value="Apache2.2"/>
-  	          </exec>
-  	      </target>
-
-      <target name="startAll" depends="startTomcat, startMySql" />
--->
 
       <target name="cleanWebApp">
-      	<antcall target="stopTomcat"/>
-<!--          <sleep seconds="1"/>-->
   	      <delete file="${deploy.dir}/${war.file.name}"/>
-<!--          <delete file="${tomcat.home}/logs/stdout.log"/>      	-->
-<!--          <delete file="f://smc.log"/>-->
           <delete dir="${deploy.dir}/${war.file}" includeEmptyDirs="true"/>
-      	<antcall target="startTomcat"/>
       </target>
 
       <target name="war" depends="minify_js_css">
@@ -262,8 +198,20 @@
       	<copy file="dist/${war.file.name}" todir="${deploy.dir}" />
       </target>
 
-      <target name="main" depends="cleanWebApp, deploy"/>  	
+      <target name="main" depends="stopTomcat, cleanWebApp, deploy, startTomcat"/>  	
 
+  	<target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="${build.dir}"/>
+    	<touch> 
+    	    <file file="${build.dir}/.gitignore" /> 
+    	</touch> 
+        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="master-classpath"/>
+    </target>
+  	
   	<!--
   	<target name="sqlCreateTables">
   	        <echo message="CREATE TABLES USING: ${db.driver} ${db.url}"/>

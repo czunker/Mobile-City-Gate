@@ -9,9 +9,9 @@
   	  <property name="resources.dir" value="WebContent/resources"/>
       <property name="war.file" value="mobile-city-gate"/>
       <property name="war.file.name" value="${war.file}.war"/>
-      <property name="tomcat.home" value="C:/Programme/Apache Software Foundation/Tomcat 6.0"/>
+      <property name="tomcat.home" value="C:/Program Files/Apache Software Foundation/Tomcat 6.0"/>
       <property name="deploy.dir" value="${tomcat.home}/webapps"/>
-      <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
+      <property name="servlet.jar" value="lib/servlet-api.jar"/>
   	
   	<property name="db.driver" value="com.mysql.jdbc.Driver"/>
   	<property name="db.url" value="jdbc:mysql://localhost:3306/bnb_db"/>
@@ -19,9 +19,8 @@
   	<property name="db.pw" value=""/>
   	
   	<path id="master-classpath">
-  	  <fileset dir="${lib.dir}">
-  	    <include name="*.jar"/>
-  	  </fileset>
+  	  <fileset dir="${lib.dir}" includes="*.jar"/>
+  	  <fileset dir="${tomcat.home}" includes="${servlet.jar}"/>
   	</path>
   	
  	
@@ -146,7 +145,19 @@
       	<copy file="dist/${war.file.name}" todir="${deploy.dir}" />
       </target>
 
-      <target name="main" depends="cleanWebApp, deploy"/>  	
+      <target name="main" depends="cleanWebApp, deploy"/>
+  	
+  	<target name="clean">
+  	        <delete dir="${build.dir}"/>
+  	    </target>
+
+  	    <target name="compile" depends="clean">
+  	        <mkdir dir="${build.dir}"/>
+  	    	<touch> 
+	    	    <file file="${build.dir}/.gitignore" /> 
+	    	</touch>
+  	        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="master-classpath"/>
+  	    </target>
   	
   	<target name="sqlCreateTables">
   	        <echo message="CREATE TABLES USING: ${db.driver} ${db.url}"/>
