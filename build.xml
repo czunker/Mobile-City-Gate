@@ -1,4 +1,4 @@
-  <project name="mobile-discovery.com Openstreetmaps" default="deploy" basedir=".">
+  <project name="Mobile City Gate" default="deploy" basedir=".">
 
       <property environment="env"/>
 
@@ -7,7 +7,7 @@
       <property name="src.dir" value="src"/>
       <property name="lib.dir" value="lib"/>
   	  <property name="resources.dir" value="WebContent/resources"/>
-      <property name="war.file" value="mobile_web_app"/>
+      <property name="war.file" value="mobile-city-gate"/>
       <property name="war.file.name" value="${war.file}.war"/>
       <property name="tomcat.home" value="/usr/share/tomcat6"/>
       <property name="deploy.dir" value="/usr/share/tomcat6/webapps"/>
@@ -185,6 +185,7 @@
       </target>
 
       <target name="war" depends="minify_js_css">
+      	  <mkdir dir="dist"/>
           <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
           	  <lib dir="${lib.dir}" excludes="servlet-api.jar"/>
