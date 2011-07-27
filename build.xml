@@ -186,12 +186,18 @@
 
       <target name="war" depends="minify_js_css">
       	  <mkdir dir="dist"/>
+          <copy todir="${build.dir}" flatten="true">
+            <resources>
+              <file file="resources/jdbc.properties"/>
+              <file file="resources/file1.txt"/>
+            </resources>
+          </copy>
           <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
-          	  <lib dir="${lib.dir}" excludes="servlet-api.jar"/>
+              <lib dir="${lib.dir}" excludes="servlet-api.jar"/>
               <classes dir="${build.dir}" includes="**/*.*"/>
-          	  <zipfileset dir="WebContent/resources" prefix="resources"/>
-          	  <fileset dir="WebContent"/>
+              <zipfileset dir="WebContent/resources" prefix="resources"/>
+              <fileset dir="WebContent"/>
           </war>
       </target>
   	
