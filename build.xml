@@ -195,7 +195,7 @@
           </war>
       </target>
   	
-      <target name="deploy" depends="war">
+      <target name="deploy">
       	<copy file="dist/${war.file.name}" todir="${deploy.dir}" />
       </target>
 
