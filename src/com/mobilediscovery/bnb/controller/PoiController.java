@@ -61,7 +61,7 @@ public class PoiController {
 	public String getPois(@PathVariable("client") String client, @PathVariable("locale") String locale, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.debug("entering method getPois");
 		
-		//TODO locale genauer überprüfen? Tabelle languages?
+		//TODO do a more precise check on locale with table languages?
 		if (!locale.matches("[a-z]{2}") ||
 			!client.matches("[0-9a-zA-Z_-]*") ||
 			client.length() > 45) {
@@ -180,7 +180,7 @@ public class PoiController {
 	}
 	
 	@RequestMapping(value = "/pois/{routeId}", headers="Accept=*/*", method=RequestMethod.GET)
-	// TODO Darf die Methode diese Exception werfen oder muss dort etwas anderes hin wegen REST + JSON?
+	// TODO is it allowed to throw exceptions in this method or is there a different way because of REST + JSON?
 	public @ResponseBody List<Poi> getPoisByRouteId(@PathVariable("routeId") int routeId) throws Exception {
 		logger.debug("entering method getPois");
 		
@@ -191,7 +191,7 @@ public class PoiController {
 	}
 	
 	@RequestMapping(value = "/pois/{clientid}/{locale}", headers="Accept=*/*", method=RequestMethod.GET)
-	// TODO Darf die Methode diese Exception werfen oder muss dort etwas anderes hin wegen REST + JSON?
+	// TODO is it allowed to throw exceptions in this method or is there a different way because of REST + JSON?
 	public @ResponseBody List<Poi> getUnassignedPois(@PathVariable("clientid") int clientId, @PathVariable("locale") String locale) throws Exception {
 		logger.debug("entering method getUnassignedPois");
 		
@@ -207,7 +207,7 @@ public class PoiController {
 	}
 	
 	@RequestMapping(value = "/pois", method=RequestMethod.POST)
-	// TODO Darf die Methode diese Exception werfen oder muss dort etwas anderes hin wegen REST + JSON?
+	// TODO is it allowed to throw exceptions in this method or is there a different way because of REST + JSON?
 	public @ResponseBody List<Poi> getPois(@ModelAttribute Integer[] poiIds) throws Exception {
 		logger.debug("entering method getPois");
 		
