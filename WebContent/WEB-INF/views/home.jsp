@@ -10,9 +10,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta http-equiv="Content-Language" content="${locale}">
-		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
-		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/home-style-min.css'/>" >
 		<title><c:out value="${messagesHome.title}"/></title>
+		<compress:css>
 		<style type="text/css">
 			<c:if test="${fn:length(languages) > 1}">
 				<c:forEach var="lang" items="${languages}">
@@ -34,6 +33,9 @@
 				left: 0px;
 			}
 		</style>
+		</compress:css>
+		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
+		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/home-style-min.css'/>" >
 	</head>
 	<body>
 	<compress:html>
@@ -47,7 +49,7 @@
 	
 		<div data-role="content" id="homepage-content">
 			<a id="aboutbutton" href="#aboutpage" data-icon="info" data-iconpos="notext" data-role="button"><c:out value="${messagesHome.about}"/></a>
-			<img id="homepageBgImg" class="bg-img" alt="<c:out value="${messagesHome.alttext_startimage}"/>" src="<c:url value='/resources/${client.url}/images/${client.startPageImage}_320_480.jpg' />" >
+			<img id="homepageBgImg" class="bg-img" alt="<c:out value="${messagesHome.alttext_startimage}"/>" src="<c:url value='/resources/global/css/images/ajax_loader.png' />" >
 			
 			<c:if test="${fn:length(languages) > 1}">
 				<div id="language" data-role="controlgroup" data-type="vertical">
@@ -117,14 +119,9 @@
 	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
 	
 	<script>
-	
-		//$("#homepage").live('pageshow', function() { $.mobile.silentScroll(0); });
-		$(window).load($.mobile.silentScroll);
-	
-	</script>
-	
-	<script>
 	<compress:js>
+	
+		$(window).load($.mobile.silentScroll);
 	
 		function setBgImage() {  
 			var contentwidth = $(window).width();  
@@ -173,7 +170,7 @@
 			}
 		}
 	
-		$("#homepage").live('pageshow', setBgImage);
+		$("#homepage").live('pagebeforeshow', setBgImage);
 		
 		$(document).ready(function() {
 		  	$(window).bind("orientationchange resize", setBgImage);

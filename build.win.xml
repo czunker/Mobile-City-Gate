@@ -138,8 +138,7 @@
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
           	  <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
               <classes dir="${build.dir}" includes="**/*.*"/>
-          	  <zipfileset dir="WebContent/resources" prefix="resources"/>
-          	  <fileset dir="WebContent"/>
+          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/jquery.mobile*.js,**/jquery-*.js,**/poi-map.js"/>
           </war>
       </target>
   	
