@@ -186,11 +186,6 @@
 <%-- needed for map + poi overview--%> 
 <script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
 
-<%-- needed for poi overview
-<script type="text/javascript" src="<c:url value='/resources/global/js/jquery-ui-1.8.11.custom.min.js'/>"></script>
---%>
-
-
 <%--
 <script type="text/javascript" src="<c:url value='/resources/global/js/geo-min.js'/>" ></script>
 <script type="text/javascript" src="<c:url value='/resources/global/js/gears-init-min.js'/>" ></script>
@@ -200,7 +195,7 @@
 <script type="text/javascript" src="<c:url value='/resources/global/js/map-min.js'/>" ></script>
 
 <script>
-<%--<compress:js>--%>
+<compress:js>
 
 	var map;
 	var selectControl;
@@ -876,7 +871,7 @@
 		});
 	}
 	
-<%--</compress:js>--%>
+</compress:js>
 </script>
 
 <jsp:include page="footer.jsp"/>
