@@ -127,16 +127,18 @@
       </target>
 
       <target name="war" depends="minify_js_css">
+      	 <copy todir="${build.dir}" flatten="true">
+      	     <resources>
+      	        <file file="resources/jdbc.properties"/>
+      	        <file file="resources/log4j.properties"/>
+      	        <file file="resources/config.properties"/>
+      	     </resources>
+      	 </copy>
           <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
-          	  <lib dir="${lib.dir}" excludes="servlet-api.jar"/>
+          	  <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
               <classes dir="${build.dir}" includes="**/*.*"/>
           	  <zipfileset dir="WebContent/resources" prefix="resources"/>
-          	<!--
-          	  <zipfileset dir="WebContent/images" prefix="images"/>
-          	  <zipfileset dir="WebContent/poi" prefix="poi"/>
-          	  <zipfileset dir="WebContent/gpx" prefix="gpx"/>
-          	  -->
           	  <fileset dir="WebContent"/>
           </war>
       </target>

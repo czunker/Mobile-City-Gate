@@ -24,6 +24,7 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.WebResource;
 
 import de.christianzunker.mobilecitygate.beans.Client;
+import de.christianzunker.mobilecitygate.beans.Config;
 import de.christianzunker.mobilecitygate.beans.Poi;
 import de.christianzunker.mobilecitygate.beans.PoiCategory;
 import de.christianzunker.mobilecitygate.beans.Profile;
@@ -42,6 +43,9 @@ public class PoiController {
 	
 	@Autowired
 	private PoiCategoryDao poiCatDao;
+	
+	@Autowired
+	private Config config;
 	
 	@Autowired
 	private ProfileDao profileDao;
@@ -76,9 +80,11 @@ public class PoiController {
         
 		//get shortened URL for easier Twitter usage
 		String longUrl = "http://" + request.getServerName() + request.getContextPath() + "/" + clientObj.getUrl() + "/" + locale + "/";
+		String googleUrl = "";
 		try {
 			com.sun.jersey.api.client.Client jsonClient = com.sun.jersey.api.client.Client.create();
-			WebResource webResource = jsonClient.resource("https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyBgEIvyRpfOSZfD_JrPIg1blLhpW8MtBu8");
+			googleUrl = "https://www.googleapis.com/urlshortener/v1/url?" + config.getGoogleApiKey();
+			WebResource webResource = jsonClient.resource(googleUrl);
 			String jsonRequest = "{ \"longUrl\": \"" + longUrl + "\" }";
 			logger.debug("jsonRequest: " + jsonRequest);
 			String jsonResponse = webResource.accept(
@@ -97,7 +103,7 @@ public class PoiController {
 			clientObj.setShortUrl(shortUrl);
 		}
 		catch (ClientHandlerException ex) {
-			logger.error("Couldn't connect to Google URL Shortener!", ex);
+			logger.error("Couldn't connect to Google URL Shortener! (Tried URL: " + googleUrl + ")", ex);
 			clientObj.setShortUrl(longUrl);
 		}
 

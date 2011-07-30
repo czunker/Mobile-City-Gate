@@ -188,9 +188,9 @@
       	  <mkdir dir="dist"/>
           <copy todir="${build.dir}" flatten="true">
             <resources>
-              <file file="resources/jdbc.properties"/>
-              <file file="resources/log4j.properties"/>
-              <file file="resources/config.properties"/>
+              <file file="jdbc.properties"/>
+              <file file="log4j.properties"/>
+              <file file="config.properties"/>
             </resources>
           </copy>
           <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
