@@ -49,7 +49,7 @@
 	
 		<div data-role="content" id="homepage-content">
 			<a id="aboutbutton" href="#aboutpage" data-icon="info" data-iconpos="notext" data-role="button"><c:out value="${messagesHome.about}"/></a>
-			<img id="homepageBgImg" class="bg-img" alt="<c:out value="${messagesHome.alttext_startimage}"/>" src="<c:url value='/resources/global/css/images/ajax_loader.png' />" >
+			<img id="homepageBgImg" class="bg-img" alt="<c:out value="${messagesHome.alttext_startimage}"/>" src="<c:url value='/resources/global/css/images/ajax-loader.png' />" >
 			
 			<c:if test="${fn:length(languages) > 1}">
 				<div id="language" data-role="controlgroup" data-type="vertical">

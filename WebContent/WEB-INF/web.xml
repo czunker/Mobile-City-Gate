@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <servlet>
-    <servlet-name>bnb</servlet-name>
+    <servlet-name>mobile-city-gate</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <init-param>
       <param-name>contextConfigLocation</param-name>
@@ -10,12 +10,12 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>bnb</servlet-name>
+    <servlet-name>mobile-city-gate</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
   <resource-ref>
     <description>DB Connection Pooling</description>
-    <res-ref-name>jdbc/bnb_db</res-ref-name>
+    <res-ref-name>jdbc/mobile-city-gate-db</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
