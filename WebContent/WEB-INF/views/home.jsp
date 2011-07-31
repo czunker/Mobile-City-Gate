@@ -40,13 +40,6 @@
 	<body>
 	<compress:html>
 	<div data-role="page" id="homepage">
-		<%-- 
-		<div data-role="header" data-backbtn="false">
-			<h1><c:out value="${messagesHome.start}"/></h1>
-			<a data-ajax="false" href="#aboutpage" data-icon="info" class="ui-btn-rigth" data-iconpos="notext"><c:out value="${messagesHome.about}"/></a>
-		</div>
-		--%>
-	
 		<div data-role="content" id="homepage-content">
 			<a id="aboutbutton" href="#aboutpage" data-icon="info" data-iconpos="notext" data-role="button"><c:out value="${messagesHome.about}"/></a>
 			<img id="homepageBgImg" class="bg-img" alt="<c:out value="${messagesHome.alttext_startimage}"/>" src="<c:url value='/resources/global/css/images/ajax-loader.png' />" >
@@ -61,21 +54,6 @@
 	        <%-- TODO data-ajax="false" muss weg, allerdings funktionieren dann die Links f�r die Dialoge nicht mehr --%>
 	        <a data-theme="z" id="startbutton" href="<c:url value='/${client.url}/${locale}/pois'/>" data-inline="true" data-ajax="false" data-role="button"><c:out value="${messagesHome.start_button}"/></a>		
 		</div>
-
-		<%-- 	
-		<div data-role="footer" class="ui-bar" data-position="inline">
-			
-			<div data-role="navbar">
-				<ul>
-					<li>&nbsp;</li>
-					<li>
-						<a href="<c:url value='/${client.url}/${locale}/pois'/>" class="center-button" data-ajax="false" data-role="button"><c:out value="${messagesHome.start_button}"/></a>
-					</li>
-					<li>&nbsp;</li>
-				</ul>
-			</div>
-		</div>
-		--%>
 	</div>
 	
 	
