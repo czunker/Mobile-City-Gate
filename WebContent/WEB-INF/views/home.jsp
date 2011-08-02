@@ -105,50 +105,78 @@
 			var contentwidth = $(window).width();  
 			var contentheight = $(window).height();
 			if ((contentwidth <= 320) && (contentheight <= 480)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_320_480.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_320_480.jpg");
+				$('#homepageBgImg').attr('width', '320');
+				$('#homepageBgImg').attr('height', '480');
 			}
 			else if ((contentwidth <= 480) && (contentheight <= 320)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_480_320.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_480_320.jpg");
+				$('#homepageBgImg').attr('width', '480');
+				$('#homepageBgImg').attr('height', '320');
 			}
 			else if ((contentwidth <= 480) && (contentheight <= 800)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_480_800.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_480_800.jpg");
+				$('#homepageBgImg').attr('width', '480');
+				$('#homepageBgImg').attr('height', '800');
 			}
 			else if ((contentwidth <= 600) && (contentheight <= 800)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_600_800.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_600_800.jpg");
+				$('#homepageBgImg').attr('width', '600');
+				$('#homepageBgImg').attr('height', '800');
 			}
 			else if ((contentwidth <= 640) && (contentheight <= 960)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_640_960.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_640_960.jpg");
+				$('#homepageBgImg').attr('width', '640');
+				$('#homepageBgImg').attr('height', '960');
 			}
 			else if ((contentwidth <= 768) && (contentheight <= 1024)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_768_1024.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_768_1024.jpg");
+				$('#homepageBgImg').attr('width', '768');
+				$('#homepageBgImg').attr('height', '1024');
 			}
 			else if ((contentwidth <= 800) && (contentheight <= 480)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_800_480.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_800_480.jpg");
+				$('#homepageBgImg').attr('width', '800');
+				$('#homepageBgImg').attr('height', '480');
 			}
 			else if ((contentwidth <= 800) && (contentheight <= 640)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_800_640.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_800_640.jpg");
+				$('#homepageBgImg').attr('width', '800');
+				$('#homepageBgImg').attr('height', '640');
 			}
 			else if ((contentwidth <= 800) && (contentheight <= 600)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_800_600.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_800_600.jpg");
+				$('#homepageBgImg').attr('width', '800');
+				$('#homepageBgImg').attr('height', '600');
 			}
 			else if ((contentwidth <= 960) && (contentheight <= 640)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_960_640.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_960_640.jpg");
+				$('#homepageBgImg').attr('width', '960');
+				$('#homepageBgImg').attr('height', '640');
 			}
 			else if ((contentwidth <= 1024) && (contentheight <= 768)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_1024_768.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_1024_768.jpg");
+				$('#homepageBgImg').attr('width', '1024');
+				$('#homepageBgImg').attr('height', '768');
 			}
 			else if ((contentwidth <= 1280) && (contentheight <= 1024)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_1280_1024.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_1280_1024.jpg");
+				$('#homepageBgImg').attr('width', '1280');
+				$('#homepageBgImg').attr('height', '1024');
 			}
 			else if ((contentwidth <= 1920) && (contentheight <= 1080)){  
-				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_1920_1080.jpg");  
+				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_1920_1080.jpg");
+				$('#homepageBgImg').attr('width', '1920');
+				$('#homepageBgImg').attr('height', '1080');
 			} 
 			else {
 				$('#homepageBgImg').attr('src',"<c:url value='/resources/${client.url}/images/${client.startPageImage}' />_320_480.jpg");
+				$('#homepageBgImg').attr('width', '320');
+				$('#homepageBgImg').attr('height', '480');
 			}
 		}
 	
-		$("#homepage").live('pagebeforeshow', setBgImage);
+		$("#homepage").live('pagebeforecreate', setBgImage);
 		
 		$(document).ready(function() {
 		  	$(window).bind("orientationchange resize", setBgImage);
