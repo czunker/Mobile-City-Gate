@@ -454,8 +454,37 @@
 	                     			url: "<c:url value='/resources/${client.url}/kml/'/>" + route.mapKML + "/",
 	                     			format: new OpenLayers.Format.KML()
 	                 			})
-	             	}); 
+	             	});
+		    		
+		    		var routeIconLayer = new OpenLayers.Layer.Vector("Points of interest");
+	    			var pointStart = new OpenLayers.Geometry.Point(route.startLon, route.startLat);
+		    		pointStart.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+		    		var iconFeatureStart = new OpenLayers.Feature.Vector(pointStart);
+		    		iconFeatureStart.style = {
+		    				externalGraphic: "<c:url value='/resources/${client.url}/images/start_flag.png'/>",
+		    		        graphicXOffset:-iconSize.w/2,
+		    		        graphicYOffset:-iconSize.h,
+		    		        graphicWidth:iconSize.w,
+		    		        graphicHeight:iconSize.h,
+		    		        pointRadius:0
+		    		};
+		    		routeIconLayer.addFeatures(iconFeatureStart);		    		
+		    		
+		    		var pointEnd = new OpenLayers.Geometry.Point(route.endLon, route.endLat);
+		    		pointEnd.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+		    		var iconFeatureEnd = new OpenLayers.Feature.Vector(pointEnd);
+		    		iconFeatureEnd.style = {
+		    				externalGraphic: "<c:url value='/resources/${client.url}/images/finish_flag.png'/>",
+		    		        graphicXOffset:-iconSize.w/2,
+		    		        graphicYOffset:-iconSize.h,
+		    		        graphicWidth:iconSize.w,
+		    		        graphicHeight:iconSize.h,
+		    		        pointRadius:0
+		    		};
+		    		routeIconLayer.addFeatures(iconFeatureEnd);
+		    		
 		    		map.addLayer(lkml);
+		    		map.addLayer(routeIconLayer);
 	     		}
 			});
 		}

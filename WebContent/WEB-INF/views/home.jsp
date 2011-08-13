@@ -11,8 +11,8 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta http-equiv="Content-Language" content="${locale}">
 		<title><c:out value="${messagesHome.title}"/></title>
-		<compress:css>
 		<style type="text/css">
+		<compress:css>
 			<c:if test="${fn:length(languages) > 1}">
 				<c:forEach var="lang" items="${languages}">
 					.ui-icon-<c:out value="${lang.shortName}"/> {
@@ -21,19 +21,13 @@
 				</c:forEach>
 			</c:if>
 			
-			IMG.center {
-			    display: block;
-			    margin-left: auto;
-			    margin-right: auto 
-			}
-			
 			.bg-img {
 				position: absolute;
 				top: 0px;
 				left: 0px;
 			}
-		</style>
 		</compress:css>
+		</style>
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/home-style-min.css'/>" >
 	</head>

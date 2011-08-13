@@ -14,6 +14,8 @@ public class Route {
 	private String lengthUnit = "";
 	private double startLon = 0.0;
 	private double startLat = 0.0;
+	private double endLon = 0.0;
+	private double endLat = 0.0;
 	private String color = "";
 	
 	private List<Poi> pois = null;
@@ -95,4 +97,17 @@ public class Route {
 	public void setLength(Double length) {
 		this.length = length;
 	}
+	public double getEndLon() {
+		return endLon;
+	}
+	public void setEndLon(double endLon) {
+		this.endLon = endLon;
+	}
+	public double getEndLat() {
+		return endLat;
+	}
+	public void setEndLat(double endLat) {
+		this.endLat = endLat;
+	}
+	
 }

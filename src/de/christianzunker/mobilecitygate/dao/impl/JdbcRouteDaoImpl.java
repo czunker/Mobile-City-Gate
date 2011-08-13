@@ -23,28 +23,28 @@ public class JdbcRouteDaoImpl implements RouteDao {
 	
     public List<Route> getRouteList() {
     	logger.debug("entering method getRouteList");
-        List<Route> routes = this.jdbcTemplate.query("SELECT id, name, description, length, kml_file, locale, length_unit, start_lon, start_lat, color FROM routes", new RouteMapper());
+        List<Route> routes = this.jdbcTemplate.query("SELECT id, name, description, length, kml_file, locale, length_unit, start_lon, start_lat, color, end_lon, end_lat FROM routes", new RouteMapper());
         logger.debug("leaving method getRouteList");
         return routes;
     }
     
     public List<Route> getRouteListByClientLocale(int clientId, String locale) {
     	logger.debug("entering method getRouteList");
-        List<Route> routes = this.jdbcTemplate.query("SELECT id, name, description, length, kml_file, locale, length_unit, start_lon, start_lat, color FROM routes WHERE client_id = " + clientId + " AND locale = '" + locale + "'", new RouteMapper());
+        List<Route> routes = this.jdbcTemplate.query("SELECT id, name, description, length, kml_file, locale, length_unit, start_lon, start_lat, color, end_lon, end_lat FROM routes WHERE client_id = " + clientId + " AND locale = '" + locale + "'", new RouteMapper());
         logger.debug("leaving method getRouteList");
         return routes;
     }
     
     public Route getRouteById(int routeId) {
     	logger.debug("entering method getRouteById");
-    	Route route = this.jdbcTemplate.queryForObject("SELECT id, name, description, length, kml_file, locale, length_unit, start_lon, start_lat, color FROM routes WHERE id = " + routeId, new RouteMapper());
+    	Route route = this.jdbcTemplate.queryForObject("SELECT id, name, description, length, kml_file, locale, length_unit, start_lon, start_lat, color, end_lon, end_lat FROM routes WHERE id = " + routeId, new RouteMapper());
     	logger.debug("leaving method getRouteById");
     	return route;
     }
     
     public List<Route> getRoutesByIds(String routeIds) {
     	logger.debug("entering method getRouteList");
-        List<Route> routes = this.jdbcTemplate.query("SELECT id, name, description, length, kml_file, locale, length_unit, start_lon, start_lat, color FROM routes WHERE id IN (" + routeIds + ")", new RouteMapper());
+        List<Route> routes = this.jdbcTemplate.query("SELECT id, name, description, length, kml_file, locale, length_unit, start_lon, start_lat, color, end_lon, end_lat FROM routes WHERE id IN (" + routeIds + ")", new RouteMapper());
         logger.debug("leaving method getRouteList");
         return routes;
     }
@@ -65,6 +65,8 @@ public class JdbcRouteDaoImpl implements RouteDao {
             route.setLengthUnit(rs.getString("length_unit"));
             route.setStartLon(rs.getDouble("start_lon"));
             route.setStartLat(rs.getDouble("start_lat"));
+            route.setEndLon(rs.getDouble("end_lon"));
+            route.setEndLat(rs.getDouble("end_lat"));
             route.setColor(rs.getString("color"));
             logger.debug("leaving method mapRow");
             return route;
