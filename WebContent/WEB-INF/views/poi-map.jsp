@@ -88,7 +88,8 @@
 	</div>
 
 	<div data-role="content" align="center" id="poi-content">	
-			<ul data-role="listview" data-filter="true" id="poi-list">
+			<!-- <ul data-role="listview" data-filter="true" id="poi-list"> -->
+			<ul data-role="listview" id="poi-list">
 			</ul>
 	</div>
 	
