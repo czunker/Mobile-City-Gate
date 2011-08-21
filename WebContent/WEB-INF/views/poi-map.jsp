@@ -13,9 +13,11 @@
 <%-- is needed for screen readers --%>
 <meta http-equiv="Content-Language" content="${locale}">
 <title><c:out value="${messages.title}"/></title>
-<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
+<!-- <link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" > -->
+<link type="text/css" rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" >
 <link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/ol-theme/default/style.css'/>" >
 <link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/map-style-min.css'/>" >
+<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/poi-map-style-min.css'/>" >
 
 <style type="text/css">
 	<compress:css>
@@ -88,8 +90,8 @@
 	</div>
 
 	<div data-role="content" align="center" id="poi-content">	
-			<!-- <ul data-role="listview" data-filter="true" id="poi-list"> -->
-			<ul data-role="listview" id="poi-list">
+			<ul data-role="listview" data-filter="true" id="poi-list">
+			<!-- <ul data-role="listview" id="poi-list">-->
 			</ul>
 	</div>
 	
@@ -100,11 +102,13 @@
 		--%>		
 		<div data-role="navbar">
 			<ul>
+				<!-- 
 				<li id="navBackButton">
 					<a href="#" data-rel="back" data-icon="arrow-l" data-role="button"><c:out value='${messagesPoiOverview.backbutton}'/></a>
 				</li>
 				<li id="navEmpty">
 				</li>
+				 -->
 				<li id="navTopButton">
 					<a href="#" onClick="$.mobile.silentScroll();" data-icon="arrow-u" data-role="button" title="<c:out value='${messagesPoiOverview.topbutton}'/>"><c:out value='${messagesPoiOverview.topbutton}'/></a>
 				</li>
@@ -140,7 +144,7 @@
 		<h1><c:out value='${messagesPoiOverview.categoryheader}'/></h1>
 	</div>
 	<div data-role="content">
-		<div  data-role="fieldcontain">
+		<div data-role="fieldcontain">
 			 	<fieldset data-role="controlgroup">
 			 		<c:forEach var="category" items="${poiCategories}">
 			 			<input type="checkbox" name="checkbox-category-<c:out value='${category.id}'/>" id="checkbox-category-<c:out value='${category.id}'/>" class="custom" />
@@ -151,7 +155,7 @@
 					</c:forEach>
 				</fieldset>
 		</div>
-		<a href='#' data-role='button' data-rel='back' data-transition='pop'><c:out value='${messagesPoiOverview.closebutton}'/></a>
+		<a href='#' data-theme="z" data-role='button' data-rel='back' data-transition='pop'><c:out value='${messagesPoiOverview.closebutton}'/></a>
 	</div>
 </div>
 
@@ -161,7 +165,7 @@
 	</div>
 	<div data-role="content">
 		<p><c:out value='${messagesPoiOverview.profilehelp}'/></p>
-		<div  data-role="fieldcontain">
+		<div data-role="fieldcontain">
 			 	<fieldset data-role="controlgroup">
 			 		<c:forEach var="profile" items="${profiles}">
 			 			<input type="checkbox" name="checkbox-profile-<c:out value='${profile.id}'/>" id="checkbox-profile-<c:out value='${profile.id}'/>" class="custom" />
@@ -172,7 +176,7 @@
 					</c:forEach>
 				</fieldset>
 		</div>
-		<a href='#' data-role='button' data-rel='back' data-transition='pop'><c:out value='${messagesPoiOverview.closebutton}'/></a>
+		<a href='#' data-theme="z" data-role='button' data-rel='back' data-transition='pop'><c:out value='${messagesPoiOverview.closebutton}'/></a>
 	</div>
 </div>
 </compress:html>
@@ -185,7 +189,10 @@
 <script type="text/javascript" src="<c:url value='/resources/global/js/ol+osm-min.js'/>" ></script>
 
 <%-- needed for map + poi overview--%> 
-<script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
+<%-- <script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>--%>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+
 
 <%--
 <script type="text/javascript" src="<c:url value='/resources/global/js/geo-min.js'/>" ></script>
@@ -283,7 +290,8 @@
 	function getRoutesWithPois() {
 		$.getJSON("<c:url value='/routes/${client.id}/${locale}'/>", function(data) {
 			$.each(data, function(i, route) {
-				var li_html = '<li data-theme="b" id="route-' + route.id + '" ><span class="ui-li-count" id="count-route-' + route.id + '">' + route.pois.length + '</span>';
+				//var li_html = '<li data-theme="b" id="route-' + route.id + '" ><span class="ui-li-count" id="count-route-' + route.id + '">' + route.pois.length + '</span>';
+				var li_html = '<li data-theme="b" id="route-' + route.id + '" >';
 				li_html += '<a href="#" onClick="submitMapRoute(' + route.id + ')">';
 				li_html += '<h3><c:out value="${messagesPoiOverview.route}"/> ' + route.name + '</h3>';
 				li_html += '<p>' + route.description + '</p>';
@@ -309,7 +317,8 @@
 		
 	function getUnassignedPois() {
 		$.getJSON("<c:url value='/pois/${client.id}/${locale}'/>", function(pois) {
-			var li_html = '<li data-role="list-divider" id="dummy-route"><span class="ui-li-count" id="count-dummy-route">' + pois.length + '</span>';
+			//var li_html = '<li data-role="list-divider" id="dummy-route"><span class="ui-li-count" id="count-dummy-route">' + pois.length + '</span>';
+			var li_html = '<li data-role="list-divider" id="dummy-route">';
 			li_html += '<h3><c:out value="${messagesPoiOverview.generalitems}"/></h3><p>&nbsp;</p>';
 			$.each(pois, function(j, poi) {
 					li_html += '<li id="' + poi.id + '">';

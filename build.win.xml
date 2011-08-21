@@ -67,6 +67,20 @@
   	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
   	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
   	  		  			      </exec>
+  		<exec executable="java">
+  		  	  			        <arg value="-jar"/>
+  		  	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  		  	  			      	<arg value="-o"/>
+  		  	  			      	<arg value="${resources.dir}/kultohr/css/poi-map-style-min.css"/>
+  		  	  			      	<arg value="${resources.dir}/kultohr/css/poi-map-style.css"/>
+  		  	  			      </exec>
+  		  	  		<exec executable="java">
+  		  	  		  			        <arg value="-jar"/>
+  		  	  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  		  	  		  			      	<arg value="-o"/>
+  		  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/poi-map-style-min.css"/>
+  		  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/poi-map-style.css"/>
+  		  	  		  			      </exec>
   	  		<concat destfile="${resources.dir}/global/js/map-min.js">
   	  		    <filelist dir="${resources.dir}/global/js" files="gears-init-min.js,geo-min.js,poi-map-min.js"/>
   	  		</concat>
