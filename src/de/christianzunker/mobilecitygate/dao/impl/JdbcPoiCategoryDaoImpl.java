@@ -24,7 +24,7 @@ public class JdbcPoiCategoryDaoImpl implements PoiCategoryDao {
 	@Override
 	public List<PoiCategory> getCategories() {
 		logger.debug("entering method getCategories");
-		List<PoiCategory> poiCategories = this.jdbcTemplate.query("SELECT id, name, short_name, icon FROM poi_categories", new PoiCategoryMapper());
+		List<PoiCategory> poiCategories = this.jdbcTemplate.query("SELECT id, name, short_name, icon FROM poi_categories ORDER BY poi_categories.name", new PoiCategoryMapper());
 		logger.debug("leaving method getCategories");
 		return poiCategories;
 	}
@@ -32,7 +32,7 @@ public class JdbcPoiCategoryDaoImpl implements PoiCategoryDao {
 	@Override
 	public List<PoiCategory> getCategoriesByClientLocale(int clientId, String locale) {
 		logger.debug("entering method getCategories");
-		List<PoiCategory> poiCategories = this.jdbcTemplate.query("SELECT id, name, short_name, icon FROM poi_categories WHERE client_id = " + clientId + " AND locale = '" + locale + "'", new PoiCategoryMapper());
+		List<PoiCategory> poiCategories = this.jdbcTemplate.query("SELECT id, name, short_name, icon FROM poi_categories WHERE client_id = " + clientId + " AND locale = '" + locale + "' ORDER BY poi_categories.name", new PoiCategoryMapper());
 		logger.debug("leaving method getCategories");
 		return poiCategories;
 	}
@@ -40,7 +40,7 @@ public class JdbcPoiCategoryDaoImpl implements PoiCategoryDao {
 	@Override
 	public List<PoiCategory> getActiveCategoriesByClientLocale(int clientId, String locale) {
 		logger.debug("entering method getCategories");
-		List<PoiCategory> poiCategories = this.jdbcTemplate.query("SELECT DISTINCT poi_categories.id, poi_categories.name, poi_categories.short_name, poi_categories.icon FROM poi_categories, rel_poi_category WHERE poi_categories.client_id = " + clientId + " AND poi_categories.id = rel_poi_category.category_id" + " AND poi_categories.locale = '" + locale + "'", new PoiCategoryMapper());
+		List<PoiCategory> poiCategories = this.jdbcTemplate.query("SELECT DISTINCT poi_categories.id, poi_categories.name, poi_categories.short_name, poi_categories.icon FROM poi_categories, rel_poi_category WHERE poi_categories.client_id = " + clientId + " AND poi_categories.id = rel_poi_category.category_id" + " AND poi_categories.locale = '" + locale + "' ORDER BY poi_categories.name", new PoiCategoryMapper());
 		logger.debug("leaving method getCategories");
 		return poiCategories;
 	}
