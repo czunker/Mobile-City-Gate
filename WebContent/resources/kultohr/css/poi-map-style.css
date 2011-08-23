@@ -1,0 +1,67 @@
+.ui-btn-up-z {
+	border: 1px solid #145072;
+	background: #30d51f;
+	font-weight: bold;
+	color: #fff;
+	text-shadow: 0 -1px 1px #145072;
+	background-image: -moz-linear-gradient(top, #30d51f, #30d51f);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #30d51f), color-stop(1, #30d51f) );
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#30d51f',EndColorStr='#30d51f')";
+}
+
+.ui-btn-up-z a.ui-link-inherit {
+	color: #fff;
+}
+
+.ui-btn-hover-z {
+	border: 1px solid #00516e;
+	background: #4b88b6;
+	font-weight: bold;
+	color: #fff;
+	text-shadow: 0 -1px 1px #014D68;
+	background-image: -moz-linear-gradient(top, #72b0d4, #4b88b6);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #72b0d4),
+		color-stop(1, #4b88b6) );
+	-ms-filter:
+		"progid:DXImageTransform.Microsoft.gradient(startColorStr='#72b0d4',EndColorStr='#4b88b6')";
+}
+
+.ui-btn-hover-z a.ui-link-inherit {
+	color: #fff;
+}
+
+.ui-btn-down-z {
+	border: 1px solid #225377;
+	background: #4596ce;
+	font-weight: bold;
+	color: #fff;
+	text-shadow: 0 -1px 1px #225377;
+	background-image: -moz-linear-gradient(top, #4596ce, #4596ce);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #4596ce),color-stop(1, #4596ce) );
+	-ms-filter:	"progid:DXImageTransform.Microsoft.gradient(startColorStr='#4596ce',EndColorStr='#4596ce')";
+}
+
+.ui-btn-down-z a.ui-link-inherit {
+	color: #fff;
+}
+
+.ui-btn-up-z,.ui-btn-hover-z,.ui-btn-down-z {
+	font-family: Helvetica, Arial, sans-serif;
+	text-decoration: none;
+}
+
+#green: 30d51f
+#blue: 4596ce
+.ui-btn-active {
+	border:1px solid #155678;
+	background:#4596ce;
+	font-weight:bold;
+	color:#fff;
+	cursor:pointer;
+	text-shadow:0 -1px 1px #145072;
+	text-decoration:none;
+	background-image:-moz-linear-gradient(top,#4596ce,#4596ce);
+	background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#4596ce),color-stop(1,#4596ce));
+	-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorStr='#4596ce', EndColorStr='#4596ce')";
+	outline:0
+}
