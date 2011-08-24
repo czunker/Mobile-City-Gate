@@ -20,12 +20,6 @@
 					}
 				</c:forEach>
 			</c:if>
-			
-			.bg-img {
-				position: absolute;
-				top: 0px;
-				left: 0px;
-			}
 		</compress:css>
 		</style>
 		<!-- <link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" > -->
@@ -33,57 +27,51 @@
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/home-style-min.css'/>" >
 	</head>
 	<body>
-	<compress:html>
-	<div data-role="page" id="homepage">
-		<div data-role="content" id="homepage-content">
+	<div id="loading">
+  		<img id="loading-image" src="<c:url value='/resources/global/images/ajax-loader.gif'/>" alt="Loading..." />
+  		<span id="loading-text"><c:out value="${messagesHome.loading}"/></span>
+	</div>
+		<div data-role="page" id="homepage">
+			<div data-role="content" id="homepage-content">
 			<a id="aboutbutton" href="#aboutpage" data-icon="info" data-iconpos="notext" data-role="button"><c:out value="${messagesHome.about}"/></a>
-			<img id="homepageBgImg" class="bg-img" alt="<c:out value="${messagesHome.alttext_startimage}"/>" src="<c:url value='/resources/global/css/images/ajax-loader.png' />" >
-			
-			<c:if test="${fn:length(languages) > 1}">
+			<img id="homepageBgImg" class="bg-img" alt="<c:out value="${messagesHome.alttext_startimage}"/>" src="<c:url value="/resources/global/css/images/ajax-loader.png" />" >
+			<c:if test="${fn:length(languages) > 1}" >
 				<div id="language" data-role="controlgroup" data-type="vertical">
 				<c:forEach var="lang" items="${languages}">
-		           	<a data-ajax="false" data-role="button" data-iconpos="notext" data-icon="<c:out value='${lang.shortName}'/>" href="<c:url value='/${client.url}/${lang.shortName}/'/>"><c:out value="${lang.name}"/></a>
-			    </c:forEach>
-	        	</div>
-	        </c:if>
-	        <%-- TODO data-ajax="false" muss weg, allerdings funktionieren dann die Links f�r die Dialoge nicht mehr --%>
-	        <a data-theme="z" id="startbutton" href="<c:url value='/${client.url}/${locale}/pois'/>" data-inline="true" data-ajax="false" data-role="button"><c:out value="${messagesHome.start_button}"/></a>		
+					<a data-ajax="false" data-role="button" data-iconpos="notext" data-icon="<c:out value="${lang.shortName}" />" href="<c:url value="/${client.url}/${lang.shortName}/" />"><c:out value="${lang.name}"/></a>
+				</c:forEach>
+				</div>
+			</c:if>
+			<a data-theme="z" id="startbutton" href="<c:url value="/${client.url}/${locale}/pois" />" data-inline="true" data-ajax="false" data-role="button"><c:out value="${messagesHome.start_button}" /></a>		
+			</div>
 		</div>
-	</div>
-	
-	
+			
 	<div data-role="page" id="aboutpage">
-		<div data-role="header" data-backbtn="true">
+		<div data-role="header" data-backbtn="true">';
 			<h1><c:out value="${messagesAbout.header}"/></h1>
-			<%--<a href="#" data-rel="back" data-icon="home" data-iconpos="notext" class="ui-btn-right jqm-home"><c:out value="${messagesAbout.home}"/></a>--%>
-		</div>
-		<div data-role="content">
+			</div>
+			<div data-role="content">
 			<p>
-				<c:out value="${messagesAbout.responsible}" escapeXml="false" /><br>
+			<c:out value="${messagesAbout.responsible}" escapeXml="false" /><br>
 			</p>
 			<p>
-				<c:out value="${messagesAbout.technical}" escapeXml="false" /><br>
-				<a href="http://www.mobile-discovery.com">www.mobile-discovery.com</a>
+			<c:out value="${messagesAbout.technical}" escapeXml="false" /><br>
+			<a href="http://www.mobile-discovery.com">www.mobile-discovery.com</a>
 			</p>
 			<p>
-				<c:out value="${messagesAbout.privacy}"/>
+			<c:out value="${messagesAbout.privacy}"/>
 			</p>
 			<p>
-				<c:out value="${messagesAbout.license}"/><br>
-                <a href="http://creativecommons.org/licenses/by-sa/2.0/"><img src="<c:url value='/resources/global/images/cc-by-sa.png'/>" alt="[CC-BY-SA]" width="88" height="31" style="float:left; margin-right: 1em;"/></a> 
+			<c:out value="${messagesAbout.license}"/><br>
+			<a href="http://creativecommons.org/licenses/by-sa/2.0/"><img src="<c:url value="/resources/global/images/cc-by-sa.png" />" alt="[CC-BY-SA]" width="88" height="31" style="float:left; margin-right: 1em;"/></a> 
 			</p>
 			<br>
 			<p>
-				<c:out value="${messagesAbout.icons}"/><br>
-				<a href="http://icons.anatom5.de/">http://icons.anatom5.de/</a><br>
+			<c:out value="${messagesAbout.icons}"/><br>
+			<a href="http://icons.anatom5.de/">http://icons.anatom5.de/</a><br>
 			</p>
-			<%--
-			<a href="http://glyphish.com/">http://glyphish.com/</a><br>
-			<a href="http://jquerymobile.com/">http://jquerymobile.com/</a>
-			--%>
-		</div>
+			</div>
 	</div>
-	</compress:html>
 	
 	<%-- 
 	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery-1.5.1.min.js'/>"></script>
@@ -96,8 +84,8 @@
 	<script>
 	<compress:js>
 	
-		$(window).load($.mobile.silentScroll);
-	
+		$(window).load(function () { $.mobile.silentScroll(); $('#loading').hide(); });
+		
 		function setBgImage() {  
 			var contentwidth = $(window).width();  
 			var contentheight = $(window).height();

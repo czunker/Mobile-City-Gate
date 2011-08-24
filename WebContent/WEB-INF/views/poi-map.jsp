@@ -71,6 +71,10 @@
 </head>
 <body>
 <compress:html>
+<div id="loading">
+  		<img id="loading-image" src="<c:url value='/resources/global/images/ajax-loader.gif'/>" alt="Loading..." />
+  		<span id="loading-text"><c:out value="${messagesPoiOverview.loading}"/></span>
+	</div>
 <div data-role="page" id="poi-overview">
 	<%-- isn't working correctly on iPhone:  data-position="fixed" --%>
 	<div data-role="header" data-backbtn="false">
@@ -191,6 +195,7 @@
 <%-- needed for map + poi overview--%> 
 <%-- <script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>--%>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script src="<c:url value='/resources/global/js/jquery-ui-1.8.11.custom.min.js'/>"></script>
 <script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
 
 
@@ -220,6 +225,8 @@
 	
 	var poiLayer = new OpenLayers.Layer.Vector("Points of interest");	    	
 	var iconSize = new OpenLayers.Size(24, 24);
+	
+	var asyncFinished = 0;
 	
 	<%--
 	$(document).bind("mobileinit", function(){
@@ -287,11 +294,32 @@
 		$("div.ui-corner-top.ui-overlay-shadow.ui-bar-a.ui-header > a").remove();
 	});
 	
+	
+	<%-- work around for loading image
+		 as I'm calling at least two ajax request, I can't hide the image with finished/sucess method of a request
+	--%> 
+	function hideLoader() {
+		asyncFinished += 1;
+		if (asyncFinished == 2) {
+			$('#loading').hide();
+			asyncFinished = 0;
+		}
+	}
+	
+	jQuery.ajaxSetup({
+		  beforeSend: function() {},
+		  complete: function(){
+		     hideLoader();
+		  },
+		  success: function() {}
+		});
+	
 	function getRoutesWithPois() {
 		$.getJSON("<c:url value='/routes/${client.id}/${locale}'/>", function(data) {
+			var li_html = "";
 			$.each(data, function(i, route) {
 				//var li_html = '<li data-theme="b" id="route-' + route.id + '" ><span class="ui-li-count" id="count-route-' + route.id + '">' + route.pois.length + '</span>';
-				var li_html = '<li data-theme="b" id="route-' + route.id + '" >';
+				li_html += '<li data-theme="b" id="route-' + route.id + '" >';
 				li_html += '<a href="#" onClick="submitMapRoute(' + route.id + ')">';
 				li_html += '<h3><c:out value="${messagesPoiOverview.route}"/> ' + route.name + '</h3>';
 				li_html += '<p>' + route.description + '</p>';
@@ -308,9 +336,9 @@
 					li_html += '</li>';
 				});	
 				li_html += '</li>';				
-			    $("#poi-list").append(li_html);
-			    $("#poi-list").listview('refresh');
 			});
+			$("#poi-list").append(li_html);
+		    $("#poi-list").listview('refresh');
 		});
 	}
 	
