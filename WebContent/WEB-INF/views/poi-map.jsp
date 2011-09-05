@@ -71,10 +71,12 @@
 </head>
 <body>
 <compress:html>
-<div id="loading">
+	<%-- 
+	<div id="loading">
   		<img id="loading-image" src="<c:url value='/resources/global/images/ajax-loader.gif'/>" alt="Loading..." />
   		<span id="loading-text"><c:out value="${messagesPoiOverview.loading}"/></span>
 	</div>
+	--%>
 <div data-role="page" id="poi-overview">
 	<%-- isn't working correctly on iPhone:  data-position="fixed" --%>
 	<div data-role="header" data-backbtn="false">
@@ -94,9 +96,47 @@
 	</div>
 
 	<div data-role="content" align="center" id="poi-content">	
+			<!--<ul data-role="listview" data-filter="true" id="poi-list">
+			</ul>-->
+			<div>
 			<ul data-role="listview" data-filter="true" id="poi-list">
-			<!-- <ul data-role="listview" id="poi-list">-->
+			<c:forEach var="route" items="${routes}">
+				<c:if test="${!empty route.pois}">
+					<li data-theme="b" id="route-<c:out value='${route.id}'/>" >
+						<%--<span class="ui-li-count" id="count-route-<c:out value='${route.id}'/>"><c:out value='${fn:length(route.pois)}'/></span>--%>
+						<a href="#" onClick="submitMapRoute(<c:out value='${route.id}'/>)">
+							<h3>Route <c:out value='${route.name}'/></h3>
+							<p><c:out value='${route.description}'/></p>
+							<c:if test="${!empty route.length}">
+								<p class="ui-li-aside">(<c:out value='${messagesPoiOverview.length}'/>: <c:out value='${route.length}'/><c:out value='${route.lengthUnit}'/>)</p>
+							</c:if>
+						</a>
+					</li>
+					<c:forEach var="poi" items="${route.pois}">
+						<li id="<c:out value='${poi.id}'/>">
+							<a href="#" onClick="submitMapPoi(<c:out value='${poi.id}'/>)">
+								<img height="20px" width="20px" src='<c:url value="/resources/${client.url}/images/${poi.icon}"/>' class="ui-li-icon" alt="<c:out value='${poi.name}'/>">
+								<c:out value='${poi.name}'/>
+							</a>
+						</li>
+					</c:forEach>
+				</c:if>
+			</c:forEach>
+			<c:if test="${!empty pois}">
+				<li data-role="list-divider" id="dummy-route"><h3><c:out value="${messagesPoiOverview.generalitems}"/></h3><p>&nbsp;</p>
+					<%--<span class="ui-li-count" id="count-dummy-route"><c:out value='${fn:length(pois)}'/></span>--%>
+					<c:forEach var="poi" items="${pois}">
+						<li id="<c:out value='${poi.id}'/>">
+							<a href="#" onClick="submitMapPoi(<c:out value='${poi.id}'/>)">
+							<img height="20px" width="20px" src='<c:url value="/resources/${client.url}/images/${poi.icon}"/>' class="ui-li-icon" alt="<c:out value='${poi.name}'/>">
+							<c:out value='${poi.name}'/>
+							</a>
+						</li>
+					</c:forEach>
+				</li>
+			</c:if>
 			</ul>
+		</div>
 	</div>
 	
 	<div data-role="footer" class="ui-bar">
@@ -226,7 +266,7 @@
 	var poiLayer = new OpenLayers.Layer.Vector("Points of interest");	    	
 	var iconSize = new OpenLayers.Size(24, 24);
 	
-	var asyncFinished = 0;
+	//var asyncFinished = 0;
 	
 	<%--
 	$(document).bind("mobileinit", function(){
@@ -276,8 +316,8 @@
 		}
 		// when comming back from mappage (e.g. browser back button), don't get POI and routes a second or third time
 		if (!closedPoiOverviewDialog && prevPage != "mappage") {
-			getRoutesWithPois();
-			getUnassignedPois();
+			//getRoutesWithPois();
+			//getUnassignedPois();
 		}
 		else {
 			closedPoiOverviewDialog = false;
@@ -297,7 +337,7 @@
 	
 	<%-- work around for loading image
 		 as I'm calling at least two ajax request, I can't hide the image with finished/sucess method of a request
-	--%> 
+	 
 	function hideLoader() {
 		asyncFinished += 1;
 		if (asyncFinished == 2) {
@@ -313,6 +353,7 @@
 		  },
 		  success: function() {}
 		});
+	
 	
 	function getRoutesWithPois() {
 		$.getJSON("<c:url value='/routes/${client.id}/${locale}'/>", function(data) {
@@ -346,22 +387,24 @@
 	function getUnassignedPois() {
 		$.getJSON("<c:url value='/pois/${client.id}/${locale}'/>", function(pois) {
 			//var li_html = '<li data-role="list-divider" id="dummy-route"><span class="ui-li-count" id="count-dummy-route">' + pois.length + '</span>';
-			var li_html = '<li data-role="list-divider" id="dummy-route">';
-			li_html += '<h3><c:out value="${messagesPoiOverview.generalitems}"/></h3><p>&nbsp;</p>';
-			$.each(pois, function(j, poi) {
-					li_html += '<li id="' + poi.id + '">';
-					li_html += '<a href="#" onClick="submitMapPoi(' + poi.id +')">';
-					li_html += '<img height="20px" width="20px" src="<c:url value="/resources/${client.url}/images/' + poi.icon + '"/>" class="ui-li-icon" alt="' + poi.name + '">';
-					li_html += poi.name;
-					li_html += '</a>';
-					li_html += '</li>';
-			});
-			li_html += '</li>';				
-		    $("#poi-list").append(li_html);
-		    $("#poi-list").listview('refresh');
+			if (pois.length > 0) {
+				var li_html = '<li data-role="list-divider" id="dummy-route">';
+				li_html += '<h3><c:out value="${messagesPoiOverview.generalitems}"/></h3><p>&nbsp;</p>';
+				$.each(pois, function(j, poi) {
+						li_html += '<li id="' + poi.id + '">';
+						li_html += '<a href="#" onClick="submitMapPoi(' + poi.id +')">';
+						li_html += '<img height="20px" width="20px" src="<c:url value="/resources/${client.url}/images/' + poi.icon + '"/>" class="ui-li-icon" alt="' + poi.name + '">';
+						li_html += poi.name;
+						li_html += '</a>';
+						li_html += '</li>';
+				});
+				li_html += '</li>';				
+			    $("#poi-list").append(li_html);
+			    $("#poi-list").listview('refresh');
+			}
 		});
 	}
-	
+	--%>
 	function geo_error(error) {
 		if (error.code == 1) {
 			alert("<c:out value='${messagesMap.gpserror1}'/>");

@@ -1,9 +1,11 @@
 // $(window).load($.mobile.silentScroll(0));
 
 $(document).ready(function() {
-	$.mobile.silentScroll(0);
+	//$.mobile.silentScroll(0);
   	$(window).bind("orientationchange resize pageshow", fixgeometry);
 });
+
+$(window).load(function () { $.mobile.silentScroll(0); $('#loading').hide(); });
 
 // Map zoom  
 $("#plus").click(function(){
