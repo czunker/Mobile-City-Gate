@@ -604,7 +604,7 @@
 			    														type: 'png', 
 			    														getURL: createTileUrl
 			    													});
-			    layerMapnik.url = ['<c:out value="${tilesServers}"/>'];
+			    layerMapnik.url = <c:out value="${tilesServers}" escapeXml="false" />;
 		    </c:when>
 		    <c:otherwise>
 				var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("OSM Standard (engl. Server)", { attribution: '', keyname: 'mapnik'});
