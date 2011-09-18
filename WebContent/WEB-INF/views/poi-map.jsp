@@ -594,8 +594,22 @@
 	        ),
 	        controls: [touchNav]
 	    });
-	    
-	    var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("OSM Standard (engl. Server)", { attribution: '', keyname: 'mapnik' });
+		
+		<c:choose>
+		    <c:when test="${!empty tilesServers}">
+			    var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("OSM Standard (engl. Server)", 
+			    													{ 
+			    														attribution: '', 
+			    														keyname: 'mapnik', 
+			    														type: 'png', 
+			    														getURL: createTileUrl
+			    													});
+			    layerMapnik.url = ['<c:out value="${tilesServers}"/>'];
+		    </c:when>
+		    <c:otherwise>
+				var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("OSM Standard (engl. Server)", { attribution: '', keyname: 'mapnik'});
+			</c:otherwise>
+		</c:choose>
 	
 	    map.addLayer(layerMapnik);
 	 	var lonLat = new OpenLayers.LonLat(longitude, latitude).transform(map.displayProjection,  map.projection);
@@ -609,6 +623,28 @@
 	    map.addControl(selectControl);
 	    selectControl.activate();
 	}
+	
+	<c:if test="${!empty tilesServers}">
+		function createTileUrl (bounds) {
+	        var res = this.map.getResolution();
+	        var x = Math.round((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
+	        var y = Math.round((this.maxExtent.top - bounds.top) / (res * this.tileSize.h));
+	        var z = this.map.getZoom();
+	        var limit = Math.pow(2, z);
+	        if (y < 0 || y >= limit) {
+	            return ""; // Tile not found. Use Firefox and Firebug to see url requested
+	        }
+	        else {
+	            x = ((x % limit) + limit) % limit;       
+	            var url = this.url;
+	            var path = z + "/" + x + "/" + y + ".png";
+	            if (url instanceof Array) {
+	                url = this.selectUrl(path, url);
+	            }
+	            return url + path;
+	        }
+	    }
+	</c:if>
 
 	
 

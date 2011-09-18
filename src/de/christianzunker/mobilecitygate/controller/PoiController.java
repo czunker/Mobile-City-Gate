@@ -163,6 +163,7 @@ public class PoiController {
 			cat.setPois(stringIds);
 		}
         
+        model.addAttribute("tilesServers", config.getTilesServers());
         model.addAttribute("profiles", profiles);
         model.addAttribute("poiCategories", cats);
         model.addAttribute("pois", pois);
