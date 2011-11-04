@@ -6,6 +6,9 @@ public class PoiCategory {
 	String name = "";
 	String shortName = "";
 	String icon = "";
+	int clientId = 0;
+	String locale = "";
+	int published = 0;
 	// TODO replace with array/List
 	String pois = "";
 	
@@ -42,6 +45,25 @@ public class PoiCategory {
 	public void setShortName(String shortName) {
 		this.shortName = shortName;
 	}
+	public int getClientId() {
+		return clientId;
+	}
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+	public String getLocale() {
+		return locale;
+	}
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+	public int getPublished() {
+		return published;
+	}
+	public void setPublished(int published) {
+		this.published = published;
+	}
+	
 	
 	
 

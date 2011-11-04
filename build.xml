@@ -125,6 +125,13 @@
 	      	<arg value="${resources.dir}/global/js/poi-map-min.js"/>
 	      	<arg value="${resources.dir}/global/js/poi-map.js"/>
 	      </exec>
+  		<exec executable="java">
+  			        <arg value="-jar"/>
+  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  			      	<arg value="-o"/>
+  			      	<arg value="${resources.dir}/global/js/cms-min.js"/>
+  			      	<arg value="${resources.dir}/global/js/cms.js"/>
+  			      </exec>
   		  <exec executable="java">
   			        <arg value="-jar"/>
   			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
@@ -217,7 +224,8 @@
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
               <classes dir="${build.dir}" includes="**/*.*"/>
-          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*.js,**/jquery.mobile*.js,**/jquery-?.?.?.min.js,**/poi-map.js"/>
+          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.min.js,**/poi-map.js"/>
+          	  <zipfileset dir="WebContent" />
           </war>
       </target>
   	

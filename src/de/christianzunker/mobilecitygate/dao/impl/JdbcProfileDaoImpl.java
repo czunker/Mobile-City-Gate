@@ -23,17 +23,33 @@ public class JdbcProfileDaoImpl implements ProfileDao {
 	
 	@Override
 	public List<Profile> getProfiles() {
-		logger.debug("entering method getDisabilities");
+		logger.debug("entering method getProfiles");
 		List<Profile> profiles = this.jdbcTemplate.query("SELECT id, name, short_name, icon FROM profiles ORDER BY profiles.name", new ProfileMapper());
-		logger.debug("leaving method getDisabilities");
+		logger.debug("leaving method getProfiles");
 		return profiles;
 	}
 	
 	@Override
 	public List<Profile> getActiveProfilesByClientLocale(int clientId, String locale) {
-		logger.debug("entering method getDisabilities");
+		logger.debug("entering method getActiveProfilesByClientLocale");
 		List<Profile> profiles = this.jdbcTemplate.query("SELECT DISTINCT profiles.id, profiles.name, profiles.short_name, profiles.icon FROM profiles, rel_poi_profile, pois WHERE profiles.id = rel_poi_profile.profile_id AND pois.id = rel_poi_profile.poi_id AND pois.client_id = " + clientId + " AND profiles.locale = '" + locale + "' ORDER BY profiles.name", new ProfileMapper());
-		logger.debug("leaving method getDisabilities");
+		logger.debug("leaving method getActiveProfilesByClientLocale");
+		return profiles;
+	}
+	
+	@Override
+	public List<Profile> getProfilesByLocale(String locale) {
+		logger.debug("entering method getProfilesByLocale");
+		List<Profile> profiles = this.jdbcTemplate.query("SELECT profiles.id, profiles.name, profiles.short_name, profiles.icon FROM profiles WHERE profiles.locale = '" + locale + "' ORDER BY profiles.name", new ProfileMapper());
+		logger.debug("leaving method getProfilesByLocale");
+		return profiles;
+	}
+	
+	@Override
+	public List<Profile> getProfilesByPoi(int poiId) {
+		logger.debug("entering method getActiveProfilesByClientLocale");
+		List<Profile> profiles = this.jdbcTemplate.query("SELECT profiles.id, profiles.name, profiles.short_name, profiles.icon FROM profiles, rel_poi_profile, pois WHERE profiles.id = rel_poi_profile.profile_id AND pois.id = rel_poi_profile.poi_id AND pois.id = " + poiId + " ORDER BY profiles.name", new ProfileMapper());
+		logger.debug("leaving method getActiveProfilesByClientLocale");
 		return profiles;
 	}
 	

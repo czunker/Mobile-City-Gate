@@ -17,12 +17,10 @@ public class Route {
 	private double endLon = 0.0;
 	private double endLat = 0.0;
 	private String color = "";
+	private int clientId = 0;
+	int published = 0;
 	
 	private List<Poi> pois = null;
-	
-	
-	
-	
 	
 	public String getColor() {
 		return color;
@@ -109,5 +107,18 @@ public class Route {
 	public void setEndLat(double endLat) {
 		this.endLat = endLat;
 	}
+	public int getClientId() {
+		return clientId;
+	}
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+	public int getPublished() {
+		return published;
+	}
+	public void setPublished(int published) {
+		this.published = published;
+	}
+	
 	
 }

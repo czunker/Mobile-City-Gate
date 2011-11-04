@@ -1,5 +1,8 @@
 package de.christianzunker.mobilecitygate.beans;
 
+import java.util.List;
+import java.util.Vector;
+
 public class Poi {
 
 	int id = 0;
@@ -13,6 +16,18 @@ public class Poi {
 	String ivrNumber = "";
 	String ivrTextUrl = "";
 	String locale = "";
+	int clientId = 0;
+	int published = 0;
+	
+	String poiCategory = "";
+	int poiCategoryId = 0;
+	
+	String route = "";
+	int routeId = 0;
+	
+	List<String> poiProfiles = new Vector<String>();
+	List<Integer> poiProfileIds = new Vector<Integer>();
+	
 	
 	
 	
@@ -82,6 +97,55 @@ public class Poi {
 	public void setLat(double lat) {
 		this.lat = lat;
 	}
+	public int getClientId() {
+		return clientId;
+	}
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+	public String getPoiCategory() {
+		return poiCategory;
+	}
+	public void setPoiCategory(String poiCategory) {
+		this.poiCategory = poiCategory;
+	}
+	public int getPoiCategoryId() {
+		return poiCategoryId;
+	}
+	public void setPoiCategoryId(int poiCategoryId) {
+		this.poiCategoryId = poiCategoryId;
+	}
+	public String getRoute() {
+		return route;
+	}
+	public void setRoute(String route) {
+		this.route = route;
+	}
+	public int getRouteId() {
+		return routeId;
+	}
+	public void setRouteId(int routeId) {
+		this.routeId = routeId;
+	}
+	public List<String> getPoiProfiles() {
+		return poiProfiles;
+	}
+	public void setPoiProfiles(List<String> poiProfiles) {
+		this.poiProfiles = poiProfiles;
+	}
+	public List<Integer> getPoiProfileIds() {
+		return poiProfileIds;
+	}
+	public void setPoiProfileIds(List<Integer> poiProfileIds) {
+		this.poiProfileIds = poiProfileIds;
+	}
+	public int getPublished() {
+		return published;
+	}
+	public void setPublished(int published) {
+		this.published = published;
+	}
+	
 	
 	
 }

@@ -2,6 +2,7 @@ package de.christianzunker.mobilecitygate.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,11 +10,14 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,7 +43,7 @@ import de.christianzunker.mobilecitygate.dao.RouteDao;
 @Controller
 public class PoiController {
 
-	private static final Logger logger = Logger.getLogger(HomeController.class);
+	private static final Logger logger = Logger.getLogger(PoiController.class);
 	
 	@Autowired
 	private PoiCategoryDao poiCatDao;
@@ -182,9 +186,64 @@ public class PoiController {
 		logger.debug("entering method getPoiById");
 		
         Poi poi = poiDao.getPoiById(poiId);
+        try {
+        	Route route = routeDao.getRouteByPoiId(poiId);
+        	poi.setRoute(route.getName());
+            poi.setRouteId(route.getId());
+        }
+        catch (EmptyResultDataAccessException ex) {
+        	poi.setRoute("no route assigned");
+        }
+        PoiCategory cat = poiCatDao.getCategoryByPoi(poiId);
+        List<Profile> profiles = profileDao.getProfilesByPoi(poiId);
+        poi.setIcon(cat.getIcon());
+        poi.setPoiCategory(cat.getName());
+        poi.setPoiCategoryId(cat.getId());
+        List<String> profileNames = new Vector();
+        List<Integer> profileIds = new Vector();
+        for (Profile profile : profiles) {
+        	profileNames.add(profile.getName());
+        	profileIds.add(new Integer(profile.getId()));
+		}
+        poi.setPoiProfileIds(profileIds);
+        poi.setPoiProfiles(profileNames);
         
         logger.debug("leaving method getPoiById");
 		return poi;
+	}
+	
+	@RequestMapping(value = "/poi/{poiId}", headers="Accept=application/json", method=RequestMethod.POST)
+	public @ResponseBody int setPoiById(@PathVariable("poiId") int poiId, @RequestBody Poi poi) {
+		logger.debug("entering method setPoiById");
+		
+		int rc = 0;
+		if (poiId > 0) {
+			rc = poiDao.updatePoiById(poiId, poi);
+			if (poi.getRouteId() > 0) {
+				rc = poiDao.updatePoiRoute(poiId, poi);
+			}
+			else {
+				rc = poiDao.deletePoiRoute(poiId, poi);
+			}
+				
+		}
+		else {
+			rc = poiDao.createPoi(poi);
+			poiId = rc;
+			rc = poiDao.createPoiRoute(poiId, poi);
+		}
+        logger.debug("leaving method setPoiById");
+        return rc;
+	}
+	
+	@RequestMapping(value = "/poi/{poiId}", method=RequestMethod.DELETE)
+	public @ResponseBody int deletePoiById(@PathVariable("poiId") int poiId) {
+		logger.debug("entering method deletePoiById");
+		
+        int rc = poiDao.deletePoiById(poiId);
+        
+        logger.debug("leaving method deletePoiById");
+        return rc;
 	}
 	
 	@RequestMapping(value = "/pois/{routeId}", headers="Accept=*/*", method=RequestMethod.GET)
@@ -224,6 +283,28 @@ public class PoiController {
         
         logger.debug("leaving method getPois");
 		return pois;
+	}
+	
+	@RequestMapping(value = "/poi/publish", method=RequestMethod.POST)
+	// TODO is it allowed to throw exceptions in this method or is there a different way because of REST + JSON?
+	public @ResponseBody int publishAllPois() throws Exception {
+		logger.debug("entering method publishAllPois");
+		
+		// TODO: Publish routes by client and locale depending on the logged in user and his rights
+		int rc = poiDao.publishAllPois();
+        
+        logger.debug("leaving method publishAllPois");
+		return rc;
+	}
+	
+	@RequestMapping(value = "/poi/publish/{poiId}", method=RequestMethod.POST)
+	public @ResponseBody int publishPoiById(@PathVariable("poiId") int poiId) {
+		logger.debug("entering method publishPoiById");
+		
+        int rc = poiDao.publishPoiById(poiId);
+        
+        logger.debug("leaving method publishPoiById");
+        return rc;
 	}
 	
 	@ExceptionHandler(Exception.class)

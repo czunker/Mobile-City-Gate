@@ -27,4 +27,22 @@ public interface PoiDao {
 	public Poi getPoiById(int id);
 	
 	public List<Poi> getPoisByClientLocale(int clientId, String locale);
+
+	public int updatePoiById(int id, Poi poi);
+	
+	public int createPoi(Poi poi);
+	
+	public int createPoiRoute(int poiId, Poi poi);
+	
+	public int updatePoiRoute(int poiId, Poi poi);
+	
+	public int deletePoiRoute(int poiId, Poi poi);
+	
+	public int deletePoiById(int poiId);
+
+	public List<Poi> getAllPoisByClientLocale(int clientId, String locale);
+
+	public int publishPoiById(int poiId);
+	
+	public int publishAllPois();
 }

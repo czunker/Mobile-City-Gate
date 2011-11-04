@@ -30,21 +30,21 @@ public class ClientController {
 	
 	@RequestMapping(value = "/clients", headers="Accept=*/*", method=RequestMethod.GET)
 	public @ResponseBody List<Client> getClients() {
-		logger.debug("entering method choice");
+		logger.debug("entering method getClients");
 		
 		List<Client> clients = clientDao.getClientsWithoutGlobal();
 
-		logger.debug("leaving method choice");
+		logger.debug("leaving method getClients");
 		return clients;
 	}
 	
 	@RequestMapping(value = "/client/{clientId}", headers="Accept=*/*", method=RequestMethod.GET)
 	public @ResponseBody Client getClient(@PathVariable("clientid") int clientId) {
-		logger.debug("entering method choice");
+		logger.debug("entering method getClient");
 		
 		Client client = clientDao.getClientById(clientId);
 
-		logger.debug("leaving method choice");
+		logger.debug("leaving method getClient");
 		return client;
 	}
 	

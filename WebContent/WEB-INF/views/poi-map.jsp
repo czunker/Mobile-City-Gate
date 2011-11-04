@@ -587,10 +587,11 @@
 	        projection: new OpenLayers.Projection("EPSG:900913"),
 	        displayProjection: new OpenLayers.Projection("EPSG:4326"),
 	        units: "m",
-	        numZoomLevels: 19,
+	        numZoomLevels: 18,
 	        maxResolution: 156543.0339,
+	      	//-20037508.34, -20037508.34, 20037508.34, 20037508.34
 	        maxExtent: new OpenLayers.Bounds(
-	            -20037508.34, -20037508.34, 20037508.34, 20037508.34
+	            5.185546875,46.845703125,15.46875,55.634765625
 	        ),
 	        controls: [touchNav]
 	    });
