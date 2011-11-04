@@ -278,21 +278,44 @@
 	});
 	--%>
 	
+	function submitMap() {
+		$.mobile.changePage("#mappage", "pop");
+		return false;
+	};
+	
+	function submitMapRoute(routeId) {
+		centerRouteId = routeId;
+		$.getJSON("<c:url value='/route/'/>" + routeId + "/", function(route) {
+			longitude = route.startLon;
+			latitude = route.startLat;
+			$.mobile.changePage("#mappage", "pop");
+		});
+		return false;
+	};
+	
+	function submitMapPoi(poiId) {
+		centerPoiId = poiId;
+		$.getJSON("<c:url value='/poi/'/>" + poiId + "/", function(poi) {
+			longitude = poi.lon;
+			latitude = poi.lat;
+			$.mobile.changePage("#mappage", "pop");
+		});
+		return false;
+	};
+	
 	<%-- create event listern for case of call to poi#mappage as bookmark --%>
 	$("#mappage").live('pageshow', function() {
 		//work around for closing dialogs
-		//when dialogs are closed this event is fired an the map is recreated, but this shouldn't be
+		//when dialogs are closed this event is fired and the map is recreated, but this shouldn't be
 		if (!closedDialog) {
 			createMap();
 			createPoisOnMap(getVisiblePOIs(), centerPoiId);
 			if (centerRouteId >= 0) {
 				createRoutesOnMap([centerRouteId]);
-				centerMapOnRoute(centerRouteId);
 				centerRouteId = -1;
 			} 
 			else if (centerPoiId >= 0) {
 				createRoutesOnMap(getVisibleRoutes());
-				centerMapOnPoi(centerPoiId);
 				centerPoiId = -1;
 			} 
 			else {
@@ -987,37 +1010,6 @@
 		return false;
 	};
 
-	function submitMap() {
-		$.mobile.changePage("#mappage", "pop");
-		return false;
-	};
-
-	function submitMapRoute(routeId) {
-		centerRouteId = routeId;
-		$.mobile.changePage("#mappage", "pop");
-		return false;
-	};
-	
-	function submitMapPoi(poiId) {
-		centerPoiId = poiId;
-		$.mobile.changePage("#mappage", "pop");
-		return false;
-	};
-	
-	function centerMapOnPoi(poiId) {
-		$.getJSON("<c:url value='/poi/'/>" + poiId + "/", function(poi) {
-			var lonLat = new OpenLayers.LonLat(poi.lon, poi.lat).transform(map.displayProjection, map.projection);
-			map.setCenter (lonLat, <c:out value="${client.startZoom}"/>);
-		});
-	}
-	
-	function centerMapOnRoute(routeId) {
-		$.getJSON("<c:url value='/route/'/>" + routeId + "/", function(route) {
-			var lonLat = new OpenLayers.LonLat(route.startLon, route.startLat).transform(map.displayProjection,  map.projection);
-			map.setCenter (lonLat, <c:out value="${client.startZoom}"/>);
-		});
-	}
-	
 </compress:js>
 </script>
 
