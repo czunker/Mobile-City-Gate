@@ -50,6 +50,19 @@ public class JdbcPoiDaoImpl implements PoiDao{
 	}
 	
 	@Override
+	public int updatePoiProfilesById(int id, Poi poi) {
+		logger.debug("entering method updatePoiProfilesById");
+		int rc = 0;
+		rc =  this.jdbcTemplate.update("DELETE FROM rel_poi_profile WHERE poi_id = " + id);
+		for (Integer profileId : poi.getPoiProfileIds()) {
+			logger.debug("INSERT INTO rel_poi_profile (poi_id, profile_id) VALUES (" + id + ", " + profileId + ")");
+			rc =  this.jdbcTemplate.update("INSERT INTO rel_poi_profile (poi_id, profile_id) VALUES (" + id + ", " + profileId + ")");
+		}
+		logger.debug("leaving method updatePoiProfilesById");
+		return rc;
+	}
+	
+	@Override
 	@Transactional (propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public int createPoi(Poi poi) {
 		logger.debug("entering method setPoiById");
@@ -73,6 +86,14 @@ public class JdbcPoiDaoImpl implements PoiDao{
 		logger.debug("entering method deletePoiById");
 		int rc =  this.jdbcTemplate.update("DELETE FROM pois WHERE id = " + id);
 		logger.debug("leaving method deletePoiById");
+		return rc;
+	}
+	
+	@Override
+	public int deletePoiProfilesById(int id) {
+		logger.debug("entering method deletePoiProfilesById");
+		int rc =  this.jdbcTemplate.update("DELETE FROM rel_poi_profile WHERE poi_id = " + id);
+		logger.debug("leaving method deletePoiProfilesById");
 		return rc;
 	}
 	
@@ -122,25 +143,43 @@ public class JdbcPoiDaoImpl implements PoiDao{
 	
 	@Override
 	public int createPoiRoute(int poiId, Poi poi) {
-		logger.debug("entering method updatePoiRoute");
+		logger.debug("entering method createPoiRoute");
 		int rc =  this.jdbcTemplate.update("INSERT INTO rel_poi_route (route_id, poi_id) VALUES (" + poi.getRouteId() + ", " + poiId + ")");
-		logger.debug("leaving method updatePoiRoute");
+		logger.debug("leaving method createPoiRoute");
 		return rc;
 	}
 	
 	@Override
-	public int updatePoiRoute(int poiId, Poi poi) {
-		logger.debug("entering method updatePoiRoute");
-		int rc =  this.jdbcTemplate.update("UPDATE rel_poi_route SET route_id = " + poi.getRouteId() + " WHERE poi_id = " + poiId);
-		logger.debug("leaving method updatePoiRoute");
-		return rc;
-	}
-	
-	@Override
-	public int deletePoiRoute(int poiId, Poi poi) {
-		logger.debug("entering method setPoiRoute");
+	public int updatePoiRouteById(int poiId, int routeId) {
+		logger.debug("entering method updatePoiRouteById");
 		int rc =  this.jdbcTemplate.update("DELETE FROM rel_poi_route WHERE poi_id = " + poiId);
-		logger.debug("leaving method setPoiRoute");
+		rc =  this.jdbcTemplate.update("INSERT INTO rel_poi_route (route_id, poi_id) VALUES (" + routeId + ", " + poiId + ")");
+		logger.debug("leaving method updatePoiRouteById");
+		return rc;
+	}
+	
+	@Override
+	public int updatePoiCategoryById(int poiId, int categoryId) {
+		logger.debug("entering method updatePoiCategoryById");
+		int rc =  this.jdbcTemplate.update("DELETE FROM rel_poi_category WHERE poi_id = " + poiId);
+		rc =  this.jdbcTemplate.update("INSERT INTO rel_poi_category (category_id, poi_id) VALUES (" + categoryId + ", " + poiId + ")");
+		logger.debug("leaving method updatePoiCategoryById");
+		return rc;
+	}
+	
+	@Override
+	public int deletePoiRouteById(int poiId) {
+		logger.debug("entering method deletePoiRouteById");
+		int rc =  this.jdbcTemplate.update("DELETE FROM rel_poi_route WHERE poi_id = " + poiId);
+		logger.debug("leaving method deletePoiRouteById");
+		return rc;
+	}
+	
+	@Override
+	public int deletePoiCategoryById(int poiId) {
+		logger.debug("entering method deletePoiCategoryById");
+		int rc =  this.jdbcTemplate.update("DELETE FROM rel_poi_category WHERE poi_id = " + poiId);
+		logger.debug("leaving method deletePoiCategoryById");
 		return rc;
 	}
 	
@@ -195,7 +234,7 @@ public class JdbcPoiDaoImpl implements PoiDao{
 	@Override
 	public List<Poi> getAllPoisByClientLocale(int clientId, String locale) {
 		logger.debug("entering method getPoisByClientLocale");
-		List<Poi> pois = this.jdbcTemplate.query("SELECT pois.id, pois.name, pois.description, pois.lon, pois.lat, poi_categories.icon, pois.ivr_number, pois.ivr_text_url, pois.locale, pois.client_id, pois.published FROM pois, poi_categories, rel_poi_category WHERE pois.client_id = " + clientId + " AND pois.locale = '" + locale + "' AND pois.id = rel_poi_category.poi_id AND rel_poi_category.category_id = poi_categories.id", new PoiMapper());
+		List<Poi> pois = this.jdbcTemplate.query("SELECT pois.id, pois.name, pois.description, pois.lon, pois.lat, poi_categories.icon, pois.ivr_number, pois.ivr_text_url, pois.locale, pois.client_id, pois.published, clients.name client, routes.name route, poi_categories.name category FROM pois, routes, poi_categories, rel_poi_category, rel_poi_route, clients WHERE pois.client_id = " + clientId + " AND clients.id = pois.client_id AND pois.locale = '" + locale + "' AND pois.id = rel_poi_category.poi_id AND rel_poi_category.category_id = poi_categories.id AND pois.id = rel_poi_route.poi_id AND rel_poi_route.route_id = routes.id", new PoiMapper());
 		logger.debug("leaving method getPoisByClientLocale");
 		return pois;
 	}
@@ -218,6 +257,24 @@ public class JdbcPoiDaoImpl implements PoiDao{
             poi.setLocale(rs.getString("locale"));
             poi.setClientId(rs.getInt("client_id"));
             poi.setPublished(rs.getInt("published"));
+            try {
+            	poi.setClient(rs.getString("client"));
+            }
+            catch (SQLException ex) {
+            	logger.warn("Couldn't find column client, but it isn't needed by all SQL queries!");
+            }
+            try {
+            	poi.setRoute(rs.getString("route"));
+            }
+            catch (SQLException ex) {
+            	logger.warn("Couldn't find column client, but it isn't needed by all SQL queries!");
+            }
+            try {
+            	poi.setPoiCategory(rs.getString("category"));
+            }
+            catch (SQLException ex) {
+            	logger.warn("Couldn't find column client, but it isn't needed by all SQL queries!");
+            }
             logger.debug("leaving method mapRow");
             return poi;
         }        

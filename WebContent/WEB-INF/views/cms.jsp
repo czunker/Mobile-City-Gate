@@ -1,4 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://htmlcompressor.googlecode.com/taglib/compressor" prefix="compress" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
@@ -149,7 +149,7 @@
 				<form id="poiForm">
 					<div data-role="fieldcontain">
 						<input type="hidden" name="id" id="poi-id" value=""  />
-						<input type="hidden" name="id" id="poi-published" value=""  />
+						<input type="hidden" name="published" id="poi-published" value=""  />
 						<input type="hidden" name="clientId" id="poi-client-id" value=""  />
 					    <label for="name">Name</label>
 					    <input type="text" size="30" name="name" id="poi-name" value=""  />
@@ -190,7 +190,7 @@
 						<br>
 						<fieldset data-role="controlgroup">
 							<legend>Profile: (für diese Personengruppen ist der Punkt <u>nicht</u> geeignet)</legend>
-							<div id="poi-profiles" name="profileIds">
+							<div id="poi-profiles">
 							<%-- will be filled by javascript --%>
 							</div>
 					    </fieldset>
@@ -271,7 +271,7 @@
 				<div data-role="fieldcontain">
 					<form id="routeForm">
 						<input type="hidden" name="id" id="route-id" value=""  />
-						<input type="hidden" name="id" id="route-published" value=""  />
+						<input type="hidden" name="published" id="route-published" value=""  />
 						<input type="hidden" name="clientId" id="route-client-id" value=""  />
 					    <label for="name">Name</label>
 					    <input type="text" name="name" id="route-name" value=""  />
@@ -390,7 +390,7 @@
 			<div class="right-column" id ="categorydiv">
 				<form id="categoryForm">
 					<input type="hidden" name="id" id="category-id" value=""  />
-					<input type="hidden" name="id" id="category-published" value=""  />
+					<input type="hidden" name="published" id="category-published" value=""  />
 					<img id="category-icon" name="icon" height="24px" width="24px" src="" alt="">
 					<img id="category-icon-selected" height="48px" width="48px" src="" alt="">
 					<br>
@@ -457,7 +457,7 @@
 	<script type="text/javascript" src="<c:url value='/resources/global/js/plupload/js/plupload.full.js'/>" ></script>
 	
 	<script>
-	<compress:js>
+	<%--<compress:js>--%>
 	
 		var poimap;
 		var routemap;
@@ -490,8 +490,10 @@
 		
 		function editPoi(poiId, copy) {
 			$.getJSON("<c:url value='/poi/'/>" + poiId, function(poi) {
+				$("#poidiv").show();
 				$("#poidiv").css('backgroundColor', $("#poi-" + poiId).css('backgroundColor'));
 				$("#poi-id").val(poi.id);
+				$("#poi-published").val(poi.published);
 				$("#poi-client-id").val(poi.clientId);
 				$("#poi-name").val(poi.name);
 				$("#poi-description").val(poi.description);
@@ -499,6 +501,7 @@
 				$("#poi-lon").val(poi.lon);
 				$("#poi-lat").val(poi.lat);
 				var iconFeature;
+				createPoiMap();
 				poiLayer.removeAllFeatures();
 				var point = new OpenLayers.Geometry.Point(poi.lon, poi.lat);
 	    		point.transform(new OpenLayers.Projection("EPSG:4326"), poimap.getProjectionObject());
@@ -528,13 +531,7 @@
 					$("#poi-icon").attr("alt", category.name);
 					updatePoiCategories(poi.clientId, poi.locale, category.id);
 				});
-				updatePoiProfiles(poi.locale);
-				<%-- set asigned profiles for this poi --%>
-				var profileArray = [];
-				$.each(poi.poiProfileIds, function(i, profileId) {
-					profileArray.push(profileId);
-				});
-				$("#poi-profiles").val(profileArray);
+				updatePoiProfiles(poi.locale, poi.poiProfileIds);
 				var langOptions = "";
 				$.each(languages[poi.clientId], function(i, lang) {
 					langOptions += '<option value="' + lang.shortName + '">' + lang.name + '</option>';
@@ -554,7 +551,6 @@
 					$("#poi-status").html("Noch nicht veröffentlicht!");
 					$("#poi-publish").show();
 				}
-				$("poidiv").show();
 				createUploaderIVRText('<c:url value="/upload/"/>' + poi.clientId + '/ivrtext');
 			});
 		}
@@ -647,11 +643,17 @@
 		    return false;
 		}
 		
-		function updatePoiProfiles(locale) {
+		function updatePoiProfiles(locale, profileIds) {
 			var profilesOptions = "";
 			$.getJSON("<c:url value='/profiles/'/>" + locale, function(profiles) {
+				<%-- set asigned profiles for this poi --%>
 				$.each(profiles, function(i, profile) {
-					profilesOptions += '<input type="checkbox" name="profile-' + profile.id + ' id="profile-' + profile.id + '/><label for="profile-' + profile.id + '">' + profile.name + '</label><br>';
+					if ($.inArray(profile.id, profileIds) > -1) {
+						profilesOptions += '<input type="checkbox" checked id="profile-' + profile.id + '" value="' + profile.id + '" /><label for="profile-' + profile.id + '">' + profile.name + '</label><br>';
+					}
+					else {
+						profilesOptions += '<input type="checkbox" id="profile-' + profile.id + '" value="' + profile.id + '" /><label for="profile-' + profile.id + '">' + profile.name + '</label><br>';
+					}
 				});
 				$("#poi-profiles").html(profilesOptions);
 			});
@@ -682,8 +684,10 @@
 		
 		function editRoute(routeId, copy) {
 			$.getJSON("<c:url value='/route/'/>" + routeId, function(route) {
+				$("#routediv").show();
 				$("#routediv").css('backgroundColor', $("#route-" + routeId).css('backgroundColor'));
 				$("#route-id").val(route.id);
+				$("#route-published").val(route.published);
 				$("#route-client-id").val(route.clientId);
 				$("#route-name").val(route.name);
 				$("#route-description").val(route.description);
@@ -703,6 +707,7 @@
 				});
 				$("#route-locale").html(langOptions);
 				$("#route-locale").val(route.locale);
+				createRouteMap();
 				var lonLat = new OpenLayers.LonLat(route.startLon, route.startLat).transform(routemap.displayProjection, routemap.projection);
 				routemap.setCenter (lonLat, 15); <%-- Zoomstufe einstellen--%>
 			    if (copy) {
@@ -718,8 +723,7 @@
 					$("#route-status").html("Noch nicht veröffentlicht!");
 					$("#route-publish").show();
 				}
-				$("routediv").show();
-			    
+				
 			    //remove old layers
 			    var routeLayers = routemap.getLayersByName(/^Route .*/);
 				for (var i=0; i<routeLayers.length; i++) {
@@ -773,8 +777,10 @@
 		
 		function editCategory(categoryId, copy) {
 			$.getJSON("<c:url value='/poicategory/'/>" + categoryId, function(category) {
+				$("#categorydiv").show();
 				$("#categorydiv").css('backgroundColor', $("#category-" + categoryId).css('backgroundColor'));
 				$("#category-id").val(category.id);
+				$("#category-published").val(category.published);
 				$("#category-name").val(category.name);
 				$("#category-shortname").val(category.shortName);
 				$("#category-icon-name").val(category.icon);
@@ -812,7 +818,6 @@
 					$("#poi-category-status").html("Noch nicht veröffentlicht!");
 					$("#poi-category-publish").show();
 				}
-				$("categorydiv").show();
 			});
 		}
 		
@@ -921,6 +926,11 @@
 		
 		function savePoi() {
 		    var poi = $("#poiForm").serializeObject();
+		    var poiProfileIds = [];
+		    $('#poi-profiles :checked').each(function() {
+		    	poiProfileIds.push($(this).val());
+		    });
+		    poi.poiProfileIds = poiProfileIds;
 		    $.postJSON("<c:url value='/poi/'/>" + $("#poi-id").val(), poi, function(data) { 
 		    	alert("Data Loaded: " + data);
 		    	if (poi.id == 0) {
@@ -1147,12 +1157,13 @@
 		$("#poi-locale").live('change', function () {
 			var locale = $("#poi-locale").val();
 			var clientId = $("#poi-client-id").val();
-			updatePoiProfiles(locale);
+			<%-- TODO: save state somehow? so when languages are changed multiple times, the old state can be restored --%>
+			updatePoiProfiles(locale, []);
 			updatePoiCategories(clientId, locale, 0);
 			updatePoiRoutes(clientId, locale, 0);
 		});	
 		
-	</compress:js>
+	<%--</compress:js>--%>
 	</script>
 	
 </body>

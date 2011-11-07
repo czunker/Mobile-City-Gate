@@ -220,10 +220,25 @@ public class PoiController {
 		if (poiId > 0) {
 			rc = poiDao.updatePoiById(poiId, poi);
 			if (poi.getRouteId() > 0) {
-				rc = poiDao.updatePoiRoute(poiId, poi);
+				// TODO: What if new assignment?
+				rc = poiDao.updatePoiRouteById(poiId, poi.getRouteId());
 			}
 			else {
-				rc = poiDao.deletePoiRoute(poiId, poi);
+				rc = poiDao.deletePoiRouteById(poiId);
+			}
+			logger.debug("poi.getPoiProfileIds().size(): " + poi.getPoiProfileIds().size());
+			if (poi.getPoiProfileIds().size() > 0) {
+				rc = poiDao.updatePoiProfilesById(poiId, poi);
+			}
+			else {
+				rc = poiDao.deletePoiProfilesById(poiId);
+			}
+			if (poi.getPoiCategoryId() > 0) {
+				// TODO: What if new assignment?
+				rc = poiDao.updatePoiCategoryById(poiId, poi.getPoiCategoryId());
+			}
+			else {
+				rc = poiDao.deletePoiCategoryById(poiId);
 			}
 				
 		}

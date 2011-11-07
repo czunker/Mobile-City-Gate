@@ -17,6 +17,7 @@ public class Poi {
 	String ivrTextUrl = "";
 	String locale = "";
 	int clientId = 0;
+	String client = "";
 	int published = 0;
 	
 	String poiCategory = "";
@@ -144,6 +145,12 @@ public class Poi {
 	}
 	public void setPublished(int published) {
 		this.published = published;
+	}
+	public String getClient() {
+		return client;
+	}
+	public void setClient(String client) {
+		this.client = client;
 	}
 	
 	

@@ -1,11 +1,11 @@
 		$(document).ready(function() {
 			$("button").button();
-			$("poidiv").hide();
-			$("routediv").hide();
-			$("categorydiv").hide();
+			$("#poidiv").hide();
+			$("#routediv").hide();
+			$("#categorydiv").hide();
 			getClientsAndTheirData();
-			createPoiMap();
-			createRouteMap();
+			//createPoiMap();
+			//createRouteMap();
 		});
 		
 		function createUploaderKML(url) {

@@ -34,9 +34,9 @@ public interface PoiDao {
 	
 	public int createPoiRoute(int poiId, Poi poi);
 	
-	public int updatePoiRoute(int poiId, Poi poi);
+	public int updatePoiRouteById(int poiId, int routeId);
 	
-	public int deletePoiRoute(int poiId, Poi poi);
+	public int deletePoiRouteById(int poiId);
 	
 	public int deletePoiById(int poiId);
 
@@ -45,4 +45,12 @@ public interface PoiDao {
 	public int publishPoiById(int poiId);
 	
 	public int publishAllPois();
+
+	public int updatePoiProfilesById(int id, Poi poi);
+
+	public int deletePoiProfilesById(int id);
+
+	public int deletePoiCategoryById(int poiId);
+
+	public int updatePoiCategoryById(int poiId, int categoryId);	
 }
