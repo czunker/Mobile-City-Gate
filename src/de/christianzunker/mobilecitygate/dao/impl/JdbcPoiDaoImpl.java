@@ -44,7 +44,7 @@ public class JdbcPoiDaoImpl implements PoiDao{
 	public int updatePoiById(int id, Poi poi) {
 		logger.debug("entering method setPoiById");
 		int rc = 0;
-		rc =  this.jdbcTemplate.update("UPDATE pois SET name = '" + poi.getName() + "', description = '" + poi.getDescription() + "', lon = " + poi.getLon() + ", lat = " + poi.getLat() + ", ivr_number = '" + poi.getIvrNumber() + "', locale = '" + poi.getLocale() + "' WHERE id = " + id);
+		rc =  this.jdbcTemplate.update("UPDATE pois SET name = '" + poi.getName() + "', description = '" + poi.getDescription() + "', lon = " + poi.getLon() + ", lat = " + poi.getLat() + ", ivr_number = '" + poi.getIvrNumber() + "', ivr_text_url = '" + poi.getIvrTextUrl() + "', locale = '" + poi.getLocale() + "' WHERE id = " + id);
 		logger.debug("leaving method setPoiById");
 		return rc;
 	}

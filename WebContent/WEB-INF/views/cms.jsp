@@ -498,6 +498,7 @@ poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 				$("#poi-name").val(poi.name);
 				$("#poi-description").val(poi.description);
 				$("#poi-ivr-number").val(poi.ivrNumber);
+				$("#poi-ivr-text-url").val(poi.ivrTextUrl);
 				$("#poi-lon").val(poi.lon);
 				$("#poi-lat").val(poi.lat);
 				var iconFeature;
