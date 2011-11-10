@@ -1,4 +1,4 @@
-poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://htmlcompressor.googlecode.com/taglib/compressor" prefix="compress" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
@@ -464,6 +464,7 @@ poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 		var selectControl;
 		var uploaderKML;
 		var uploaderCategory;
+		var uploaderIVRText;
 		var poiLayer = new OpenLayers.Layer.Vector("Points of interest");
 		var iconSize = new OpenLayers.Size(24, 24);
 	
@@ -552,6 +553,10 @@ poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 					$("#poi-status").html("Noch nicht veröffentlicht!");
 					$("#poi-publish").show();
 				}
+				<%-- not a very nice solution, but didn't find another way
+				if I wouldn't destroy it, I get an additional file dialog each time a POI is edited 
+				--%>
+				if (uploaderIVRText) { uploaderIVRText.destroy(); }
 				createUploaderIVRText('<c:url value="/upload/"/>' + poi.clientId + '/ivrtext');
 			});
 		}
@@ -732,6 +737,10 @@ poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 				}
 			    
 				var client = clients[route.clientId];
+				<%-- not a very nice solution, but didn't find another way
+				if I wouldn't destroy it, I get an additional file dialog each time a POI is edited 
+				--%>
+				if (uploaderKML) { uploaderKML.destroy(); }
 				createUploaderKML('<c:url value="/upload/"/>' + route.clientId + '/mapkml');
 				
 			    var lkml = new OpenLayers.Layer.Vector("Route " + route.name, {style: {strokeColor: route.color, strokeWidth: 5, strokeOpacity: 0.5},
@@ -805,6 +814,10 @@ poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 				//});
 				$("#category-client").html(clientOptions);
 				$("#category-client").val(category.clientId);
+				<%-- not a very nice solution, but didn't find another way
+				if I wouldn't destroy it, I get an additional file dialog each time a POI is edited 
+				--%>
+				if (uploaderCategory) { uploaderCategory.destroy(); }
 				createUploaderCategory('<c:url value="/upload/"/>' + category.clientId + '/poicategory');
 				if (copy) {
 					$("#category-id").val(0);
@@ -823,6 +836,9 @@ poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 		}
 		
 		function createUploaderCategory(url) {
+			<%-- doesn't work
+			if (uploaderCategory) { return false; }
+			--%>
 			uploaderCategory = new plupload.Uploader({
 				runtimes : 'gears,html5,browserplus',
 				browse_button : 'pickfiles-category',
@@ -1033,6 +1049,7 @@ poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 		}
 		
 		function createPoiMap() {
+			if (poimap) { return false; }
 			OpenLayers.Lang.setCode('de');
 			<%-- must be explicitly set, otherwise ol would search for images and css in the wrong location --%>
 			OpenLayers.ImgPath = "<c:url value='/resources/global/images/ol-images/'/>";
@@ -1111,6 +1128,7 @@ poiForm<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 		
 		
 		function createRouteMap() {
+			if (routemap) { return false; }
 			OpenLayers.Lang.setCode('de');
 			<%-- must be explicitly set, otherwise ol would search for images and css in the wrong location --%>
 			OpenLayers.ImgPath = "<c:url value='/resources/global/images/ol-images/'/>";

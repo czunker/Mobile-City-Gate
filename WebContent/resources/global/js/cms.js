@@ -9,6 +9,9 @@
 		});
 		
 		function createUploaderKML(url) {
+			/* doesn't work
+			if (uploaderKML) { return false; }
+			*/
 			uploaderKML = new plupload.Uploader({
 				runtimes : 'gears,html5,browserplus',
 				browse_button : 'pickfiles-kml',
@@ -66,6 +69,9 @@
 		}
 		
 		function createUploaderIVRText(url) {
+			/* doesn't work
+			if (uploaderIVRText) { return false; }
+			*/
 			uploaderIVRText = new plupload.Uploader({
 				runtimes : 'gears,html5,browserplus',
 				browse_button : 'pickfiles-ivrtext',

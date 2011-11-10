@@ -67,7 +67,7 @@ public class JdbcPoiDaoImpl implements PoiDao{
 	public int createPoi(Poi poi) {
 		logger.debug("entering method setPoiById");
 		int rc = 0;
-		rc = this.jdbcTemplate.update("INSERT INTO pois (name, description, lon, lat, ivr_number, locale, client_id) VALUES ('" + poi.getName() + "', '" + poi.getDescription() + "', " + poi.getLon() + ", " + poi.getLat() + ", '" + poi.getIvrNumber() + "', '" + poi.getLocale() + "', " + poi.getClientId() + ")");
+		rc = this.jdbcTemplate.update("INSERT INTO pois (name, description, lon, lat, ivr_number, ivr_text_url, locale, client_id) VALUES ('" + poi.getName() + "', '" + poi.getDescription() + "', " + poi.getLon() + ", " + poi.getLat() + ", '" + poi.getIvrNumber() + "', '" + poi.getIvrTextUrl() + "', '" + poi.getLocale() + "', " + poi.getClientId() + ")");
 		int poiId = this.jdbcTemplate.queryForInt("SELECT last_insert_id() from pois LIMIT 1", null, null);
 		rc = this.jdbcTemplate.update("INSERT INTO rel_poi_category (poi_id, category_id) VALUES (" + poiId + ", " + poi.getPoiCategoryId() + ")");
 		if (!poi.getPoiProfileIds().isEmpty()) {

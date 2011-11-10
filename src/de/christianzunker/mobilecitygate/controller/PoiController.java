@@ -243,6 +243,7 @@ public class PoiController {
 				
 		}
 		else {
+			// TODO: good design? split it in multiple methods?
 			rc = poiDao.createPoi(poi);
 			poiId = rc;
 			rc = poiDao.createPoiRoute(poiId, poi);
