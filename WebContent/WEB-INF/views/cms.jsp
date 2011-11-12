@@ -99,10 +99,8 @@
 			<sec:authorize access="hasRole('publishPoi')">
 				<%--<div class="alignright">--%>
 				<div>
-					<button>
-						<a href="#" onClick="publishAllPois()">
-							<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
-						</a>
+					<button onClick="publishAllPois()">
+						<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
 						Alle POIs veröffentlichen
 					</button>
 				</div>
@@ -195,14 +193,10 @@
 							</div>
 					    </fieldset>
 					</div>
-					<button>
-						<a href="#" onClick="savePoi()">Speichern</a>
-					</button>
+					<button onClick="savePoi()">Speichern</button>
 					<sec:authorize access="hasRole('publishPoi')">
-						<button id="poi-publish" >
-							<a href="#" onClick="publishPoi()">
-								<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
-							</a>
+						<button id="poi-publish" onClick="publishPoi()">
+							<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
 							Publizieren
 						</button>
 						<div id="poi-status"></div>
@@ -221,10 +215,8 @@
 			<sec:authorize access="hasRole('publishRoute')">
 				<%--<div class="alignright">--%>
 				<div>
-				<button>
-					<a href="#" onClick="publishAllRoutes()">
-						<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
-					</a>
+				<button onClick="publishAllRoutes()">
+					<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
 					Alle Routen veröffentlichen
 				</button>
 				</div>
@@ -316,14 +308,10 @@
 							<a id="pickfiles-kml" href="#">[KML Datei auswählen]</a>
 							<a id="uploadfiles-kml" href="#">[Dateien hochladen]</a>
 						</div>
-						<button>
-							<a href="#" onClick="saveRoute()">Speichern</a>
-						</button>
+						<button onClick="saveRoute()">Speichern</button>
 						<sec:authorize access="hasRole('publishRoute')">
-							<button id="route-publish">
-								<a href="#" onClick="publishRoute()">
-									<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
-								</a>
+							<button id="route-publish" onClick="publishRoute()">
+								<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
 								Publizieren
 							</button>
 							<div id="route-status"></div>
@@ -341,10 +329,8 @@
 			<sec:authorize access="hasRole('publishCategory')">
 				<%--<div class="alignright">--%>
 				<div>
-				<button>
-				<a href="#" onClick="publishAllCategories()">
-					<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
-				</a>
+				<button onClick="publishAllCategories()">
+				<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
 				Alle Kategorien veröffentlichen
 				</button>
 				</div>
@@ -414,14 +400,10 @@
 						<a id="pickfiles-category" href="#">[Icon Dateien auswählen]</a>
 						<a id="uploadfiles-category" href="#">[Dateien hochladen]</a>
 					</div>
-					<button>
-						<a href="#" onClick="saveCategory()">Speichern</a>
-					</button>
+					<button onClick="saveCategory()">Speichern</button>
 					<sec:authorize access="hasRole('publishCategory')">
-						<button id="poi-category-publish">
-							<a href="#" onClick="publishCategory()">
-								<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
-							</a>
+						<button id="poi-category-publish" onClick="publishCategory()">
+							<img height="16px" width="16px" src="<c:url value='/resources/global/images/publish.png'/>" alt="Veröffentlichen">								
 							Publizieren
 						</button>
 						<div id="poi-category-status"></div>
