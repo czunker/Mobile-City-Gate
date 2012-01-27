@@ -10,7 +10,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta http-equiv="Content-Language" content="de">
 		<title><c:out value="${messages.title}"/></title>
-		<link type="text/css" rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" >
+		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-1.0a4.1.min.css'/>" >
 	</head>
 	<body>
 	<compress:html>
@@ -30,7 +30,8 @@
 	</div>
 	</compress:html>
 	
-	<script>
+	<script async>
+	<compress:js>
 	
 		// it seems metatag isn't always enough
 		//When ready...
@@ -41,15 +42,17 @@
 		    window.scrollTo(0, 1);
 		  }, 0);
 		});
-	
+	</compress:js>
 	</script>
 	
 	<%-- 
 	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery-1.5.1.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery.mobile-1.0a4.min.js'/>"></script>
+	<script async src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+	<script async src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery.mobile-1.0a4.1.min.js'/>"></script>
 	--%>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>	
+	
+	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>	
 
 	<jsp:include page="footer.jsp"/>
 	</body>

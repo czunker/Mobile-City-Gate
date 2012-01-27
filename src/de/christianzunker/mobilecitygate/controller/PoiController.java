@@ -1,5 +1,6 @@
 package de.christianzunker.mobilecitygate.controller;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -69,6 +70,10 @@ public class PoiController {
 	@RequestMapping(value = "/{client}/{locale}/pois")
 	public String getPois(@PathVariable("client") String client, @PathVariable("locale") String locale, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.debug("entering method getPois");
+		Calendar cal = Calendar.getInstance();
+		long starttime = cal.getTimeInMillis();
+		long curtime = 0L;
+		logger.trace("starttime: " + starttime);
 		
 		//TODO do a more precise check on locale with table languages?
 		if (!locale.matches("[a-z]{2}") ||
@@ -81,6 +86,9 @@ public class PoiController {
 		Client clientObj = clientDao.getClientByUrl(client);
 		HashMap<String, String> hashMessagesPoiOverview = messageDao.getMessagesByPageClientIdLocale("poi-overview", clientObj.getId(), locale);
 		HashMap<String, String> hashMessagesMap = messageDao.getMessagesByPageClientIdLocale("map", clientObj.getId(), locale);
+		
+		curtime = cal.getTimeInMillis();
+		logger.trace("PERF: after get messages took ms: " + (curtime - starttime));
         
 		//get shortened URL for easier Twitter usage
 		String longUrl = "http://" + request.getServerName() + request.getContextPath() + "/" + clientObj.getUrl() + "/" + locale + "/";
@@ -111,28 +119,19 @@ public class PoiController {
 			clientObj.setShortUrl(longUrl);
 		}
 
-
+		curtime = cal.getTimeInMillis();
+		logger.trace("PERF: after get short url took ms: " + (curtime - starttime));
 		
 		List<PoiCategory> cats = poiCatDao.getActiveCategoriesByClientLocale(clientObj.getId(), locale);
         List<Profile> profiles = profileDao.getActiveProfilesByClientLocale(clientObj.getId(), locale);
-        
-        if (logger.isDebugEnabled()) {
-	        List<Profile> allProfiles = profileDao.getProfiles();
-	        for (Profile prof : allProfiles) {
-	        	logger.debug("Profile: " + prof.getId() + " " + prof.getName());
-	        }
-        }
-        
+
         
         //List<Poi> pois = poiDao.getPoisNotInRoute();
         List<Poi> pois = poiDao.getPoisNotInRouteByClientLocale(clientObj.getId(), locale);
         List<Route> routes = routeDao.getRouteListByClientLocale(clientObj.getId(), locale);
-        
-        if (logger.isDebugEnabled()) {
-        	for (Route route : routes) {
-        		logger.debug("route: " + route.getName());
-			}
-		}
+
+        curtime = cal.getTimeInMillis();
+        logger.trace("PERF: after get categories, profiles, routes and pois took ms: " + (curtime - starttime));
         
         for (Route route : routes) {
 			route.setPois(poiDao.getPoisByRouteLocale(route.getId(), locale));
@@ -140,6 +139,9 @@ public class PoiController {
         		logger.debug("#route pois: " + route.getPois().size());
 			}
 		}
+        
+        curtime = cal.getTimeInMillis();
+        logger.trace("PERF: after set pois for route took ms: " + (curtime - starttime));
         
         for (Profile profile : profiles) {
 			List<Integer> ids = poiDao.getPoiIdsByProfileByClientLocale(profile.getId(), clientObj.getId(), locale);
@@ -154,6 +156,9 @@ public class PoiController {
 			profile.setNonUsablePoiIds(stringIds);
 		}
         
+        curtime = cal.getTimeInMillis();
+        logger.trace("PERF: after associate pois to profiles took ms: " + (curtime - starttime));
+        
         for (PoiCategory cat : cats) {
 			List<Integer> ids = poiDao.getPoiIdsByCategoryLocale(cat.getId(), locale);
 			String stringIds = "";
@@ -167,6 +172,9 @@ public class PoiController {
 			cat.setPois(stringIds);
 		}
         
+        curtime = cal.getTimeInMillis();
+        logger.trace("PERF: after associate pois to categories took ms: " + (curtime - starttime));
+        
         model.addAttribute("tilesServers", config.getTilesServers());
         model.addAttribute("profiles", profiles);
         model.addAttribute("poiCategories", cats);
@@ -176,6 +184,9 @@ public class PoiController {
         model.addAttribute("client", clientObj);
         model.addAttribute("messagesPoiOverview", hashMessagesPoiOverview);
         model.addAttribute("messagesMap", hashMessagesMap);
+        
+        curtime = cal.getTimeInMillis();
+        logger.trace("PERF: after setting the model took ms: " + (curtime - starttime));
         
         logger.debug("leaving method getPois");
 		return "poi-map";

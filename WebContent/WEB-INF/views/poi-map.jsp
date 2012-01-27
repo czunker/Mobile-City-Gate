@@ -13,8 +13,7 @@
 <%-- is needed for screen readers --%>
 <meta http-equiv="Content-Language" content="${locale}">
 <title><c:out value="${messages.title}"/></title>
-<!-- <link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" > -->
-<link type="text/css" rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" >
+<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 <link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/ol-theme/default/style.css'/>" >
 <link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/map-style-min.css'/>" >
 <link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/poi-map-style-min.css'/>" >
@@ -233,10 +232,13 @@
 <script type="text/javascript" src="<c:url value='/resources/global/js/ol+osm-min.js'/>" ></script>
 
 <%-- needed for map + poi overview--%> 
-<%-- <script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>--%>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-<script src="<c:url value='/resources/global/js/jquery-ui-1.8.11.custom.min.js'/>"></script>
-<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+<%--
+<script async src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery.mobile-1.0a4.1.min.js'/>"></script> 
+--%>
+<script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
+<script async src="<c:url value='/resources/global/js/jquery-ui-1.8.11.custom.min.js'/>"></script>
+
 
 
 <%--
@@ -245,9 +247,9 @@
 <script type="text/javascript" src="<c:url value='/resources/global/js/poi-map.js'/>" ></script>
 --%> 
 <%-- needed for map --%>
-<script type="text/javascript" src="<c:url value='/resources/global/js/map-min.js'/>" ></script>
+<script async type="text/javascript" src="<c:url value='/resources/global/js/map-min.js'/>" ></script>
 
-<script>
+<script async>
 <compress:js>
 
 	var map;
@@ -265,6 +267,7 @@
 	
 	var poiLayer = new OpenLayers.Layer.Vector("Points of interest");	    	
 	var iconSize = new OpenLayers.Size(24, 24);
+	var locationFeature;
 	
 	//var asyncFinished = 0;
 	
@@ -298,7 +301,7 @@
 		$.getJSON("<c:url value='/poi/'/>" + poiId + "/", function(poi) {
 			longitude = poi.lon;
 			latitude = poi.lat;
-			$.mobile.changePage("#mappage", "pop");
+		  	$.mobile.changePage("#mappage", "pop");
 		});
 		return false;
 	};
@@ -452,6 +455,9 @@
 	    
 	    var point = new OpenLayers.Geometry.Point(longitude, latitude);
 		point.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+		if (locationFeature) {
+			poiLayer.removeFeatures(locationFeature);
+		}
 		var iconFeature = new OpenLayers.Feature.Vector(point);
 		iconFeature.style = {
 				externalGraphic: "<c:url value='/resources/${client.url}/images/location_map.png'/>",
@@ -466,6 +472,7 @@
 				"content": '<c:out value="${messagesMap.heretext}"/>' + "<br><br><a href='#' onClick='closedDialog = true;' data-role='button' data-rel='back' data-transition='pop'><c:out value='${messagesMap.closebutton}'/></a>"
 				};
 		poiLayer.addFeatures(iconFeature);
+		locationFeature = iconFeature;
 	}
 	
 	function createPoisOnMap(poiIds, localCenterPoiId) {
@@ -489,6 +496,8 @@
 	    		if (poi.id == localCenterPoiId) {
 					icon = icon.replace(".png", "_selected.png");
 					iconSize = new OpenLayers.Size(48, 48);
+					//var lonLat = new OpenLayers.LonLat(poi.lon, poi.lat).transform(map.displayProjection,  map.projection);
+				    //map.setCenter (lonLat, <c:out value="${client.startZoom}"/>);
 				}
 	    		else {
 	    			iconSize = new OpenLayers.Size(24, 24);
@@ -596,7 +605,11 @@
 	
 	function createMap() {
 		// don't create map a second time
-		if (map) { return false; }
+		if (map) {
+			var lonLat = new OpenLayers.LonLat(longitude, latitude).transform(map.displayProjection,  map.projection);
+		    map.setCenter (lonLat, <c:out value="${client.startZoom}"/>); <%-- Zoomstufe einstellen--%>
+			return false;
+		}
 		OpenLayers.Lang.setCode('de');
 		<%-- must be explicitly set, otherwise ol would search for images and css in the wrong location --%>
 		OpenLayers.ImgPath = "<c:url value='/resources/global/images/ol-images/'/>";
