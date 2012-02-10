@@ -282,6 +282,9 @@
 	--%>
 	
 	function submitMap() {
+		if(geo_position_js.init()){
+	 		geo_position_js.getCurrentPosition(geo_success, geo_error);
+	 	}
 		$.mobile.changePage("#mappage", "pop");
 		return false;
 	};
