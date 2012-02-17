@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -67,6 +69,7 @@ public class PoiController {
 	@Autowired
 	private MessageDao messageDao;
 	
+	@Cacheable("pois")
 	@RequestMapping(value = "/{client}/{locale}/pois")
 	public String getPois(@PathVariable("client") String client, @PathVariable("locale") String locale, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.debug("entering method getPois");
@@ -92,33 +95,8 @@ public class PoiController {
         
 		//get shortened URL for easier Twitter usage
 		String longUrl = "http://" + request.getServerName() + request.getContextPath() + "/" + clientObj.getUrl() + "/" + locale + "/";
-		String googleUrl = "";
-		try {
-			com.sun.jersey.api.client.Client jsonClient = com.sun.jersey.api.client.Client.create();
-			googleUrl = "https://www.googleapis.com/urlshortener/v1/url?" + config.getGoogleApiKey();
-			WebResource webResource = jsonClient.resource(googleUrl);
-			String jsonRequest = "{ \"longUrl\": \"" + longUrl + "\" }";
-			logger.debug("jsonRequest: " + jsonRequest);
-			String jsonResponse = webResource.accept(
-			        MediaType.APPLICATION_JSON_TYPE).
-			        type(MediaType.APPLICATION_JSON_TYPE).
-			        post(String.class, jsonRequest);
-			logger.debug("jsonResponse: " + jsonResponse);
-			
-			String shortUrl = "";
-			JsonParser jsonParser = new JsonParser();
-			JsonObject jsonObj = (JsonObject)jsonParser.parse(jsonResponse);
-			if ( jsonObj != null && jsonObj.has("id")) {
-				shortUrl = jsonObj.get("id").toString();
-				shortUrl = shortUrl.replace("\"", "");
-			}
-			clientObj.setShortUrl(shortUrl);
-		}
-		catch (ClientHandlerException ex) {
-			logger.error("Couldn't connect to Google URL Shortener! (Tried URL: " + googleUrl + ")", ex);
-			clientObj.setShortUrl(longUrl);
-		}
-
+		clientObj.setShortUrl(getGoogleShortUrl(longUrl));
+		
 		curtime = cal.getTimeInMillis();
 		logger.trace("PERF: after get short url took ms: " + (curtime - starttime));
 		
@@ -192,6 +170,37 @@ public class PoiController {
 		return "poi-map";
 	}
 	
+	@Cacheable("urls")
+	private String getGoogleShortUrl(String longUrl) {
+		String shortUrl = "";
+		String googleUrl = "https://www.googleapis.com/urlshortener/v1/url?" + config.getGoogleApiKey();
+		try {
+			com.sun.jersey.api.client.Client jsonClient = com.sun.jersey.api.client.Client.create();
+			WebResource webResource = jsonClient.resource(googleUrl);
+			String jsonRequest = "{ \"longUrl\": \"" + longUrl + "\" }";
+			logger.debug("jsonRequest: " + jsonRequest);
+			String jsonResponse = webResource.accept(
+			        MediaType.APPLICATION_JSON_TYPE).
+			        type(MediaType.APPLICATION_JSON_TYPE).
+			        post(String.class, jsonRequest);
+			logger.debug("jsonResponse: " + jsonResponse);
+			
+			JsonParser jsonParser = new JsonParser();
+			JsonObject jsonObj = (JsonObject)jsonParser.parse(jsonResponse);
+			if ( jsonObj != null && jsonObj.has("id")) {
+				shortUrl = jsonObj.get("id").toString();
+				shortUrl = shortUrl.replace("\"", "");
+			}
+		}
+		catch (ClientHandlerException ex) {
+			logger.error("Couldn't connect to Google URL Shortener! (Tried URL: " + googleUrl + ")", ex);
+			shortUrl = longUrl;
+		}
+		return shortUrl;
+	}
+	
+	
+	@Cacheable("poi")
 	@RequestMapping(value = "/poi/{poiId}", headers="Accept=*/*", method=RequestMethod.GET)
 	public @ResponseBody Poi getPoiById(@PathVariable("poiId") int poiId) {
 		logger.debug("entering method getPoiById");
@@ -223,6 +232,7 @@ public class PoiController {
 		return poi;
 	}
 	
+	@CacheEvict(value = "poi", allEntries=false)
 	@RequestMapping(value = "/poi/{poiId}", headers="Accept=application/json", method=RequestMethod.POST)
 	public @ResponseBody int setPoiById(@PathVariable("poiId") int poiId, @RequestBody Poi poi) {
 		logger.debug("entering method setPoiById");

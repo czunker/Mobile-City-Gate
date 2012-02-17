@@ -28,25 +28,10 @@
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
 	
-	<!-- 
-	<cache:annotation-driven cache-manager="cacheManager" proxy-target-class="false" mode="proxy" />
-	 -->
-	<cache:annotation-driven />
+	<cache:annotation-driven cache-manager="cacheManager" />
 
-	<!--
-	<bean id="ehcache" 
-		  class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
-		  p:config-location="classpath:ehcache.xml"  
-      />  
-    <bean id="cacheManager"
-      	   class="org.springframework.cache.ehcache.EhCacheCacheManager" 
-      	   p:cache-manager-ref="ehcache" 
-      />
-	-->
-	
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cache-manager-ref="ehcache"/>
 
-	<!-- Ehcache library setup -->
 	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:config-location="WEB-INF/ehcache.xml"/>
 
 	
