@@ -107,8 +107,8 @@
 					<li id="nav-poi-categories"><a href="#" onClick="showCategories()">Kategorien</a></li>
 					<li id="nav-languages"><a href="#" onClick="showLanguages()">Sprachen</a></li>
 					<li id="nav-messages"><a href="#" onClick="showMessages()">Texte</a></li>
+					<li id="nav-clients"><a href="#" onClick="showClients()">Mandanten</a></li>
 					<%--
-					<li><a href="#tabs-clients">Klienten</a></li>
 					<li><a href="#tabs-users">CMS - Userverwaltung</a></li>
 		            <li class="dropdown">
 		              <a href="#" class="dropdown-toggle">Dropdown</a>
@@ -160,7 +160,7 @@
 					            <th></th>
 					          </tr>
 						</thead>
-						<c:forEach var="poi" items="${pois}" varStatus="status">
+						<c:forEach var="poi" items="${pois}">
 							    <tr id="poi-<c:out value='${poi.id}'/>">
 								<td><c:out value='${poi.name}'/></td>
 								<td><c:out value='${poi.client}'/></td>
@@ -306,7 +306,7 @@
 					            <th colspan="3"></th>
 					          </tr>
 						</thead>
-						<c:forEach var="route" items="${routes}" varStatus="status">
+						<c:forEach var="route" items="${routes}">
 						    	<tr id="route-<c:out value='${route.id}'/>">
 								<td><c:out value='${route.name}'/></td>
 								<sec:authorize access="hasRole('changeRoute')">
@@ -426,7 +426,7 @@
 					            <th colspan="3"></th>
 					          </tr>
 						</thead>
-						<c:forEach var="category" items="${categories}" varStatus="status">
+						<c:forEach var="category" items="${categories}">
 						    	<tr id="category-<c:out value='${category.id}'/>">
 								<td><c:out value='${category.name}'/></td>
 									<sec:authorize access="hasRole('changeCategory')">
@@ -511,7 +511,7 @@
 				            <th colspan="3"></th>
 				          </tr>
 					</thead>
-					<c:forEach var="language" items="${languages}" varStatus="status">
+					<c:forEach var="language" items="${languages}">
 					    	<tr id="language-<c:out value='${language.id}'/>">
 							<td><c:out value='${language.name}'/></td>
 							<td><c:out value='${language.shortName}'/></td>
@@ -599,7 +599,7 @@
 				            <th></th>
 				          </tr>
 					</thead>
-					<c:forEach var="message" items="${messages}" varStatus="status">
+					<c:forEach var="message" items="${messages}">
 					    	<tr id="message-<c:out value='${message.id}'/>">
 							<td><c:out value='${message.text}'/></td>
 							<td><c:out value='${message.page}'/></td>
@@ -617,11 +617,102 @@
 				</table>
 			</div>
 			
-			
-			<%--
 			<div id="tabs-clients" class="hide">
+				<table id="client-list" class="zebra-striped condensed-table">
+					<thead>
+						<tr>
+				            <th>Name</th>
+				            <th>URL</th>
+				            <th colspan="3"></th>
+				          </tr>
+					</thead>
+					<c:forEach var="client" items="${clients}">
+					    	<tr id="client-<c:out value='${client.id}'/>">
+							<td><c:out value='${client.name}'/></td>
+							<td><c:out value='${client.url}'/></td>
+								<sec:authorize access="hasRole('changeClient')">
+									<td>
+									<a href="#" onClick="editClient(<c:out value='${client.id}'/>, false)">
+										<img height="16px" width="16px" src="<c:url value='/resources/global/images/Actions-document-edit-icon.png'/>" alt="Editieren">								
+									</a>
+									</td>
+								</sec:authorize>
+								<sec:authorize access="hasRole('createClient')">
+									<td>
+									<a href="#" onClick="editClient(<c:out value='${client.id}'/>, true)">
+										<img height="16px" width="16px" src="<c:url value='/resources/global/images/Actions-edit-copy-icon.png'/>" alt="Kopieren">								
+									</a>
+									</td>
+								</sec:authorize>
+								<sec:authorize access="hasRole('deleteClient')">
+									<td>
+									<a href="#" onClick="deleteClient(<c:out value='${client.id}'/>)">
+										<img height="16px" width="16px" src="<c:url value='/resources/global/images/Actions-edit-delete-shred-icon.png'/>" alt="Löschen">								
+									</a>
+									</td>
+								</sec:authorize>
+						</tr>
+					</c:forEach>
+				</table>
 			</div>
 			
+			<div id="clientdiv" class="small-modal hide">
+					<div class="modal-header">
+		              <a href="#" class="close">&times;</a>
+		              <h3 id="edit-client-heading">Mandanten editieren</h3>
+		            </div>
+		            
+	            	<div class="modal-body">
+						<form id="clientForm" class="form-stacked">
+							<input type="hidden" name="id" id="client-id" value=""  />
+							<div class="row">
+								<div class="span3">
+									<label for="name">Name</label>
+							    	<input type="text" size="30" name="name" id="client-name" value=""  />
+							   	</div>
+							   	<div class="span3">
+									<label for="url">URL</label>
+							    	<input type="text" size="30" name="url" id="client-url" value=""  />
+							   	</div>
+							</div>
+							<div class="row">
+								<div class="span3">
+									<label for="startLon">Längengrad</label>
+							    	<input type="text" size="30" name="startLon" id="client-start-lon" value=""  />
+							   	</div>
+							   	<div class="span3">
+									<label for="startLat">Breitengrad</label>
+							    	<input type="text" size="30" name="startLat" id="client-start-lat" value=""  />
+							   	</div>
+							   	<div class="span3">
+									<label for="startZoom">Zoom (max. 16)</label>
+							    	<input type="text" size="30" name="startZoom" id="client-start-zoom" value=""  />
+							   	</div>
+							</div>
+							<div class="row">
+							</div>
+							<div class="row">
+						    	<div class="span16">
+								    <div id="container-client-bg">
+										<div id="filelist-client-bg">Browser unterstütz leider keinen Dateiupload.</div>
+										<br />
+										<a id="pickfiles-client-bg" href="#">[Icon Datei auswählen]</a>
+										<a id="uploadfiles-client-bg" href="#">[Datei hochladen]</a>
+									</div>
+								</div>
+							</div>
+						</form>
+			        </div>
+			        
+			        <div class="modal-footer">
+					  	<a href="#" class="btn primary" onClick="saveClient()">Speichern</a>
+						<a href="#" class="btn secondary close">Abbrechen</a>
+		            </div>
+					
+				</div>
+			
+			
+			<%--
 			<div id="tabs-users" class="hide">
 			</div>
 			--%>
@@ -662,11 +753,13 @@
 			$("#tabs-poi-categories").hide();
 			$("#tabs-languages").hide();
 			$("#tabs-messages").hide();
+			$("#tabs-clients").hide();
 			$("#nav-poi-categories").removeClass('active');
 			$("#nav-routes").removeClass('active');
 			$("#nav-pois").addClass('active');
 			$("#nav-languages").removeClass('active');
 			$("#nav-messages").removeClass('active');
+			$("#nav-clients").removeClass('active');
 		}
 		
 		function showRoutes() {
@@ -675,11 +768,13 @@
 			$("#tabs-poi-categories").hide();
 			$("#tabs-languages").hide();
 			$("#tabs-messages").hide();
+			$("#tabs-clients").hide();
 			$("#nav-poi-categories").removeClass('active');
 			$("#nav-routes").addClass('active');
 			$("#nav-pois").removeClass('active');
 			$("#nav-languages").removeClass('active');
 			$("#nav-messages").removeClass('active');
+			$("#nav-clients").removeClass('active');
 		}
 		
 		function showCategories() {
@@ -688,11 +783,13 @@
 			$("#tabs-poi-categories").show();
 			$("#tabs-languages").hide();
 			$("#tabs-messages").hide();
+			$("#tabs-clients").hide();
 			$("#nav-poi-categories").addClass('active');
 			$("#nav-routes").removeClass('active');
 			$("#nav-pois").removeClass('active');
 			$("#nav-languages").removeClass('active');
 			$("#nav-messages").removeClass('active');
+			$("#nav-clients").removeClass('active');
 		}
 		
 		function showLanguages() {
@@ -701,11 +798,28 @@
 			$("#tabs-poi-categories").hide();
 			$("#tabs-languages").show();
 			$("#tabs-messages").hide();
+			$("#tabs-clients").hide();
 			$("#nav-poi-categories").removeClass('active');
 			$("#nav-routes").removeClass('active');
 			$("#nav-pois").removeClass('active');
 			$("#nav-languages").addClass('active');
 			$("#nav-messages").removeClass('active');
+			$("#nav-clients").removeClass('active');
+		}
+		
+		function showClients() {
+			$("#tabs-pois").hide();
+			$("#tabs-routes").hide();
+			$("#tabs-poi-categories").hide();
+			$("#tabs-languages").hide();
+			$("#tabs-messages").hide();
+			$("#tabs-clients").show();
+			$("#nav-poi-categories").removeClass('active');
+			$("#nav-routes").removeClass('active');
+			$("#nav-pois").removeClass('active');
+			$("#nav-languages").removeClass('active');
+			$("#nav-messages").removeClass('active');
+			$("#nav-clients").addClass('active');
 		}
 		
 		function showMessages() {
@@ -714,11 +828,13 @@
 			$("#tabs-poi-categories").hide();
 			$("#tabs-languages").hide();
 			$("#tabs-messages").show();
+			$("#tabs-clients").hide();
 			$("#nav-poi-categories").removeClass('active');
 			$("#nav-routes").removeClass('active');
 			$("#nav-pois").removeClass('active');
 			$("#nav-languages").removeClass('active');
 			$("#nav-messages").addClass('active');
+			$("#nav-clients").removeClass('active');
 		}
 		
 		function getClientsAndTheirData() {
@@ -848,6 +964,17 @@
 				   success: function(msg){
 				     alert( "Data Saved: " + msg );
 				     $("#language-" + languageId).remove();
+				   }
+				 });
+		}
+		
+		function deleteClient(clientId) {
+			$.ajax({
+				   type: "DELETE",
+				   url: "<c:url value='/client/'/>" + clientId,
+				   success: function(msg){
+				     alert( "Data Saved: " + msg );
+				     $("#client-" + clientId).remove();
 				   }
 				 });
 		}
@@ -1297,6 +1424,32 @@
 		    return false;
 		}
 		
+		function saveClient() {
+		    var client = $("#clientForm").serializeObject();
+		    $.postJSON("<c:url value='/client/'/>" + $("#client-id").val(), client, function(data) { 
+		    	alert("Data Loaded: " + data);
+		    	if (client.id == 0) {
+		    		addClientToList(data);
+		    		refreshLanguages(data);
+		    	}
+		    });
+		    return false;
+		}
+		
+		function refreshLanguages(clientId) {
+			$.getJSON("<c:url value='/languages/'/>" + clientId, function(languages) {
+				$.each(languages, function(i, language) {
+					addLanguageToList(language.id);
+					$.getJSON("<c:url value='/messages/" + clientId + "/" + language.shortName + "'/>", function(messages) {
+						$.each(messages, function(j, message) {
+							addMessageToList(message.id);
+						});
+					});
+				});
+			});
+			return false;
+		}
+		
 		function addPoiToList(poiId) {
 			$.getJSON("<c:url value='/poi/'/>" + poiId, function(poi) {
 				var html = '<tr id="poi-' + poiId + '">';
@@ -1318,6 +1471,33 @@
 				</sec:authorize>
 				html += '</tr>';
 				$("#poi-list").append(html);
+			});
+		}
+		
+		function addMessageToList(messageId) {
+			$.getJSON("<c:url value='/message/'/>" + messageId, function(message) {
+				var html = '<tr id="message-' + messageId + '">';
+				html += '<td>' + message.text + '</td>';
+				html += '<td>' + message.page + '</td>';
+				html += '<td>' + message.locale + '</td>';
+				html += '<td>' + message.client + '</td>';
+				<sec:authorize access="hasRole('changeMessage')">
+				html += '<td><a href="#" onClick="editMessage(' + messageId + ', false)">';
+				html += '<img height="16px" width="16px" src="<c:url value="/resources/global/images/Actions-document-edit-icon.png"/>" alt="Editieren">';								
+				html += '</a></td>';
+				</sec:authorize>
+				<sec:authorize access="hasRole('createMessage')">
+				html += '<td><a href="#" onClick="editMessage(' + messageId + ', true)">';
+				html += '<img height="16px" width="16px" src="<c:url value="/resources/global/images/Actions-edit-copy-icon.png"/>" alt="Kopieren">';								
+				html += '</a></td>';
+				</sec:authorize>
+				<sec:authorize access="hasRole('deleteMessage')">
+				html += '<td><a href="#" onClick="deleteMessage(' + messageId + ')">';
+				html += '<img height="16px" width="16px" src="<c:url value="/resources/global/images/Actions-edit-delete-shred-icon.png"/>" alt="Löschen">';								
+				html += '</a></td>';
+				</sec:authorize>
+				html += '</tr>';
+				$("#message-list").append(html);
 			});
 		}
 		
@@ -1392,6 +1572,31 @@
 				</sec:authorize>
 				html += '</tr>';
 				$("#language-list").append(html);
+			});
+		}
+		
+		function addClientToList(clientId) {
+			$.getJSON("<c:url value='/client/'/>" + clientId, function(client) {
+				var html = '<tr id="client-' + clientId + '">';
+				html += '<td>' + client.name + '</td>';
+				html += '<td>' + client.url + '</td>';
+				<sec:authorize access="hasRole('changeClient')">
+				html += '<td><a href="#" onClick="editClient(' + clientId + ', false)">';
+				html += '<img height="16px" width="16px" src="<c:url value="/resources/global/images/Actions-document-edit-icon.png"/>" alt="Editieren">';								
+				html += '</a></td>';
+				</sec:authorize>
+				<sec:authorize access="hasRole('createClient')">
+				html += '<td><a href="#" onClick="editClient(' + clientId + ', true)">';
+				html += '<img height="16px" width="16px" src="<c:url value="/resources/global/images/Actions-edit-copy-icon.png"/>" alt="Kopieren">';								
+				html += '</a></td>';
+				</sec:authorize>
+				<sec:authorize access="hasRole('deleteClient')">
+				html += '<td><a href="#" onClick="deleteClient(' + clientId + ')">';
+				html += '<img height="16px" width="16px" src="<c:url value="/resources/global/images/Actions-edit-delete-shred-icon.png"/>" alt="Löschen">';								
+				html += '</a></td>';
+				</sec:authorize>
+				html += '</tr>';
+				$("#client-list").append(html);
 			});
 		}
 		
@@ -1533,6 +1738,23 @@
 					$("#language-id").val(0);
 				}
 				createUploaderLanguageIcon('<c:url value="/upload/icon"/>');
+			});
+		}
+		
+		function editClient(clientId, copy) {
+			$.getJSON("<c:url value='/client/'/>" + clientId, function(client) {
+				$("#clientdiv").modal('show');
+				$("#client-id").val(client.id);
+				$("#client-name").val(client.name);
+				$("#client-url").val(client.url);
+				$("#client-start-lat").val(client.startLat);
+				$("#client-start-lon").val(client.startLon);
+				$("#client-start-zoom").val(client.startZoom);
+				$("#edit-client-heading").html('"' + client.name + '" editieren');
+				if (copy) {
+					$("#client-id").val(0);
+				}
+				//createUploaderClientImages('<c:url value="/upload/icon"/>');
 			});
 		}
 		

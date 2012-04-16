@@ -58,7 +58,7 @@ public class CmsController { // NO_UCD
 	
 	@RequestMapping(value = "/cms/")
 	public String getCmsData(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		logger.debug("entering method getPois");
+		logger.debug("entering method getCmsData");
 		
 		List<Poi> pois = new Vector<Poi>();
 		Collection<GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
@@ -85,6 +85,8 @@ public class CmsController { // NO_UCD
 		List<Message> messages = messageDao.getMessages();
 		
 		List<Language> languages = languageDao.getLanguages();
+		
+		List<Client> clients = clientDao.getClientsWithoutGlobal();
         
 		model.addAttribute("tilesServers", config.getTilesServers());
         model.addAttribute("pois", pois);
@@ -92,8 +94,9 @@ public class CmsController { // NO_UCD
         model.addAttribute("routes", routes);
         model.addAttribute("messages", messages);
         model.addAttribute("languages", languages);
+        model.addAttribute("clients", clients);
         
-        logger.debug("leaving method getPois");
+        logger.debug("leaving method getCmsData");
 		return "cms-bootstrap";
 	}
 	

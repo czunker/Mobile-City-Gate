@@ -52,6 +52,7 @@ public class JdbcLanguageDaoImpl implements LanguageDao { // NO_UCD
 	@Override
 	public int deleteLanguageById(Language lang) {
 		logger.debug("entering method deleteLanguageById");
+		//TODO: should be handled by db constraints
 		int rc =  this.jdbcTemplate.update("DELETE FROM messages WHERE client_id = " + lang.getClientId() + " AND locale = '" + lang.getShortName() + "'");
 		rc =  this.jdbcTemplate.update("DELETE FROM languages WHERE id = " + lang.getId());
 		logger.debug("leaving method deleteLanguageById");

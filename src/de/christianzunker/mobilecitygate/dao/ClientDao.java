@@ -14,4 +14,10 @@ public interface ClientDao {
 	
 	public List<Client> getClientsWithoutGlobal();
 
+	public int updateClientById(Client client);
+
+	public int createClient(Client client);
+
+	public int deleteClientById(Client client);
+
 }

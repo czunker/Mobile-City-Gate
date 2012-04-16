@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import de.christianzunker.mobilecitygate.beans.Client;
@@ -51,6 +53,38 @@ private static final Logger logger = Logger.getLogger(JdbcClientDaoImpl.class);
 		Client client = this.jdbcTemplate.queryForObject("SELECT id, name, url, start_lon, start_lat, start_zoom, start_page_image, bg_image, homepage, social FROM clients WHERE id = " + clientId, new ClientMapper());
 		logger.debug("leaving method getclientByUrl");
 		return client;
+	}
+	
+	@Override
+	public int deleteClientById(Client client) {
+		logger.debug("entering method deleteClientById");
+		//TODO: all other deletes should be handled by db constraints
+		int rc =  this.jdbcTemplate.update("DELETE FROM client WHERE id = " + client.getId());
+		logger.debug("leaving method deleteClientById");
+		return rc;
+	}
+	
+	@Override
+	public int updateClientById(Client client) {
+		logger.debug("entering method updateClientById");
+		int rc =  this.jdbcTemplate.update("UPDATE clients SET url = '" + client.getUrl() + " WHERE id = " + client.getId());
+		logger.debug("leaving method updateClientById");
+		return rc;
+	}
+	
+	@Override
+	@Transactional (propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public int createClient(Client client) {
+		logger.debug("entering method createClient");
+		int rc = 0;
+		rc = this.jdbcTemplate.update("INSERT INTO clients (name, url, start_lon, start_lat, start_zoom, start_page_image, bg_image, homepage, social) VALUES ('" + client.getName() + "', '" + client.getUrl() + "', " + client.getStartLon() + ", " + client.getStartLat() + ", " + client.getStartZoom() + ", '" + client.getStartPageImage() + "', '" + client.getBgImage() + "', '" + client.getHomepage() + "', " + client.getSocial() + ")");
+		int clientId = this.jdbcTemplate.queryForInt("SELECT last_insert_id() from clients LIMIT 1", null, null);
+		rc = this.jdbcTemplate.update("INSERT INTO languages (language_long, language_short, icon, client_id) VALUES ('Deutsch', 'de', 'de_ball.png', " + clientId + ")");
+		int langId = this.jdbcTemplate.queryForInt("SELECT last_insert_id() from languages LIMIT 1", null, null);
+		rc = this.jdbcTemplate.update("INSERT INTO messages (message_key, message_text, page, locale, client_id) SELECT message_key, message_text, page, 'de', " + clientId + " FROM messages WHERE client_id = 1 AND locale = 'de'");
+		logger.debug("added new client with id: " + clientId);
+		logger.debug("leaving method createClient");
+		return clientId;
 	}
 	
 	private static final class ClientMapper implements RowMapper<Client> {

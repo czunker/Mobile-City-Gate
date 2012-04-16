@@ -15,4 +15,6 @@ public interface MessageDao {
 	
 	public HashMap<String, String> getMessagesByPageClientIdLocale(String page, int clientId, String locale);
 
+	public Message getMessageById(int messageId);
+
 }

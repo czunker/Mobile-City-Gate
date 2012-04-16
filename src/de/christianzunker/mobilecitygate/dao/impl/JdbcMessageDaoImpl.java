@@ -34,8 +34,17 @@ public class JdbcMessageDaoImpl implements MessageDao { // NO_UCD
 	public List<Message> getMessagesByClientIdLocale(int clientId, String locale) {
 		logger.debug("entering method getMessagesByMandantIdLocale");
 		List<Message> messages = this.jdbcTemplate.query("SELECT messages.id, page, message_key, message_text, locale, client_id, clients.name as client FROM clients, messages WHERE client_id = clients.id AND client_id = " + clientId + " AND locale = '" + locale + "'", new MessageMapper());
+		logger.debug("SELECT messages.id, page, message_key, message_text, locale, client_id, clients.name as client FROM clients, messages WHERE client_id = clients.id AND client_id = " + clientId + " AND locale = '" + locale + "'");
 		logger.debug("leaving method getMessagesByMandantIdLocale");
 		return messages;
+	}
+	
+	@Override
+	public Message getMessageById(int messageId) {
+		logger.debug("entering method getMessagesById");
+		Message message = this.jdbcTemplate.queryForObject("SELECT messages.id, page, message_key, message_text, locale, client_id, clients.name as client FROM clients, messages WHERE client_id = clients.id AND id = " + messageId, new MessageMapper());
+		logger.debug("leaving method getMessagesById");
+		return message;
 	}
 	
 	@Override
