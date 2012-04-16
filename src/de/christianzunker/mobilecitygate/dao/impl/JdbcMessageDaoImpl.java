@@ -16,7 +16,7 @@ import de.christianzunker.mobilecitygate.beans.Message;
 import de.christianzunker.mobilecitygate.dao.MessageDao;
 
 @Repository
-public class JdbcMessageDaoImpl implements MessageDao {
+public class JdbcMessageDaoImpl implements MessageDao { // NO_UCD
 
 	private static final Logger logger = Logger.getLogger(JdbcMessageDaoImpl.class);
 	
@@ -25,7 +25,7 @@ public class JdbcMessageDaoImpl implements MessageDao {
 	@Override
 	public List<Message> getMessagesByClientId(int clientId) {
 		logger.debug("entering method getMessagesByMandantId");
-		List<Message> messages = this.jdbcTemplate.query("SELECT id, page, message_key, message_text, locale, mandant_id FROM messages WHERE client_id = " + clientId, new MessageMapper());
+		List<Message> messages = this.jdbcTemplate.query("SELECT messages.id, page, message_key, message_text, locale, client_id, clients.name as client FROM clients, messages WHERE client_id = clients.id AND client_id = " + clientId, new MessageMapper());
 		logger.debug("leaving method getMessagesByMandantId");
 		return messages;
 	}
@@ -33,7 +33,7 @@ public class JdbcMessageDaoImpl implements MessageDao {
 	@Override
 	public List<Message> getMessagesByClientIdLocale(int clientId, String locale) {
 		logger.debug("entering method getMessagesByMandantIdLocale");
-		List<Message> messages = this.jdbcTemplate.query("SELECT id, page, message_key, message_text, locale, mandant_id FROM messages WHERE client_id = " + clientId + " AND locale = '" + locale + "'", new MessageMapper());
+		List<Message> messages = this.jdbcTemplate.query("SELECT messages.id, page, message_key, message_text, locale, client_id, clients.name as client FROM clients, messages WHERE client_id = clients.id AND client_id = " + clientId + " AND locale = '" + locale + "'", new MessageMapper());
 		logger.debug("leaving method getMessagesByMandantIdLocale");
 		return messages;
 	}
@@ -54,7 +54,7 @@ public class JdbcMessageDaoImpl implements MessageDao {
 	@Override
 	public List<Message> getMessages() {
 		logger.debug("entering method getMessages");
-		List<Message> messages = this.jdbcTemplate.query("SELECT id, page, message_key, message_text, locale, mandant_id FROM messages", new MessageMapper());
+		List<Message> messages = this.jdbcTemplate.query("SELECT messages.id, page, message_key, message_text, locale, client_id, clients.name as client FROM clients, messages WHERE client_id = clients.id", new MessageMapper());
 		logger.debug("leaving method getMessages");
 		return messages;
 	}
@@ -71,7 +71,8 @@ public class JdbcMessageDaoImpl implements MessageDao {
             Message.setKey(rs.getString("message_key"));
             Message.setText(rs.getString("message_text"));
             Message.setLocale(rs.getString("locale"));
-            Message.setMandantId(rs.getInt("mandant_id"));
+            Message.setClientId(rs.getInt("client_id"));
+            Message.setClient(rs.getString("client"));
             logger.debug("leaving method mapRow");
             return Message;
         }        

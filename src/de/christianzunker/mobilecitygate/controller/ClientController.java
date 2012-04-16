@@ -21,7 +21,7 @@ import de.christianzunker.mobilecitygate.dao.ClientDao;
  * Handles requests for the application home page.
  */
 @Controller
-public class ClientController {
+public class ClientController { // NO_UCD
 	
 	private static final Logger logger = Logger.getLogger(ClientController.class);
 	

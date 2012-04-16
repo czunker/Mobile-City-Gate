@@ -3,7 +3,7 @@ package de.christianzunker.mobilecitygate.utils;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 
-public class EncodePassword {
+public class EncodePassword { // NO_UCD
 
 	/**
 	 * @param args

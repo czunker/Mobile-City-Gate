@@ -6,17 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Enumeration;
-import java.util.Iterator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,12 +25,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import de.christianzunker.mobilecitygate.beans.Client;
-import de.christianzunker.mobilecitygate.beans.Config;
-import de.christianzunker.mobilecitygate.beans.UploadItem;
 import de.christianzunker.mobilecitygate.dao.ClientDao;
 
 @Controller
-public class UploadController {
+public class UploadController { // NO_UCD
 	
 		private static final Logger logger = Logger.getLogger(UploadController.class);
 		
@@ -59,18 +53,9 @@ public class UploadController {
                 	logger.debug("User Did not upload file");
                 }
                 else {
-                	filename = file.getOriginalFilename();
-                	logger.debug("Uploaded File Name is: " + filename);
+                	filename = cleanFilename(file.getOriginalFilename());
                 	// TODO: use cleanName method: http://www.plupload.com/plupload/docs/api/index.html#class_plupload.html-cleanName
                 	// TODO: or use it in javascript?
-                	filename = filename.replaceAll("ö", "oe");
-                	filename = filename.replaceAll("ü", "ue");
-                	filename = filename.replaceAll("ä", "ae");
-                	filename = filename.replaceAll("ß", "ss");
-                	filename = filename.replaceAll("Ö", "Oe");
-                	filename = filename.replaceAll("Ü", "Ue");
-                	filename = filename.replaceAll("Ä", "Ae");
-                	filename = filename.replaceAll(" ", "_");
                 	logger.debug("Changed File Name to: " + filename);
                 }
          
@@ -126,18 +111,9 @@ public class UploadController {
                 	return "none specified";
                 }
                 else {
-                	filename = file.getOriginalFilename();
-                	logger.debug("Uploaded File Name is: " + filename);
+                	filename = cleanFilename(file.getOriginalFilename());
                 	// TODO: use cleanName method: http://www.plupload.com/plupload/docs/api/index.html#class_plupload.html-cleanName
                 	// TODO: or use it in javascript?
-                	filename = filename.replaceAll("ö", "oe");
-                	filename = filename.replaceAll("ü", "ue");
-                	filename = filename.replaceAll("ä", "ae");
-                	filename = filename.replaceAll("ß", "ss");
-                	filename = filename.replaceAll("Ö", "Oe");
-                	filename = filename.replaceAll("Ü", "Ue");
-                	filename = filename.replaceAll("Ä", "Ae");
-                	filename = filename.replaceAll(" ", "_");
                 	logger.debug("Changed File Name to: " + filename);
                 }
          
@@ -193,18 +169,9 @@ public class UploadController {
                 	return "none specified";
                 }
                 else {
-                	filename = file.getOriginalFilename();
-                	logger.debug("Uploaded File Name is: " + filename);
+                	filename = cleanFilename(file.getOriginalFilename());
                 	// TODO: use cleanName method: http://www.plupload.com/plupload/docs/api/index.html#class_plupload.html-cleanName
                 	// TODO: or use it in javascript?
-                	filename = filename.replaceAll("ö", "oe");
-                	filename = filename.replaceAll("ü", "ue");
-                	filename = filename.replaceAll("ä", "ae");
-                	filename = filename.replaceAll("ß", "ss");
-                	filename = filename.replaceAll("Ö", "Oe");
-                	filename = filename.replaceAll("Ü", "Ue");
-                	filename = filename.replaceAll("Ä", "Ae");
-                	filename = filename.replaceAll(" ", "_");
                 	logger.debug("Changed File Name to: " + filename);
                 }
          
@@ -244,6 +211,74 @@ public class UploadController {
                 logger.debug("leaving method createIVRTextFile");
                 return filename; 
         }
+		
+		@RequestMapping(value = "/upload/icon", method = RequestMethod.POST)
+        public @ResponseBody String createLanguageIconFile(@RequestParam("name") String[] fileNames, HttpServletRequest request) {
+        		logger.debug("entering method createLanguageIconFile");
+        		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        		MultipartFile file = multipartRequest.getFile("file");
+                String filename = "";
+                String filepath = "";
+                
+                if (file == null) {
+                	logger.debug("User Did not upload file");
+                	return "none specified";
+                }
+                else {
+                	filename = cleanFilename(file.getOriginalFilename());
+                	// TODO: use cleanName method: http://www.plupload.com/plupload/docs/api/index.html#class_plupload.html-cleanName
+                	// TODO: or use it in javascript?
+                	logger.debug("Changed File Name to: " + filename);
+                }
+         
+                InputStream inputStream = null;
+                OutputStream outputStream = null;
+                logger.debug("size: " + file.getSize());
+                
+                // TODO: verify image is png
+                // TODO: optimize image
+                // TODO: rename image?
+                if (file.getSize() > 0) {
+                    try {
+                    	inputStream = file.getInputStream();
+                    	//ServletContext servletContext = request.getContextPath();
+                		String contextPath = servletContext.getRealPath(File.separator);
+                		filepath = contextPath + "resources" + File.separator + "global" + File.separator + "images" + File.separator + filename;
+                        logger.debug("Writing file: " + filepath);
+						outputStream = new FileOutputStream(filepath);
+					
+	                    int readBytes = 0;
+	                    byte[] buffer = new byte[10000];
+	                    while ((readBytes = inputStream.read(buffer, 0 , 10000))!=-1){
+	         
+	                        outputStream.write(buffer, 0, readBytes);
+	                    }
+	                    outputStream.close();
+	                    inputStream.close();
+                    } catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                    catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+                logger.debug("leaving method createLanguageIconFile");
+                return filename; 
+        }
+		
+		private String cleanFilename(String filename) {
+			filename = filename.replaceAll("ö", "oe");
+        	filename = filename.replaceAll("ü", "ue");
+        	filename = filename.replaceAll("ä", "ae");
+        	filename = filename.replaceAll("ß", "ss");
+        	filename = filename.replaceAll("Ö", "Oe");
+        	filename = filename.replaceAll("Ü", "Ue");
+        	filename = filename.replaceAll("Ä", "Ae");
+        	filename = filename.replaceAll(" ", "_");
+        	return filename;
+		}
         
         protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws ServletException {
         	        // to actually be able to convert Multipart instance to byte[]

@@ -5,29 +5,29 @@ import java.util.Vector;
 
 public class Poi {
 
-	int id = 0;
-	String name = "";
-	String description = "";
-	double lon = 0.0;
-	double lat = 0.0;
-	String icon = "";
-	String iconSize = "";
-	String iconOffset = "";
-	String ivrNumber = "";
-	String ivrTextUrl = "";
-	String locale = "";
-	int clientId = 0;
-	String client = "";
-	int published = 0;
+	private int id = 0;
+	private String name = "";
+	private String description = "";
+	private double lon = 0.0;
+	private double lat = 0.0;
+	private String icon = "";
+	private String iconSize = "";
+	private String iconOffset = "";
+	private String ivrNumber = "";
+	private String ivrTextUrl = "";
+	private String locale = "";
+	private int clientId = 0;
+	private String client = "";
+	private int published = 0;
 	
-	String poiCategory = "";
-	int poiCategoryId = 0;
+	private String poiCategory = "";
+	private int poiCategoryId = 0;
 	
-	String route = "";
-	int routeId = 0;
+	private String route = "";
+	private int routeId = 0;
 	
-	List<String> poiProfiles = new Vector<String>();
-	List<Integer> poiProfileIds = new Vector<Integer>();
+	private List<String> poiProfiles = new Vector<String>();
+	private List<Integer> poiProfileIds = new Vector<Integer>();
 	
 	
 	

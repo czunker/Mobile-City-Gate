@@ -2,15 +2,15 @@ package de.christianzunker.mobilecitygate.beans;
 
 public class PoiCategory {
 	
-	int id = 0;
-	String name = "";
-	String shortName = "";
-	String icon = "";
-	int clientId = 0;
-	String locale = "";
-	int published = 0;
+	private int id = 0;
+	private String name = "";
+	private String shortName = "";
+	private String icon = "";
+	private int clientId = 0;
+	private String locale = "";
+	private int published = 0;
 	// TODO replace with array/List
-	String pois = "";
+	private String pois = "";
 	
 	
 	

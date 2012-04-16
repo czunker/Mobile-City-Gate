@@ -14,11 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import de.christianzunker.mobilecitygate.beans.PoiCategory;
-import de.christianzunker.mobilecitygate.beans.Route;
 import de.christianzunker.mobilecitygate.dao.PoiCategoryDao;
 
 @Repository
-public class JdbcPoiCategoryDaoImpl implements PoiCategoryDao {
+public class JdbcPoiCategoryDaoImpl implements PoiCategoryDao { // NO_UCD
 
 	private static final Logger logger = Logger.getLogger(JdbcPoiCategoryDaoImpl.class);
 	

@@ -2,12 +2,12 @@ package de.christianzunker.mobilecitygate.beans;
 
 public class Profile {
 
-	int id = 0;
-	String name = "";
-	String shortName = "";
-	String icon = "";
+	private int id = 0;
+	private String name = "";
+	private String shortName = "";
+	private String icon = "";
 	// TODO replace with array/List
-	String nonUsablePoiIds = "";
+	private String nonUsablePoiIds = "";
 	
 	
 	

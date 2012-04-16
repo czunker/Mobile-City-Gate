@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,7 +43,7 @@ import de.christianzunker.mobilecitygate.dao.ProfileDao;
 import de.christianzunker.mobilecitygate.dao.RouteDao;
 
 @Controller
-public class PoiController {
+public class PoiController { // NO_UCD
 
 	private static final Logger logger = Logger.getLogger(PoiController.class);
 	
@@ -212,6 +211,7 @@ public class PoiController {
             poi.setRouteId(route.getId());
         }
         catch (EmptyResultDataAccessException ex) {
+        	logger.info("no route assigned for poi " + poi.getName() + "(id: " + poi.getId() + ")");
         	poi.setRoute("no route assigned");
         }
         PoiCategory cat = poiCatDao.getCategoryByPoi(poiId);
@@ -219,8 +219,8 @@ public class PoiController {
         poi.setIcon(cat.getIcon());
         poi.setPoiCategory(cat.getName());
         poi.setPoiCategoryId(cat.getId());
-        List<String> profileNames = new Vector();
-        List<Integer> profileIds = new Vector();
+        List<String> profileNames = new Vector<String>();
+        List<Integer> profileIds = new Vector<Integer>();
         for (Profile profile : profiles) {
         	profileNames.add(profile.getName());
         	profileIds.add(new Integer(profile.getId()));

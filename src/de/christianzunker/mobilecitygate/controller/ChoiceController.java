@@ -22,7 +22,7 @@ import de.christianzunker.mobilecitygate.dao.MessageDao;
  * Handles requests for the application home page.
  */
 @Controller
-public class ChoiceController {
+public class ChoiceController { // NO_UCD
 	
 	private static final Logger logger = Logger.getLogger(ChoiceController.class);
 	

@@ -14,16 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
-import de.christianzunker.mobilecitygate.beans.PoiCategory;
 import de.christianzunker.mobilecitygate.beans.Profile;
-import de.christianzunker.mobilecitygate.dao.PoiCategoryDao;
 import de.christianzunker.mobilecitygate.dao.ProfileDao;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
-public class ProfileController {
+public class ProfileController { // NO_UCD
 	
 	private static final Logger logger = Logger.getLogger(ProfileController.class);
 	

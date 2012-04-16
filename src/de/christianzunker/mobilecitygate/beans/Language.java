@@ -6,6 +6,22 @@ public class Language {
 	private String shortName = "";
 	private String name = "";
 	private String icon = "";
+	private String client = "";
+	private int clientId = 0;
+	
+	
+	public String getClient() {
+		return client;
+	}
+	public void setClient(String client) {
+		this.client = client;
+	}
+	public int getClientId() {
+		return clientId;
+	}
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
 	public int getId() {
 		return id;
 	}

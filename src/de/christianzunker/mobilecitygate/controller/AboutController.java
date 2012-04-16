@@ -19,7 +19,7 @@ import de.christianzunker.mobilecitygate.dao.ClientDao;
 import de.christianzunker.mobilecitygate.dao.MessageDao;
 
 @Controller
-public class AboutController {
+public class AboutController { // NO_UCD
 	
 	private static final Logger logger = Logger.getLogger(AboutController.class);
 	

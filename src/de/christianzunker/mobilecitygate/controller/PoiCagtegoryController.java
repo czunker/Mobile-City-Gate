@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import de.christianzunker.mobilecitygate.beans.PoiCategory;
-import de.christianzunker.mobilecitygate.beans.Route;
 import de.christianzunker.mobilecitygate.dao.PoiCategoryDao;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
-public class PoiCagtegoryController {
+public class PoiCagtegoryController { // NO_UCD
 	
 	private static final Logger logger = Logger.getLogger(PoiCagtegoryController.class);
 	

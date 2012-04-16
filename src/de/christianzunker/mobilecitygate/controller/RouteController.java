@@ -20,7 +20,7 @@ import de.christianzunker.mobilecitygate.dao.PoiDao;
 import de.christianzunker.mobilecitygate.dao.RouteDao;
 
 @Controller
-public class RouteController {
+public class RouteController { // NO_UCD
 
 	private static final Logger logger = Logger.getLogger(RouteController.class);
 	

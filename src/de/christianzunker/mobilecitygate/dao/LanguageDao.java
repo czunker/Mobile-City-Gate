@@ -10,4 +10,11 @@ public interface LanguageDao {
 
 	public List<Language> getLanguagesByClient(int clientId);
 
+	public Language getLanguageById(int languageId);
+
+	public int createLanguage(Language lang);
+
+	public int updateLanguageById(Language lang);
+
+	public int deleteLanguageById(Language lang);
 }

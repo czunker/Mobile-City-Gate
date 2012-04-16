@@ -7,10 +7,10 @@
 	<global-method-security pre-post-annotations="enabled" />
 
     <http use-expressions="true">
-    	<intercept-url pattern="/login.jsp" filters="none" />
+    	<intercept-url pattern="/login-bootstrap.jsp" filters="none" />
     	<intercept-url pattern="/cms/**" access="isAuthenticated()" />
         <intercept-url pattern="/**" access="permitAll" />
-        <form-login login-page="/login.jsp" default-target-url="/cms/" always-use-default-target="true" />
+        <form-login login-page="/login-bootstrap.jsp" default-target-url="/cms/" always-use-default-target="true" />
         <logout logout-success-url="/cms/" />
     </http>
 

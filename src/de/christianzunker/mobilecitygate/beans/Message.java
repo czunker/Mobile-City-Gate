@@ -7,10 +7,17 @@ public class Message {
 	private String key = "";
 	private String text = "";
 	private String locale = "";
-	private int mandantId = 0;
+	private int clientId = 0;
+	private String client = "";
 	
 	
 	
+	public String getClient() {
+		return client;
+	}
+	public void setClient(String client) {
+		this.client = client;
+	}
 	public int getId() {
 		return id;
 	}
@@ -41,11 +48,11 @@ public class Message {
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
-	public int getMandantId() {
-		return mandantId;
+	public int getClientId() {
+		return clientId;
 	}
-	public void setMandantId(int id) {
-		this.mandantId = id;
+	public void setClientId(int id) {
+		this.clientId = id;
 	}
 	
 	

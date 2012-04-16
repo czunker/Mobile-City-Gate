@@ -15,7 +15,7 @@ import de.christianzunker.mobilecitygate.beans.Client;
 import de.christianzunker.mobilecitygate.dao.ClientDao;
 
 @Repository
-public class JdbcClientDaoImpl implements ClientDao {
+public class JdbcClientDaoImpl implements ClientDao { // NO_UCD
 	
 private static final Logger logger = Logger.getLogger(JdbcClientDaoImpl.class);
 	

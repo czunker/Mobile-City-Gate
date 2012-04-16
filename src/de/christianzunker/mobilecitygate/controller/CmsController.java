@@ -19,20 +19,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import de.christianzunker.mobilecitygate.beans.Client;
 import de.christianzunker.mobilecitygate.beans.Config;
 import de.christianzunker.mobilecitygate.beans.Language;
+import de.christianzunker.mobilecitygate.beans.Message;
 import de.christianzunker.mobilecitygate.beans.Poi;
 import de.christianzunker.mobilecitygate.beans.PoiCategory;
-import de.christianzunker.mobilecitygate.beans.Profile;
 import de.christianzunker.mobilecitygate.beans.Route;
 import de.christianzunker.mobilecitygate.dao.ClientDao;
 import de.christianzunker.mobilecitygate.dao.LanguageDao;
 import de.christianzunker.mobilecitygate.dao.MessageDao;
 import de.christianzunker.mobilecitygate.dao.PoiCategoryDao;
 import de.christianzunker.mobilecitygate.dao.PoiDao;
-import de.christianzunker.mobilecitygate.dao.ProfileDao;
 import de.christianzunker.mobilecitygate.dao.RouteDao;
 
 @Controller
-public class CmsController {
+public class CmsController { // NO_UCD
 
 	private static final Logger logger = Logger.getLogger(CmsController.class);
 	
@@ -53,6 +52,9 @@ public class CmsController {
 	
 	@Autowired
 	private LanguageDao languageDao;
+	
+	@Autowired
+	private MessageDao messageDao;
 	
 	@RequestMapping(value = "/cms/")
 	public String getCmsData(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -79,15 +81,20 @@ public class CmsController {
 		List<Route> routes = routeDao.getAllRoutes();
 		
 		List<PoiCategory> categories = categoryDao.getAllCategories();
+		
+		List<Message> messages = messageDao.getMessages();
+		
+		List<Language> languages = languageDao.getLanguages();
         
 		model.addAttribute("tilesServers", config.getTilesServers());
         model.addAttribute("pois", pois);
         model.addAttribute("categories", categories);
         model.addAttribute("routes", routes);
-        //model.addAttribute("messagesCmsPois", hashMessagesCmsPois);
+        model.addAttribute("messages", messages);
+        model.addAttribute("languages", languages);
         
         logger.debug("leaving method getPois");
-		return "cms";
+		return "cms-bootstrap";
 	}
 	
 	

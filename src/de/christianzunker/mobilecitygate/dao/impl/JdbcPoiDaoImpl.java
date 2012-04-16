@@ -17,7 +17,7 @@ import de.christianzunker.mobilecitygate.beans.Poi;
 import de.christianzunker.mobilecitygate.dao.PoiDao;
 
 @Repository
-public class JdbcPoiDaoImpl implements PoiDao{
+public class JdbcPoiDaoImpl implements PoiDao{ // NO_UCD
 
 	private static final Logger logger = Logger.getLogger(JdbcPoiDaoImpl.class);
 	

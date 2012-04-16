@@ -18,7 +18,7 @@ public class Route {
 	private double endLat = 0.0;
 	private String color = "";
 	private int clientId = 0;
-	int published = 0;
+	private int published = 0;
 	
 	private List<Poi> pois = null;
 	

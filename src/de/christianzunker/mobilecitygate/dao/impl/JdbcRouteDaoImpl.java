@@ -18,7 +18,7 @@ import de.christianzunker.mobilecitygate.beans.Route;
 import de.christianzunker.mobilecitygate.dao.RouteDao;
 
 @Repository
-public class JdbcRouteDaoImpl implements RouteDao {
+public class JdbcRouteDaoImpl implements RouteDao { // NO_UCD
 	
 	private static final Logger logger = Logger.getLogger(JdbcRouteDaoImpl.class);
 	

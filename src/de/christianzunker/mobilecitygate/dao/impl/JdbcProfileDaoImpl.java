@@ -15,7 +15,7 @@ import de.christianzunker.mobilecitygate.beans.Profile;
 import de.christianzunker.mobilecitygate.dao.ProfileDao;
 
 @Repository
-public class JdbcProfileDaoImpl implements ProfileDao {
+public class JdbcProfileDaoImpl implements ProfileDao { // NO_UCD
 
 	private static final Logger logger = Logger.getLogger(JdbcProfileDaoImpl.class);
 	
