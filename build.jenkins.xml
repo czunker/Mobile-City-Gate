@@ -12,6 +12,7 @@
       <property name="war.file.name" value="${war.file}.war"/>
       <property name="tomcat.home" value="/usr/share/tomcat6"/>
       <property name="deploy.dir" value="/var/lib/tomcat6/webapps"/>
+  	<property name="config.dir" value="/etc/mobiles-stadttor"/>
       <property name="servlet.jar" value="lib/servlet-api.jar"/>
   	<property name="dev.user" value="ec2-user"/>
   	<property name="dev.server" value="dev.do-it-mobile.de"/>
@@ -114,45 +115,66 @@
   		</target>
 
   	<target name="minify_js_css">
-	      <exec executable="java">
-	        <arg value="-jar"/>
-	      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
-	      	<arg value="-o"/>
-	      	<arg value="${resources.dir}/global/js/poi-map-min.js"/>
-	      	<arg value="${resources.dir}/global/js/poi-map.js"/>
-	      </exec>
-  		  <exec executable="java">
-  			        <arg value="-jar"/>
-  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
-  			      	<arg value="-o"/>
-  			      	<arg value="${resources.dir}/global/css/map-style-min.css"/>
-  			      	<arg value="${resources.dir}/global/css/map-style.css"/>
-  			      </exec>
-  		<exec executable="java">
-  			        <arg value="-jar"/>
-  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
-  			      	<arg value="-o"/>
-  			      	<arg value="${resources.dir}/kultohr/css/home-style-min.css"/>
-  			      	<arg value="${resources.dir}/kultohr/css/home-style.css"/>
-  			      </exec>
-  		<exec executable="java">
-  		  			        <arg value="-jar"/>
-  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
-  		  			      	<arg value="-o"/>
-  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
-  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
-  		  			      </exec>
-  		<exec executable="java">
-  		  			        <arg value="-jar"/>
-  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
-  		  			      	<arg value="-o"/>
-  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
-  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
-  		  			      </exec>
-  		<concat destfile="${resources.dir}/global/js/map-min.js">
-  		    <filelist dir="${resources.dir}/global/js" files="gears-init-min.js,geo-min.js,poi-map-min.js"/>
-  		</concat>
-	  </target>
+  		      <exec executable="java">
+  		        <arg value="-jar"/>
+  		      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  		      	<arg value="-o"/>
+  		      	<arg value="${resources.dir}/global/js/poi-map-min.js"/>
+  		      	<arg value="${resources.dir}/global/js/poi-map.js"/>
+  		      </exec>
+  	  		<exec executable="java">
+  	  			        <arg value="-jar"/>
+  	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  			      	<arg value="-o"/>
+  	  			      	<arg value="${resources.dir}/global/js/cms-min.js"/>
+  	  			      	<arg value="${resources.dir}/global/js/cms.js"/>
+  	  			      </exec>
+  	  		  <exec executable="java">
+  	  			        <arg value="-jar"/>
+  	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  			      	<arg value="-o"/>
+  	  			      	<arg value="${resources.dir}/global/css/map-style-min.css"/>
+  	  			      	<arg value="${resources.dir}/global/css/map-style.css"/>
+  	  			      </exec>
+  	  		<exec executable="java">
+  	  			        <arg value="-jar"/>
+  	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  			      	<arg value="-o"/>
+  	  			      	<arg value="${resources.dir}/kultohr/css/home-style-min.css"/>
+  	  			      	<arg value="${resources.dir}/kultohr/css/home-style.css"/>
+  	  			      </exec>
+  	  		<exec executable="java">
+  	  		  			        <arg value="-jar"/>
+  	  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  		  			      	<arg value="-o"/>
+  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
+  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
+  	  		  			      </exec>
+  	  		<exec executable="java">
+  	  		  			        <arg value="-jar"/>
+  	  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  		  			      	<arg value="-o"/>
+  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
+  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
+  	  		  			      </exec>
+  	  		<exec executable="java">
+  	  			        <arg value="-jar"/>
+  	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  			      	<arg value="-o"/>
+  	  			      	<arg value="${resources.dir}/kultohr/css/poi-map-style-min.css"/>
+  	  			      	<arg value="${resources.dir}/kultohr/css/poi-map-style.css"/>
+  	  			      </exec>
+  	  		<exec executable="java">
+  	  		  			        <arg value="-jar"/>
+  	  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
+  	  		  			      	<arg value="-o"/>
+  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/poi-map-style-min.css"/>
+  	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/poi-map-style.css"/>
+  	  		  			      </exec>
+  	  		<concat destfile="${resources.dir}/global/js/map-min.js">
+  	  		    <filelist dir="${resources.dir}/global/js" files="gears-init-min.js,geo-min.js,poi-map-min.js"/>
+  	  		</concat>
+  		  </target>
   	<!--
   	<target name="startMySql">
   	          <exec executable="/etc/init.d/mysqld">
@@ -186,20 +208,28 @@
           <delete dir="${deploy.dir}/${war.file}" includeEmptyDirs="true"/>
       </target>
 
-      <target name="war" depends="minify_js_css">
+  	<target name="optimize_images">
+  	  	 <exec executable="scripts/optimize_images.sh">
+  	  	   <arg value="${resources.dir}"/>
+  	  	 </exec>
+  	  	</target>  	
+  	
+      <target name="war" depends="minify_js_css, optimize_images">
       	  <mkdir dir="dist"/>
           <copy todir="${build.dir}" flatten="true">
             <resources>
-              <file file="jdbc.properties"/>
-              <file file="log4j.properties"/>
-              <file file="config.properties"/>
+              <file file="${config.dir}/jdbc.properties"/>
+              <file file="${config.dir}/log4j.properties"/>
+              <file file="${config.dir}/config.properties"/>
             </resources>
           </copy>
           <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
               <classes dir="${build.dir}" includes="**/*.*"/>
-          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/jquery.mobile*.js,**/jquery-*.js,**/poi-map.js"/>          </war>
+          	<zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.min.js,**/poi-map.js"/>
+          	<zipfileset dir="WebContent" />
+          </war>
       </target>
   	
       <target name="deploy">
