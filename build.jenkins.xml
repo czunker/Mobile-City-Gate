@@ -34,7 +34,7 @@
   	  	  <fileset dir="${tomcat.home}" includes="${servlet.jar}"/>
   	</path>
   	
-  	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+<!--  	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>-->
   	
       <target name="backup">
       	  <tstamp/>
