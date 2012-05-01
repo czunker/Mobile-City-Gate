@@ -8,10 +8,10 @@
       <property name="lib.dir" value="lib"/>
   	  <property name="ant.lib.dir" value="/usr/share/ant/lib" />
   	  <property name="resources.dir" value="WebContent/resources"/>
-      <property name="war.file" value="mobile-city-gate"/>
+      <property name="war.file" value="mobiles-stadttor"/>
       <property name="war.file.name" value="${war.file}.war"/>
       <property name="tomcat.home" value="/usr/share/tomcat6"/>
-      <property name="deploy.dir" value="/usr/share/tomcat6/webapps"/>
+      <property name="deploy.dir" value="/var/lib/tomcat6/webapps"/>
       <property name="servlet.jar" value="lib/servlet-api.jar"/>
   	<property name="dev.user" value="ec2-user"/>
   	<property name="dev.server" value="dev.do-it-mobile.de"/>
@@ -169,13 +169,13 @@
   	  	  -->
 
   	      <target name="startTomcat">
-  	          <exec executable="/etc/init.d/tomcat6">
+  	          <exec executable="sudo /etc/init.d/tomcat6">
   	              <arg value="start"/>
   	          </exec>
   	      </target>
 
   	      <target name="stopTomcat">
-  	          <exec executable="/etc/init.d/tomcat6">
+  	          <exec executable="sudo /etc/init.d/tomcat6">
   	              <arg value="stop"/>
   	          </exec>
   	      </target>
