@@ -10,7 +10,7 @@
   	  <property name="resources.dir" value="WebContent/resources"/>
       <property name="war.file" value="mobiles-stadttor"/>
       <property name="war.file.name" value="${war.file}.war"/>
-  	<property name="java.home" value="${env.JAVA_HOME}"/>
+  	<property name="java.home" value="/opt/java7"/>
       <property name="tomcat.home" value="/usr/share/tomcat6"/>
       <property name="deploy.dir" value="/var/lib/tomcat6/webapps"/>
   	<property name="config.dir" value="/etc/mobiles-stadttor"/>
