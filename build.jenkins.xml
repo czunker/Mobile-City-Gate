@@ -6,6 +6,7 @@
       <property name="build.dir" value="build/classes"/>
       <property name="src.dir" value="src"/>
       <property name="lib.dir" value="lib"/>
+  	  <property name="ant.lib.dir" value="/usr/share/ant/lib" />
   	  <property name="resources.dir" value="WebContent/resources"/>
       <property name="war.file" value="mobile-city-gate"/>
       <property name="war.file.name" value="${war.file}.war"/>
@@ -29,6 +30,7 @@
   	
   	<path id="master-classpath">
   	  	  <fileset dir="${lib.dir}" includes="*.jar"/>
+  		  <fileset dir="${ant.lib.dir}" includes="*.jar"/>
   	  	  <fileset dir="${tomcat.home}" includes="${servlet.jar}"/>
   	</path>
   	
