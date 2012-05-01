@@ -10,6 +10,7 @@
   	  <property name="resources.dir" value="WebContent/resources"/>
       <property name="war.file" value="mobiles-stadttor"/>
       <property name="war.file.name" value="${war.file}.war"/>
+  	<property name="java.home" value="${env.JAVA_HOME}"/>
       <property name="tomcat.home" value="/usr/share/tomcat6"/>
       <property name="deploy.dir" value="/var/lib/tomcat6/webapps"/>
   	<property name="config.dir" value="/etc/mobiles-stadttor"/>
@@ -115,56 +116,56 @@
   		</target>
 
   	<target name="minify_js_css">
-  		      <exec executable="java">
+  		      <exec executable="${java.home}/bin/java">
   		        <arg value="-jar"/>
   		      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
   		      	<arg value="-o"/>
   		      	<arg value="${resources.dir}/global/js/poi-map-min.js"/>
   		      	<arg value="${resources.dir}/global/js/poi-map.js"/>
   		      </exec>
-  	  		<exec executable="java">
+  	  		<exec executable="${java.home}/bin/java">
   	  			        <arg value="-jar"/>
   	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
   	  			      	<arg value="-o"/>
   	  			      	<arg value="${resources.dir}/global/js/cms-min.js"/>
   	  			      	<arg value="${resources.dir}/global/js/cms.js"/>
   	  			      </exec>
-  	  		  <exec executable="java">
+  	  		  <exec executable="${java.home}/bin/java">
   	  			        <arg value="-jar"/>
   	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
   	  			      	<arg value="-o"/>
   	  			      	<arg value="${resources.dir}/global/css/map-style-min.css"/>
   	  			      	<arg value="${resources.dir}/global/css/map-style.css"/>
   	  			      </exec>
-  	  		<exec executable="java">
+  	  		<exec executable="${java.home}/bin/java">
   	  			        <arg value="-jar"/>
   	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
   	  			      	<arg value="-o"/>
   	  			      	<arg value="${resources.dir}/kultohr/css/home-style-min.css"/>
   	  			      	<arg value="${resources.dir}/kultohr/css/home-style.css"/>
   	  			      </exec>
-  	  		<exec executable="java">
+  	  		<exec executable="${java.home}/bin/java">
   	  		  			        <arg value="-jar"/>
   	  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
   	  		  			      	<arg value="-o"/>
   	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
   	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
   	  		  			      </exec>
-  	  		<exec executable="java">
+  	  		<exec executable="${java.home}/bin/java">
   	  		  			        <arg value="-jar"/>
   	  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
   	  		  			      	<arg value="-o"/>
   	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style-min.css"/>
   	  		  			      	<arg value="${resources.dir}/bonn-inklusiv/css/home-style.css"/>
   	  		  			      </exec>
-  	  		<exec executable="java">
+  	  		<exec executable="${java.home}/bin/java">
   	  			        <arg value="-jar"/>
   	  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
   	  			      	<arg value="-o"/>
   	  			      	<arg value="${resources.dir}/kultohr/css/poi-map-style-min.css"/>
   	  			      	<arg value="${resources.dir}/kultohr/css/poi-map-style.css"/>
   	  			      </exec>
-  	  		<exec executable="java">
+  	  		<exec executable="${java.home}/bin/java">
   	  		  			        <arg value="-jar"/>
   	  		  			      	<arg value="${lib.dir}/yuicompressor-2.4.2.jar"/>
   	  		  			      	<arg value="-o"/>
