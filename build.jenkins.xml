@@ -217,6 +217,7 @@
   	
       <target name="war" depends="minify_js_css, optimize_images">
       	  <mkdir dir="dist"/>
+      	<!--
           <copy todir="${build.dir}" flatten="true">
             <resources>
               <file file="${config.dir}/jdbc.properties"/>
@@ -224,6 +225,7 @@
               <file file="${config.dir}/config.properties"/>
             </resources>
           </copy>
+          -->
           <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
