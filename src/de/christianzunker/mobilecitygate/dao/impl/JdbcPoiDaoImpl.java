@@ -1,5 +1,7 @@
 package de.christianzunker.mobilecitygate.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -7,7 +9,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,18 +71,37 @@ public class JdbcPoiDaoImpl implements PoiDao{ // NO_UCD
 	@Transactional (propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public int createPoi(Poi poi) {
 		logger.debug("entering method setPoiById");
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		final String INSERT_SQL = "INSERT INTO pois (name, description, lon, lat, ivr_number, ivr_text_url, locale, client_id) VALUES ('" + poi.getName() + "', '" + poi.getDescription() + "', " + poi.getLon() + ", " + poi.getLat() + ", '" + poi.getIvrNumber() + "', '" + poi.getIvrTextUrl() + "', '" + poi.getLocale() + "', " + poi.getClientId() + ")";
 		int rc = 0;
-		rc = this.jdbcTemplate.update("INSERT INTO pois (name, description, lon, lat, ivr_number, ivr_text_url, locale, client_id) VALUES ('" + poi.getName() + "', '" + poi.getDescription() + "', " + poi.getLon() + ", " + poi.getLat() + ", '" + poi.getIvrNumber() + "', '" + poi.getIvrTextUrl() + "', '" + poi.getLocale() + "', " + poi.getClientId() + ")");
-		int poiId = this.jdbcTemplate.queryForInt("SELECT last_insert_id() from pois LIMIT 1", null, null);
-		rc = this.jdbcTemplate.update("INSERT INTO rel_poi_category (poi_id, category_id) VALUES (" + poiId + ", " + poi.getPoiCategoryId() + ")");
+		//rc = this.jdbcTemplate.update("INSERT INTO pois (name, description, lon, lat, ivr_number, ivr_text_url, locale, client_id) VALUES ('" + poi.getName() + "', '" + poi.getDescription() + "', " + poi.getLon() + ", " + poi.getLat() + ", '" + poi.getIvrNumber() + "', '" + poi.getIvrTextUrl() + "', '" + poi.getLocale() + "', " + poi.getClientId() + ")");
+		this.jdbcTemplate.update(new PreparedStatementCreator() {
+	        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+	            PreparedStatement ps = connection.prepareStatement(INSERT_SQL, new String[] {"id"});
+	            return ps;
+	        }
+	    },
+	    keyHolder);
+		//int poiId = this.jdbcTemplate.queryForInt("SELECT last_insert_id() from pois LIMIT 1", null, null);
+		Number poiId = keyHolder.getKey();
+		logger.info("Inserted new POI with id: " + poiId.intValue());
+		rc = this.jdbcTemplate.update("INSERT INTO rel_poi_category (poi_id, category_id) VALUES (" + poiId.intValue() + ", " + poi.getPoiCategoryId() + ")");
 		if (!poi.getPoiProfileIds().isEmpty()) {
 			for (Integer profileId : poi.getPoiProfileIds()) {
-				rc = this.jdbcTemplate.update("INSERT INTO rel_poi_profile (poi_id, category_id) VALUES (" + poiId + ", " + profileId + ")");
+				rc = this.jdbcTemplate.update("INSERT INTO rel_poi_profile (poi_id, category_id) VALUES (" + poiId.intValue() + ", " + profileId + ")");
 			}
 		}
-		rc = poiId;
-		logger.debug("added new poi with id: " + poiId);
+		rc = poiId.intValue();
+		//logger.debug("added new poi with id: " + poiId.intValue());
 		logger.debug("leaving method setPoiById");
+		return rc;
+	}
+	
+	@Override
+	public int createPoiRoute(int poiId, Poi poi) {
+		logger.debug("entering method createPoiRoute");
+		int rc =  this.jdbcTemplate.update("INSERT INTO rel_poi_route (route_id, poi_id) VALUES (" + poi.getRouteId() + ", " + poiId + ")");
+		logger.debug("leaving method createPoiRoute");
 		return rc;
 	}
 	
@@ -139,14 +163,6 @@ public class JdbcPoiDaoImpl implements PoiDao{ // NO_UCD
 		List<Poi> pois = this.jdbcTemplate.query(sql, new PoiMapper());
 		logger.debug("leaving method getPoisByRouteLocale");
 		return pois;
-	}
-	
-	@Override
-	public int createPoiRoute(int poiId, Poi poi) {
-		logger.debug("entering method createPoiRoute");
-		int rc =  this.jdbcTemplate.update("INSERT INTO rel_poi_route (route_id, poi_id) VALUES (" + poi.getRouteId() + ", " + poiId + ")");
-		logger.debug("leaving method createPoiRoute");
-		return rc;
 	}
 	
 	@Override
@@ -244,7 +260,7 @@ public class JdbcPoiDaoImpl implements PoiDao{ // NO_UCD
     	private static final Logger logger = Logger.getLogger(PoiMapper.class);
 
         public Poi mapRow(ResultSet rs, int rowNum) throws SQLException {
-        	logger.debug("entering method mapRow");
+        	logger.trace("entering method mapRow");
         	Poi poi = new Poi();
             poi.setId(rs.getInt("id"));
             poi.setName(rs.getString("name"));
@@ -261,21 +277,21 @@ public class JdbcPoiDaoImpl implements PoiDao{ // NO_UCD
             	poi.setClient(rs.getString("client"));
             }
             catch (SQLException ex) {
-            	logger.warn("Couldn't find column client, but it isn't needed by all SQL queries!");
+            	logger.info("Couldn't find column client, but it isn't needed by all SQL queries!");
             }
             try {
             	poi.setRoute(rs.getString("route"));
             }
             catch (SQLException ex) {
-            	logger.warn("Couldn't find column client, but it isn't needed by all SQL queries!");
+            	logger.info("Couldn't find column client, but it isn't needed by all SQL queries!");
             }
             try {
             	poi.setPoiCategory(rs.getString("category"));
             }
             catch (SQLException ex) {
-            	logger.warn("Couldn't find column client, but it isn't needed by all SQL queries!");
+            	logger.info("Couldn't find column client, but it isn't needed by all SQL queries!");
             }
-            logger.debug("leaving method mapRow");
+            logger.trace("leaving method mapRow");
             return poi;
         }        
     }

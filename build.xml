@@ -10,7 +10,7 @@
       <property name="war.file" value="mobile-city-gate"/>
       <property name="war.file.name" value="${war.file}.war"/>
   	<property name="java.home" value="${env.JAVA_HOME}"/>
-      <property name="tomcat.home" value="/var/lib/tomcat"/>
+      <property name="tomcat.home" value="/var/lib/tomcat6"/>
       <property name="deploy.dir" value="${tomcat.home}/webapps"/>
       <property name="servlet.jar" value="lib/servlet-api.jar"/>
   	<property name="dev.user" value="ec2-user"/>
