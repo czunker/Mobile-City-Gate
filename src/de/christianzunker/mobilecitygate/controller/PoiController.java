@@ -199,7 +199,7 @@ public class PoiController { // NO_UCD
 	}
 	
 	
-	@Cacheable("poi")
+	@Cacheable("pois")
 	@RequestMapping(value = "/poi/{poiId}", headers="Accept=*/*", method=RequestMethod.GET)
 	public @ResponseBody Poi getPoiById(@PathVariable("poiId") int poiId) {
 		logger.debug("entering method getPoiById");
@@ -232,7 +232,7 @@ public class PoiController { // NO_UCD
 		return poi;
 	}
 	
-	@CacheEvict(value = "poi", allEntries=false)
+	@CacheEvict(value = "pois", allEntries=true)
 	@RequestMapping(value = "/poi/{poiId}", headers="Accept=application/json", method=RequestMethod.POST)
 	public @ResponseBody int setPoiById(@PathVariable("poiId") int poiId, @RequestBody Poi poi) {
 		logger.debug("entering method setPoiById");
@@ -273,6 +273,7 @@ public class PoiController { // NO_UCD
         return rc;
 	}
 	
+	@CacheEvict(value = "pois", allEntries=true)
 	@RequestMapping(value = "/poi/{poiId}", method=RequestMethod.DELETE)
 	public @ResponseBody int deletePoiById(@PathVariable("poiId") int poiId) {
 		logger.debug("entering method deletePoiById");
@@ -322,6 +323,7 @@ public class PoiController { // NO_UCD
 		return pois;
 	}
 	
+	@CacheEvict(value = "pois", allEntries=true)
 	@RequestMapping(value = "/poi/publish", method=RequestMethod.POST)
 	// TODO is it allowed to throw exceptions in this method or is there a different way because of REST + JSON?
 	public @ResponseBody int publishAllPois() throws Exception {
@@ -334,6 +336,7 @@ public class PoiController { // NO_UCD
 		return rc;
 	}
 	
+	@CacheEvict(value = "pois", allEntries=true)
 	@RequestMapping(value = "/poi/publish/{poiId}", method=RequestMethod.POST)
 	public @ResponseBody int publishPoiById(@PathVariable("poiId") int poiId) {
 		logger.debug("entering method publishPoiById");

@@ -50,4 +50,26 @@ tar zxvf osmosis-latest.tgz -C /usr/local/osm/bin/
 cd ../bin/osm2pgsql/
 
 
+  334  cd ../bin/osm2pgsql/
+  335  ./osm2pgsql -S default.style --slim -d gis -C 4096 /usr/local/osm/planet/germany.osm
+  336  ./osm2pgsql
+  337  ./osm2pgsql -h
+  338  ./osm2pgsql -S default.style --slim -d gis -C 1800 /usr/local/osm/planet/germany.osm
+  341  vi generate_tiles.py 
+  344  mkdir tiles
+  354  cd ../bin/mapnik/
+  355  MAPNIK_MAP_FILE="osm.xml" MAPNIK_TILE_DIR="/usr/local/osm/tiles/" ./generate_tiles.py
+  356  ./generate_xml.py --dbname gis --user xyz --accept-none
+  357  MAPNIK_MAP_FILE="osm.xml" MAPNIK_TILE_DIR="/usr/local/osm/tiles/" ./generate_tiles.py
+  358  ll
+  359  unzip 10m-populated-places.zip 
+  360  ll
+  361  MAPNIK_MAP_FILE="osm.xml" MAPNIK_TILE_DIR="/usr/local/osm/tiles/" ./generate_tiles.py
+  362  mv ne_10m_populated_places.dbf 10m_populated_places.dbf
+  363  mv ne_10m_populated_places.prj 10m_populated_places.prj
+  364  mv ne_10m_populated_places.shp 10m_populated_places.shp
+  365  mv ne_10m_populated_places.shx 10m_populated_places.shx 
+  366  MAPNIK_MAP_FILE="osm.xml" MAPNIK_TILE_DIR="/usr/local/osm/tiles/" ./generate_tiles.py
+  367  mv 10m* world_boundaries/.
+  368  MAPNIK_MAP_FILE="osm.xml" MAPNIK_TILE_DIR="/usr/local/osm/tiles/" ./generate_tiles.py
 

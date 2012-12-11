@@ -2,31 +2,26 @@
 
       <property environment="env"/>
 
-      <property name="build.compiler" value="modern"/>
+      <property name="build.compiler" value="javac1.7"/>
       <property name="build.dir" value="build/classes"/>
       <property name="src.dir" value="src"/>
+      <property name="config.dir" value="/etc/mobile-city-gate"/>
       <property name="lib.dir" value="lib"/>
   	  <property name="resources.dir" value="WebContent/resources"/>
       <property name="war.file" value="mobile-city-gate"/>
       <property name="war.file.name" value="${war.file}.war"/>
-  	<property name="java.home" value="${env.JAVA_HOME}"/>
+  	<!--<property name="java.home" value="${env.JAVA_HOME}"/>-->
+  	<property name="java.home" value="/opt/java7"/>
       <property name="tomcat.home" value="/var/lib/tomcat6"/>
       <property name="deploy.dir" value="${tomcat.home}/webapps"/>
       <property name="servlet.jar" value="lib/servlet-api.jar"/>
-  	<property name="dev.user" value="ec2-user"/>
-  	<property name="dev.server" value="dev.do-it-mobile.de"/>
-  	<property name="dev.key.file" value="/home/xyz/.ssh/dev.do-it-mobile.de"/>
-  	<property name="dev.target.dir" value="/home/ec2-user"/>
-  	
-  	<property name="db.driver" value="com.mysql.jdbc.Driver"/>
-  	<property name="db.url" value="jdbc:mysql://localhost:3306/bnb_db"/>
-  	<property name="db.user" value="root"/>
-  	<property name="db.pw" value=""/>
   	
   	<path id="master-classpath">
   	  	  <fileset dir="${lib.dir}" includes="*.jar"/>
   	  	  <fileset dir="${tomcat.home}" includes="${servlet.jar}"/>
   	</path>
+  	
+  	<property name="executable-full-path" location="${env.PATH}"/>
   	
   	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
   	
@@ -38,42 +33,6 @@
       	  <copy file="../../${war.file}.${DSTAMP}.tar.gz" todir="/mnt/backup" />
       </target>
 
-  	<!--http://www.basilv.com/psd/blog/2007/automated-deploys-using-ssh-and-ant-->
-  	<target name="deploy_ec2_dev_war">
-  		<scp remoteTodir="${dev.user}@${dev.server}:${dev.target.dir}"
-  			keyfile="${dev.key.file}"
-  			passphrase=""
-  		  trust="yes"
-  		  sftp="true">
-  		    <fileset dir="dist">
-  		      <include name="**/*"/>
-  		    </fileset>
-  		</scp>
-  		<sshexec host="${dev.server}" username="${dev.user}" keyfile="${dev.key.file}" trust="yes" command="./deploy_war.sh" />
-  	</target>
-  	
-  	<!--http://stackoverflow.com/questions/5498710/ant-how-to-select-the-latest-modified-file-from-a-directory-->
-  	<target name="deploy_ec2_dev_mysql">
-	  	<timestampselector property="latest.modified">
-	  	  <path>
-	  	    <fileset dir="db">
-	  	      <include name="Dump*.sql" />
-	  	    </fileset>
-	  	  </path>
-	  	</timestampselector>
-  		<sshexec host="${dev.server}" username="${dev.user}" keyfile="${dev.key.file}" trust="yes" command="rm -f Dump*.sql" />
-  		<scp remoteTodir="${dev.user}@${dev.server}:${dev.target.dir}"
-  			keyfile="${dev.key.file}"
-  			passphrase=""
-  		  trust="yes"
-  		  sftp="true">
-  		    <fileset dir="db">
-  		      <include name="${latest.modified}"/>
-  		    </fileset>
-  		</scp>
-  		<sshexec host="${dev.server}" username="${dev.user}" keyfile="${dev.key.file}" trust="yes" command='./deploy_db.sh' />
-	</target>
-  	
   	<target name="optimize_images">
   	 <exec executable="scripts/optimize_images.sh">
   	   <arg value="${resources.dir}"/>
@@ -164,17 +123,141 @@
           <delete dir="${deploy.dir}/${war.file}" includeEmptyDirs="true"/>
       </target>
 
-      <target name="war" depends="minify_js_css, optimize_images">
-      	  <mkdir dir="dist"/>
-      	<!--
+      <target name="war-rhc" depends="clean, prepare-war, minify_js_css, optimize_images">
+          <path id="rhc.file.id"> 
+    		<fileset dir="dist"> 
+        		<include name="mobile-city-gate##rhc*"/> 
+     		</fileset> 
+		  </path> 
+		  <property name="rhc.file" refid="rhc.file.id"/>
+          <delete file="${rhc.file}" />
+      	  <copy todir="${build.dir}" flatten="true">
+            <resources>
+              <file file="${config.dir}/jdbc.properties"/>
+              <file file="${config.dir}/log4j.properties"/>
+              <file file="${config.dir}/config.properties"/>
+           	  <file file="${config.dir}/ehcache.xml"/>
+           	  <file file="${config.dir}/mobile-city-gate-security.xml"/>
+           	  <file file="${config.dir}/mobile-city-gate-servlet.xml"/>
+      		</resources>
+          </copy>
+          <replaceregexp file="${build.dir}/mobile-city-gate-servlet.xml"
+               match="value>file:/etc/mobile-city-gate/(.*)value"
+               replace="value>classpath:\1value"
+               byline="true"
+		  />
+          <replaceregexp file="${build.dir}/mobile-city-gate-servlet.xml"
+               match="file:.*ehcache.xml"
+               replace="classpath:ehcache.xml"
+               byline="true"
+		  />
+          <replaceregexp file="${build.dir}/jdbc.properties"
+               match="jdbc.url=.*"
+               replace="jdbc.url=jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:3306/web_app_db"
+               byline="true"
+		  />
+          <!-- disable file logging -->
+          <replaceregexp file="${build.dir}/log4j.properties"
+               match="log4j.logger.de.christianzunker=TRACE, file"
+               replace="#log4j.logger.de.christianzunker=TRACE, file"
+               byline="true"
+		  />
+		  <!-- disable file logging -->
+          <replaceregexp file="${build.dir}/log4j.properties"
+               match="log4j.logger.org.springframework=DEBUG, file"
+               replace="#log4j.logger.org.springframework=DEBUG, file"
+               byline="true"
+		  />
+          <!-- disable file logging -->
+          <replaceregexp file="${build.dir}/log4j.properties"
+               match="log4j.logger.com.mchange.v2.c3p0.impl=DEBUG, sql"
+               replace="#log4j.logger.com.mchange.v2.c3p0.impl=DEBUG, sql"
+               byline="true"
+		  />
+          <!-- change logging level for console -->
+          <replaceregexp file="${build.dir}/log4j.properties"
+               match="log4j.rootLogger=WARN, stdout"
+               replace="log4j.rootLogger=INFO, stdout"
+               byline="true"
+		  />
+          <war destfile="dist/${war.file}##rhc-${current.time}.war" webxml="WebContent/WEB-INF/web.xml">
+              <webinf dir="WebContent/WEB-INF" includes="**/*" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
+              <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
+              <classes dir="${build.dir}" includes="**/*.*" excludes="mobile-city-gate-*.xml"/>
+          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.min.js,**/poi-map.js"/>
+          	  <zipfileset dir="WebContent" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
+          	  <zipfileset dir="${build.dir}" prefix="WEB-INF" includes="mobile-city-gate-*.xml" />
+          </war>
+      </target>
+      
+      <target name="war-cloudbees" depends="clean, prepare-war, minify_js_css, optimize_images">
+          <path id="cloudbees.file.id"> 
+    		<fileset dir="dist"> 
+        		<include name="mobile-city-gate##cloudbees*"/> 
+     		</fileset> 
+		  </path> 
+		  <property name="cloudbees.file" refid="cloudbees.file.id"/>
+          <delete file="${cloudbees.file}" />
           <copy todir="${build.dir}" flatten="true">
             <resources>
-              <file file="resources/jdbc.properties"/>
-              <file file="resources/log4j.properties"/>
-              <file file="resources/config.properties"/>-->
-           	  <!--<file file="resources/ehcache.xml"/>-->
-      	<!--</resources>
-          </copy>-->
+              <file file="${config.dir}/jdbc.properties"/>
+              <file file="${config.dir}/log4j.properties"/>
+              <file file="${config.dir}/config.properties"/>
+           	  <file file="${config.dir}/ehcache.xml"/>
+           	  <file file="${config.dir}/mobile-city-gate-security.xml"/>
+           	  <file file="${config.dir}/mobile-city-gate-servlet.xml"/>
+      		</resources>
+          </copy>
+          <replaceregexp file="${build.dir}/mobile-city-gate-servlet.xml"
+               match="value>file:/etc/mobile-city-gate/(.*)value"
+               replace="value>classpath:\1value"
+               byline="true"
+		  />
+          <replaceregexp file="${build.dir}/mobile-city-gate-servlet.xml"
+               match="file:.*ehcache.xml"
+               replace="classpath:ehcache.xml"
+               byline="true"
+		  />
+          <replaceregexp file="${build.dir}/jdbc.properties"
+               match="jdbc.url=.*"
+               replace="jdbc.url=jdbc:mysql://ec2-23-21-211-172.compute-1.amazonaws.com:3306/web_app_db"
+               byline="true"
+		  />
+          <!-- disable file logging -->
+          <replaceregexp file="${build.dir}/log4j.properties"
+               match="log4j.logger.de.christianzunker=TRACE, file"
+               replace="#log4j.logger.de.christianzunker=TRACE, file"
+               byline="true"
+		  />
+		  <!-- disable file logging -->
+          <replaceregexp file="${build.dir}/log4j.properties"
+               match="log4j.logger.org.springframework=DEBUG, file"
+               replace="#log4j.logger.org.springframework=DEBUG, file"
+               byline="true"
+		  />
+          <!-- disable file logging -->
+          <replaceregexp file="${build.dir}/log4j.properties"
+               match="log4j.logger.com.mchange.v2.c3p0.impl=DEBUG, sql"
+               replace="#log4j.logger.com.mchange.v2.c3p0.impl=DEBUG, sql"
+               byline="true"
+		  />
+          <!-- change logging level for console -->
+          <replaceregexp file="${build.dir}/log4j.properties"
+               match="log4j.rootLogger=WARN, stdout"
+               replace="log4j.rootLogger=INFO, stdout"
+               byline="true"
+		  />
+          <war destfile="dist/${war.file}##cloudbees-${current.time}.war" webxml="WebContent/WEB-INF/web.xml">
+              <webinf dir="WebContent/WEB-INF" includes="**/*" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
+              <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
+              <classes dir="${build.dir}" includes="**/*.*" excludes="mobile-city-gate-*.xml"/>
+          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.min.js,**/poi-map.js"/>
+          	  <zipfileset dir="WebContent" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
+          	  <zipfileset dir="${build.dir}" prefix="WEB-INF" includes="mobile-city-gate-*.xml" />
+          </war>
+      </target>
+      
+      <target name="war" depends="clean, prepare-war, minify_js_css, optimize_images">
           <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
@@ -191,60 +274,63 @@
       <target name="main" depends="stopTomcat, cleanWebApp, deploy, startTomcat"/>  	
 
   	<target name="clean">
-        <delete dir="${build.dir}"/>
+        <delete file="${build.dir}/log4j.properties"/>
+        <delete file="${build.dir}/jdbc.properties"/>
+        <delete file="${build.dir}/config.properties"/>
+        <delete dir="dist"/>
     </target>
-
-    <target name="compile" depends="clean">
-        <mkdir dir="${build.dir}"/>
-    	<touch> 
+    
+  	<target name="prepare-war">
+  	    <mkdir dir="dist"/>
+  	    <!-- <mkdir dir="${build.dir}"/> -->
+  	    <touch> 
     	    <file file="${build.dir}/.gitignore" /> 
-    	</touch> 
-        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="master-classpath"/>
-    </target>
-  	
-  	<!--
-  	<target name="sqlCreateTables">
-  	        <echo message="CREATE TABLES USING: ${db.driver} ${db.url}"/>
-  	        <sql driver="${db.driver}"
-  	             url="${db.url}"
-  	             userid="${db.user}"
-  	             password="${db.pw}"
-  	             onerror="continue"
-  	             src="db/create_structure.sql">  
-  	            <classpath refid="master-classpath"/>
-  	        </sql> 
-  	    </target>
+    	</touch>
+    	<tstamp>
+        	<format property="current.time" pattern="yyyy-MM-dd_HHmmss" />
+    	</tstamp>
+    	<echo>${current.time}</echo>
+  	</target>
 
-  	    <target name="sqlLoadData">
-  	        <echo message="LOAD DATA USING: ${db.driver} ${db.url}"/>
-  	        <sql driver="${db.driver}"
-  	             url="${db.url}"
-  	             userid="${db.user}"
-  	             password="${db.pw}"
-  	             onerror="continue"
-  	             src="db/init_data.sql">  
-  	            <classpath refid="master-classpath"/>
-  	        </sql> 
-  	    </target>
-  	-->
-  	<!-- csvColumnSeparator, output geht nur ab ant 1.8 -->
-  	<!--
-  	<target name="sqlSelectMessages">
-  	  	        <echo message="SELECT MESSAGES USING: ${db.driver} ${db.url}"/>
-  	  	        <sql driver="${db.driver}"
-  	  	             url="${db.url}"
-  	  	             userid="${db.user}"
-  	  	             password="${db.pw}"
-  	  	             onerror="continue"
-  	  	             src="db/select_messages.sql"
-  	  	             csvColumnSeparator="="
-  	  	        	 print="yes"
-  	  	        	 showheaders="no"
-  		 		     showtrailers="no"
-  	  	        	 output="c:\temp\messages.properties">  
-  	  	            <classpath refid="master-classpath"/>
-  	  	        </sql> 
-  	  	    </target>
-  	  	  -->
+    <target name="compile" depends="clean, prepare-war">
+        <javac executable="/opt/java7/bin/javac" compiler="${build.compiler}" srcdir="${src.dir}" destdir="${build.dir}" classpathref="master-classpath"/>
+    </target>
+    
+    <target name="deploy-cloudbees" depends="war-cloudbees">
+        <path id="cloudbees.file.id"> 
+    		<fileset dir="dist"> 
+        		<include name="mobile-city-gate##cloudbees*"/> 
+     		</fileset> 
+		</path> 
+		<property name="cloudbees.file" refid="cloudbees.file.id"/>
+  	 	<exec executable="bees">
+  	   		<arg value="app:deploy"/>
+  	   		<arg value="${cloudbees.file}"/>
+  	   		<arg value="-a"/>
+  	   		<arg value="open-it-solutions/dev-mobilecitygate"/>
+  	 	</exec>
+  	</target>
+  	
+  	<target name="deploy-rhc" depends="war-rhc">
+  	    <path id="rhc.file.id"> 
+    		<fileset dir="dist"> 
+        		<include name="mobile-city-gate##rhc*"/> 
+     		</fileset> 
+		</path> 
+		<property name="rhc.file" refid="rhc.file.id"/> 
+  	    <copy file="${rhc.file}" tofile="${basedir}-rhc/dev/webapps/${war.file.name}" />
+        <exec executable="git" dir="${basedir}-rhc/dev">
+            <arg value="add" />
+            <arg value="webapps/${war.file.name}" />
+        </exec>
+        <exec executable="git" dir="${basedir}-rhc/dev">
+            <arg value="commit" />
+            <arg value="-m" />
+            <arg value="'Deployment ${current.time}'" />
+        </exec>
+        <exec executable="git" dir="${basedir}-rhc/dev">
+            <arg value="push" />
+        </exec>
+  	</target>
   	
   </project>
