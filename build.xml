@@ -141,6 +141,8 @@
            	  <file file="${config.dir}/mobile-city-gate-servlet.xml"/>
       		</resources>
           </copy>
+          <!-- replace with filterset during copy -->
+          <!-- http://ant.apache.org/manual/Types/filterset.html -->
           <replaceregexp file="${build.dir}/mobile-city-gate-servlet.xml"
                match="value>file:/etc/mobile-city-gate/(.*)value"
                replace="value>classpath:\1value"
