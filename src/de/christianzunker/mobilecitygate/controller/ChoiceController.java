@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 import de.christianzunker.mobilecitygate.beans.Client;
+import de.christianzunker.mobilecitygate.beans.Config;
 import de.christianzunker.mobilecitygate.dao.ClientDao;
 import de.christianzunker.mobilecitygate.dao.MessageDao;
 
@@ -25,6 +26,9 @@ import de.christianzunker.mobilecitygate.dao.MessageDao;
 public class ChoiceController { // NO_UCD
 	
 	private static final Logger logger = Logger.getLogger(ChoiceController.class);
+	
+	@Autowired
+	private Config config;
 	
 	@Autowired
 	private ClientDao clientDao;
@@ -40,6 +44,7 @@ public class ChoiceController { // NO_UCD
 		HashMap<String, String> hashMessages = messageDao.getMessagesByPageClientIdLocale("choice", 0, "de");
 		
         model.addAttribute("clients", clients);
+        model.addAttribute("config", config);
         model.addAttribute("messages", hashMessages);
         logger.debug("leaving method choice");
 		return "choice";

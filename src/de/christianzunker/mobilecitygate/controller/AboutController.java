@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 import de.christianzunker.mobilecitygate.beans.Client;
+import de.christianzunker.mobilecitygate.beans.Config;
 import de.christianzunker.mobilecitygate.dao.ClientDao;
 import de.christianzunker.mobilecitygate.dao.MessageDao;
 
@@ -22,6 +23,9 @@ import de.christianzunker.mobilecitygate.dao.MessageDao;
 public class AboutController { // NO_UCD
 	
 	private static final Logger logger = Logger.getLogger(AboutController.class);
+	
+	@Autowired
+	private Config config;
 	
 	@Autowired
 	private ClientDao clientDao;
@@ -44,6 +48,7 @@ public class AboutController { // NO_UCD
 		HashMap<String, String> hashMessages = messageDao.getMessagesByPageClientIdLocale("about", clientObj.getId(), locale);
 		
         model.addAttribute("client", clientObj);
+        model.addAttribute("config", config);
         model.addAttribute("messages", hashMessages);
         model.addAttribute("locale", locale);
         logger.debug("leaving method about");

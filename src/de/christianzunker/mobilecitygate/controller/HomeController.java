@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 import de.christianzunker.mobilecitygate.beans.Client;
+import de.christianzunker.mobilecitygate.beans.Config;
 import de.christianzunker.mobilecitygate.beans.Language;
 import de.christianzunker.mobilecitygate.dao.ClientDao;
 import de.christianzunker.mobilecitygate.dao.LanguageDao;
@@ -28,6 +29,9 @@ import de.christianzunker.mobilecitygate.dao.MessageDao;
 public class HomeController { // NO_UCD
 	
 	private static final Logger logger = Logger.getLogger(HomeController.class);
+	
+	@Autowired
+	private Config config;
 	
 	@Autowired
 	private ClientDao clientDao;
@@ -55,6 +59,7 @@ public class HomeController { // NO_UCD
 		List<Language> languages = languageDao.getLanguagesByClient(clientObj.getId());
 		
         model.addAttribute("locale", locale);
+        model.addAttribute("config", config);
         model.addAttribute("languages", languages);
         model.addAttribute("messagesHome", hashMessagesHome);
         model.addAttribute("messagesAbout", hashMessagesAbout);

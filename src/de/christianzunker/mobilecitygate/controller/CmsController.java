@@ -93,6 +93,7 @@ public class CmsController { // NO_UCD
         model.addAttribute("categories", categories);
         model.addAttribute("routes", routes);
         model.addAttribute("messages", messages);
+        model.addAttribute("config", config);
         model.addAttribute("languages", languages);
         model.addAttribute("clients", clients);
         

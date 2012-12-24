@@ -8,6 +8,16 @@ public class Config {
 	
 	private String googleApiKey;
 	private String tilesServers;
+	private String piwikServer;
+
+	public String getPiwikServer() {
+		return piwikServer;
+	}
+
+	@Value("${piwikServer}")
+	public void setPiwikServer(String piwikServer) {
+		this.piwikServer = piwikServer;
+	}
 
 	public String getGoogleApiKey() {
 		return googleApiKey;

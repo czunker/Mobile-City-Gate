@@ -156,6 +156,7 @@ public class PoiController { // NO_UCD
         model.addAttribute("profiles", profiles);
         model.addAttribute("poiCategories", cats);
         model.addAttribute("pois", pois);
+        model.addAttribute("config", config);
         model.addAttribute("routes", routes);
         model.addAttribute("locale", locale);
         model.addAttribute("client", clientObj);
