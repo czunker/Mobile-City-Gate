@@ -186,8 +186,9 @@
               <webinf dir="WebContent/WEB-INF" includes="**/*" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
               <classes dir="${build.dir}" includes="**/*.*" excludes="mobile-city-gate-*.xml"/>
-          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.min.js,**/poi-map.js"/>
-          	  <zipfileset dir="WebContent" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
+          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/OpenLayers.js,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?*.js,**/jquery+mobile-min.*.js,**/cms.js,**/poi-map.js"/>
+          	  <!-- <zipfileset dir="WebContent" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" /> -->
+          	  <zipfileset dir="WebContent" includes="*.jsp" />
           	  <zipfileset dir="${build.dir}" prefix="WEB-INF" includes="mobile-city-gate-*.xml" />
           </war>
       </target>
@@ -253,8 +254,9 @@
               <webinf dir="WebContent/WEB-INF" includes="**/*" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
               <classes dir="${build.dir}" includes="**/*.*" excludes="mobile-city-gate-*.xml"/>
-          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.min.js,**/poi-map.js"/>
-          	  <zipfileset dir="WebContent" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
+          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/OpenLayers.js,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?*.js,**/jquery+mobile-min.*.js,**/cms.js,**/poi-map.js"/>
+          	  <!-- <zipfileset dir="WebContent" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" /> -->
+          	  <zipfileset dir="WebContent" includes="*.jsp" />
           	  <zipfileset dir="${build.dir}" prefix="WEB-INF" includes="mobile-city-gate-*.xml" />
           </war>
       </target>
@@ -264,8 +266,8 @@
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
               <classes dir="${build.dir}" includes="**/*.*"/>
-          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.min.js,**/poi-map.js"/>
-          	  <zipfileset dir="WebContent" />
+          	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/OpenLayers.js,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?*.js,**/jquery+mobile-min.*.js,**/cms.js,**/poi-map.js"/>
+          	  <zipfileset dir="WebContent" includes="*.jsp" />
           </war>
       </target>
   	
@@ -298,7 +300,8 @@
         <javac executable="/opt/java7/bin/javac" compiler="${build.compiler}" srcdir="${src.dir}" destdir="${build.dir}" classpathref="master-classpath"/>
     </target>
     
-    <target name="deploy-cloudbees" depends="war-cloudbees">
+    <target name="deploy-cloudbees">
+    <!-- <target name="deploy-cloudbees" depends="war-cloudbees"> -->
         <path id="cloudbees.file.id"> 
     		<fileset dir="dist"> 
         		<include name="mobile-city-gate##cloudbees*"/> 
