@@ -9,5 +9,5 @@ do
 done
 for file in $(find ${BASEDIR} -name "*.png")
 do
-       optipng $file
+       optipng -quiet $file
 done

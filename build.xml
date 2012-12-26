@@ -313,13 +313,16 @@
   	 	</exec>
   	</target>
   	
-  	<target name="deploy-rhc" depends="war-rhc">
+    <!-- <target name="deploy-rhc" depends="war-rhc"> -->
+  	<target name="deploy-rhc">
   	    <path id="rhc.file.id"> 
     		<fileset dir="dist"> 
-        		<include name="mobile-city-gate##rhc*"/> 
+        		<include name="mobile-city-gate##rhc*.war"/> 
      		</fileset> 
-		</path> 
-		<property name="rhc.file" refid="rhc.file.id"/> 
+		</path>
+		<echo>${rhc.file.id}</echo> 
+		<property name="rhc.file" refid="rhc.file.id"/>
+		<echo>${rhc.file}</echo> 
   	    <copy file="${rhc.file}" tofile="${basedir}-rhc/dev/webapps/${war.file.name}" />
         <exec executable="git" dir="${basedir}-rhc/dev">
             <arg value="add" />

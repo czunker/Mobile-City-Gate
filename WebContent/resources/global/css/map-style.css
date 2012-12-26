@@ -1,18 +1,15 @@
 #navigation {
     position: absolute;
-    bottom: 0px;
+    bottom: 10px;
     left: 10px;
     z-index: 10;
 }
 
-#navigation .ui-btn-icon-notext {
-	padding: 10px;
-}
-
 #location {
     position: absolute;
-    bottom:10px;
-    right: 10px;
+    <%-- honestly: i don't know why it has to be 20px, but with 10px it is not working as i expected --%>
+    bottom:20px;
+    right: 20px;
     z-index: 10;
     padding: 10px;
 }

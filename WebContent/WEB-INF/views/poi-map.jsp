@@ -168,7 +168,7 @@
          </div> 
      </div>
      
-      <div id="navigation" data-role="controlgroup" data-type="horizontal"> 
+      <div id="navigation" data-role="controlgroup" data-type="vertical"> 
         <a href="#" data-role="button" data-icon="plus" id="plus" data-iconpos="notext"><c:out value="${messagesMap.zoomin}"/></a> 
         <a href="#" data-role="button" data-icon="minus" id="minus" data-iconpos="notext"><c:out value="${messagesMap.zoomout}"/></a>
       </div>

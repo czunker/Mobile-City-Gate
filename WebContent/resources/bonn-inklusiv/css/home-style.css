@@ -34,11 +34,6 @@
   z-index: 1000;
 }
 
-#language .ui-btn-icon-notext {
-	display: block;
-    padding: 10px;
-}
-
 #language {
     position: absolute;
     bottom: 10px;
