@@ -223,11 +223,15 @@ public class PoiController { // NO_UCD
         List<String> profileNames = new Vector<String>();
         List<Integer> profileIds = new Vector<Integer>();
         for (Profile profile : profiles) {
+        	logger.trace("profileName: " + profile.getName());
         	profileNames.add(profile.getName());
+        	logger.trace("profileId: " + profile.getId());
         	profileIds.add(new Integer(profile.getId()));
 		}
         poi.setPoiProfileIds(profileIds);
+        logger.trace("#profileNames: " + poi.getPoiProfileIds().size());
         poi.setPoiProfiles(profileNames);
+        logger.trace("#profileNames: " + poi.getPoiProfiles().size());
         
         logger.debug("leaving method getPoiById");
 		return poi;

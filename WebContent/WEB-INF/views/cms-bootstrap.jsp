@@ -64,13 +64,14 @@
 			.alignleft {
 				float: left;
 			}
+
 			.wide-modal {
 			  position: fixed;
 			  top: 5%;
-			  left: 5%;
+			  right: 5%;
 			  z-index: 11000;
-			  width: 90%;
-			  height: 90%;
+			  max-width: 90%;
+			  max-height: 90%;
 			  /*margin: -250px 0 0 -280px;*/
 			  background-color: #ffffff;
 			  border: 1px solid #999;
@@ -89,18 +90,21 @@
 			  background-clip: padding-box;
 			}
 			
+			#poidiv .modal-body {
+				max-height: 90%;
+			}
+			
 		</compress:css>
 		</style>
-		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/bootstrap.min.css'/>" >
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/ol-theme/default/style.css'/>" >
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/colorpicker.css'/>" />
 </head>
 <body style="padding-top: 40px;">
-		<div class="topbar-wrapper" style="z-index: 5;">
-		    <div class="topbar" data-dropdown="dropdown" >
-		      <div class="topbar-inner">
-		        <div class="container">
-		          <h3><a href="#">CMS Mobiles Stadttor</a></h3>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+		    <div class="navbar-inner">
+    			<div class="container">
+		          <a class="brand" href="#">CMS Mobiles Stadttor</a>
 		          <ul class="nav">
 		            <li id="nav-pois" class="active"><a href="#" onClick="showPois()">Pois</a></li>
 					<li id="nav-routes"><a href="#" onClick="showRoutes()">Routen</a></li>
@@ -108,6 +112,7 @@
 					<li id="nav-languages"><a href="#" onClick="showLanguages()">Sprachen</a></li>
 					<li id="nav-messages"><a href="#" onClick="showMessages()">Texte</a></li>
 					<li id="nav-clients"><a href="#" onClick="showClients()">Mandanten</a></li>
+				  </ul>
 					<%--
 					<li><a href="#tabs-users">CMS - Userverwaltung</a></li>
 		            <li class="dropdown">
@@ -120,16 +125,17 @@
 		              </ul>
 		            </li>
 		            --%>
-		          </ul>
+		          
 		          <%-- 
 		          <form class="pull-left" action="">
 		            <input type="text" placeholder="Search" />
 		          </form>
 		          --%>
-		          <ul class="nav secondary-nav">
-					<a href="<c:url value='/j_spring_security_logout' />">Logout</a>
+		          <ul class="nav pull-right">
+		          	<li class="divider-vertical"></li>
+		          	<li><a href="<c:url value='/j_spring_security_logout' />">Logout</a></li>
 		          </ul>
-		        </div>
+		        </div><!-- /container -->
 		      </div><!-- /topbar-inner -->
 		    </div><!-- /topbar -->
 		   </div>
@@ -149,7 +155,7 @@
 					</div>
 				</sec:authorize>
 				--%>		
-					<table id="poi-list" class="zebra-striped condensed-table">
+					<table id="poi-list" class="table table-striped table-bordered condensed-table table-hover">
 						<thead>
 							<tr>
 					            <th>Name</th>
@@ -193,11 +199,14 @@
 					</table>
 				</div>
 				
-				<div id="poidiv" class="wide-modal hide">
+				<div id="poidiv" class="wide-modal hide" data-show="false">
 					<div class="modal-header">
-		              <a href="#" class="close">&times;</a>
-		              <h3 id="edit-poi-heading">POI editieren</h3>
-		              <img id="poi-icon" height="24px" width="24px" src="" alt=""><div id="poi-status"></div>
+						<div class="row">
+  							<div class="span1"><img id="poi-icon" height="24px" width="24px" src="" alt=""></div>
+  							<div class="span8"><h3 id="edit-poi-heading">POI editieren</h3></div>
+  							<div class="span2"><div id="poi-status"></div></div>
+  							<div class="span1"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
+						</div>
 		            </div>
 		            
 	            	<div class="modal-body">
@@ -206,14 +215,14 @@
 							<input type="hidden" name="published" id="poi-published" value=""  />
 							<input type="hidden" name="clientId" id="poi-client-id" value=""  />
 							<div class="row">
-								<div class="span4">
+								<div class="span3">
 									<label for="name">Name</label>
 							    	<input type="text" size="30" name="name" id="poi-name" value=""  />
 							    	<label for="locale" class="select">Sprache</label>
 									<select name="locale" id="poi-locale">
 									</select>
 							   	</div>
-							   	<div class="span4">
+							   	<div class="span3">
 							   		<label for="poiCategoryId" class="select">Kategorie:</label>
 									<select name="poiCategoryId" id="poi-category">
 									</select>
@@ -221,31 +230,27 @@
 									<select name="routeId" id="poi-route">
 									</select>
 								</div>
-							   	<div class="span4">
+							   	<div class="span3">
 									<label for="description">Beschreibung</label>
 						    		<textarea class="xxlarge" name="description" rows="4" id="poi-description"></textarea>
 								</div>
-							</div>
-						    <div class="row">
-						    	<div class="span4">
-								    <label for="ivrTextUrl">IVR Text URL</label>
-								    <input type="text" size="15" name="ivrTextUrl" id="poi-ivr-text-url" value="" readonly />
-								</div>
-								<div class="span4">
-								    <label for="ivrNumber">IVR Nummer</label>
-								    <input type="text" size="15" name="ivrNumber" id="poi-ivr-number" value=""  />
-								</div>
-								<div class="span4">
+								<div class="span3">
 									<label for="lon">Längengrad</label>
 							    	<input type="text" size="10" name="lon" id="poi-lon" value=""  />
-								</div>
-								<div class="span4">
 								    <label for="lat">Breitengrad</label>
 							    	<input type="text" size="10" name="lat" id="poi-lat" value=""  />
 								</div>
-						    </div>
+							</div>
 						    <div class="row">
-						    	<div class="span16">
+						    	<div class="span3">
+								    <label for="ivrNumber">IVR Nummer</label>
+								    <input type="text" size="15" name="ivrNumber" id="poi-ivr-number" value=""  />
+								</div>
+								<div class="span3">
+								    <label for="ivrTextUrl">IVR Text URL</label>
+								    <input type="text" size="15" name="ivrTextUrl" id="poi-ivr-text-url" value="" readonly />
+								</div>
+								<div class="span6">
 								    <div id="container-ivrtext">
 										<div id="filelist-ivrtext">Browser unterstütz leider keinen Dateiupload.</div>
 										<br />
@@ -253,14 +258,14 @@
 										<a id="uploadfiles-ivrtext" href="#">[Dateien hochladen]</a>
 									</div>
 								</div>
-							</div>
+						    </div>
 							<div class="row">
-								<div class="span4">
+								<div class="span3">
 									<label for="profileIds">Profile:</label>
 						            <div id="poi-profiles">
 						            </div>
 						        </div>
-						        <div class="span10">
+						        <div class="span9">
 						        	<div id="poi-mapdiv"> 
 							              <noscript>Ihr Browser unterstütz kein Javascript oder es ist nicht aktiviert.</noscript> 
 							        </div>
@@ -279,7 +284,7 @@
 								</a>
 							<%--</button>--%>
 						</sec:authorize>
-						<a href="#" class="btn secondary close">Abbrechen</a>
+						<a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
 		            </div>
 					
 				</div>
@@ -299,7 +304,7 @@
 					</div>
 				</sec:authorize>
 				--%>
-					<table id="route-list" class="zebra-striped condensed-table">
+					<table id="route-list" class="table table-striped table-bordered condensed-table table-hover">
 						<thead>
 							<tr>
 					            <th>Name</th>
@@ -419,7 +424,7 @@
 					</div>
 				</sec:authorize>
 				--%>
-					<table id="category-list" class="zebra-striped condensed-table">
+					<table id="category-list" class="table table-striped table-bordered condensed-table table-hover">
 						<thead>
 							<tr>
 					            <th>Name</th>
@@ -502,7 +507,7 @@
 			
 			
 			<div id="tabs-languages" class="hide">
-				<table id="language-list" class="zebra-striped condensed-table">
+				<table id="language-list" class="table table-striped table-bordered condensed-table table-hover">
 					<thead>
 						<tr>
 				            <th>Name</th>
@@ -589,7 +594,7 @@
 				</div>
 			
 			<div id="tabs-messages" class="hide">
-				<table id="message-list" class="zebra-striped condensed-table">
+				<table id="message-list" class="table table-striped table-bordered condensed-table table-hover">
 					<thead>
 						<tr>
 				            <th>Text</th>
@@ -618,7 +623,7 @@
 			</div>
 			
 			<div id="tabs-clients" class="hide">
-				<table id="client-list" class="zebra-striped condensed-table">
+				<table id="client-list" class="table table-striped table-bordered condensed-table table-hover">
 					<thead>
 						<tr>
 				            <th>Name</th>
@@ -718,8 +723,10 @@
 			--%>
 		</div>
 
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-	<script type="text/javascript" src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-modal.js"></script>
+	<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-modal.js"></script> -->
+	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery-1.8.3.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/resources/global/js/bootstrap.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/global/js/colorpicker.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/global/js/json.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/global/js/OpenLayers.js'/>" ></script>
@@ -899,7 +906,6 @@
 					updatePoiCategories(poi.clientId, poi.locale, category.id);
 				});
 				updatePoiProfiles(poi.locale, poi.poiProfileIds);
-				$("#poi-profiles").val(profileArray);
 				var langOptions = "";
 				$.each(languages[poi.clientId], function(i, lang) {
 					langOptions += '<option value="' + lang.shortName + '">' + lang.name + '</option>';
@@ -911,13 +917,12 @@
 					poi.published = 0;
 					$("#poi-published").val(0);
 				}
-				alert(poi.published);
 				if (poi.published > 0) {
-					$("#poi-status").html('<span class="label success">Veröffentlicht!</span>');
+					$("#poi-status").html('<span class="label  label-success">Veröffentlicht!</span>');
 					$("#poi-publish").hide();
 				}
 				else {
-					$("#poi-status").html('<span class="label important">Noch nicht Veröffentlicht!</span>');
+					$("#poi-status").html('<span class="label label-important">Noch nicht Veröffentlicht!</span>');
 					$("#poi-publish").show();
 				}
 				createUploaderIVRText('<c:url value="/upload/"/>' + poi.clientId + '/ivrtext');
@@ -1035,20 +1040,21 @@
 		}
 		
 		function updatePoiProfiles(locale, profileIds) {
-			var profilesOptions = '<ul class="inputs-list">';
+			//var profilesOptions = '<ul class="inputs-list">';
+			var profilesOptions = '';
 			$.getJSON("<c:url value='/profiles/'/>" + locale, function(profiles) {
 				$.each(profiles, function(i, profile) {
-					profilesOptions += '<li><label>';
+					profilesOptions += '<label class="checkbox">';
 					if ($.inArray(profile.id, profileIds) > -1) {
-						profilesOptions += '<input type="checkbox" checked id="profile-' + profile.id + '" value="' + profile.id + '" /><label for="profile-' + profile.id + '">' + profile.name + '</label><br>';
+						profilesOptions += '<input type="checkbox" checked id="profile-' + profile.id + '" value="' + profile.id + '" />' + profile.name;
 					}
 					else {
-						profilesOptions += '<input type="checkbox" id="profile-' + profile.id + '" value="' + profile.id + '" /><label for="profile-' + profile.id + '">' + profile.name + '</label><br>';
+						profilesOptions += '<input type="checkbox" id="profile-' + profile.id + '" value="' + profile.id + '" />' + profile.name;
 					}
-					profilesOptions += '<span>' + profile.name + '</span>';
-					profilesOptions += '</label></li>';
+					//profilesOptions += '<span>' + profile.name + '</span>';
+					profilesOptions += '</label>';
 				});
-				profilesOptions += '</ul>';
+				//profilesOptions += '</ul>';
 				profilesOptions += '<span class="help-block">';
 				profilesOptions += '<strong>Hinweis:</strong> Für diese Personengruppen ist der Punkt <u>nicht</u> geeignet';
 				profilesOptions += '</span>';

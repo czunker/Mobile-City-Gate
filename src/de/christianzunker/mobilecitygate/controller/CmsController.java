@@ -98,8 +98,8 @@ public class CmsController { // NO_UCD
         model.addAttribute("clients", clients);
         
         logger.debug("leaving method getCmsData");
-		//return "cms-bootstrap";
-		return "cms";
+		return "cms-bootstrap";
+		//return "cms";
 	}
 	
 	
