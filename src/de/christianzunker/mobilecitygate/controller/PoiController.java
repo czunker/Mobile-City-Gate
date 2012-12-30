@@ -1,5 +1,6 @@
 package de.christianzunker.mobilecitygate.controller;
 
+import java.net.SocketTimeoutException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -171,11 +172,18 @@ public class PoiController { // NO_UCD
 	}
 	
 	@Cacheable("urls")
-	private String getGoogleShortUrl(String longUrl) {
-		String shortUrl = "";
+	public String getGoogleShortUrl(String longUrl) {
+		String shortUrl = longUrl;
 		String googleUrl = "https://www.googleapis.com/urlshortener/v1/url?" + config.getGoogleApiKey();
 		try {
 			com.sun.jersey.api.client.Client jsonClient = com.sun.jersey.api.client.Client.create();
+			int timeout = config.getGoogleTimeout();
+			if (!(timeout > 0)) {
+				// config not set, connect with a default timeout of 200ms
+				timeout = 200;
+			}
+			logger.trace("Google timeout: " + timeout + "ms");
+			jsonClient.setConnectTimeout(timeout);
 			WebResource webResource = jsonClient.resource(googleUrl);
 			String jsonRequest = "{ \"longUrl\": \"" + longUrl + "\" }";
 			logger.debug("jsonRequest: " + jsonRequest);
@@ -193,8 +201,11 @@ public class PoiController { // NO_UCD
 			}
 		}
 		catch (ClientHandlerException ex) {
-			logger.error("Couldn't connect to Google URL Shortener! (Tried URL: " + googleUrl + ")", ex);
-			shortUrl = longUrl;
+			Exception rootCause = (Exception) ex.getCause();
+			if (rootCause.getClass().equals(SocketTimeoutException.class)) {
+				logger.error("Got connection timeout!");
+			}
+			logger.error("Couldn't connect to Google URL Shortener!", ex);
 		}
 		return shortUrl;
 	}

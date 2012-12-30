@@ -283,13 +283,13 @@ public class JdbcPoiDaoImpl implements PoiDao{ // NO_UCD
             	poi.setRoute(rs.getString("route"));
             }
             catch (SQLException ex) {
-            	logger.info("Couldn't find column client, but it isn't needed by all SQL queries!");
+            	logger.info("Couldn't find column route, but it isn't needed by all SQL queries!");
             }
             try {
             	poi.setPoiCategory(rs.getString("category"));
             }
             catch (SQLException ex) {
-            	logger.info("Couldn't find column client, but it isn't needed by all SQL queries!");
+            	logger.info("Couldn't find column category, but it isn't needed by all SQL queries!");
             }
             logger.trace("leaving method mapRow");
             return poi;

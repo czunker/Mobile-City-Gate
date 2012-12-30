@@ -9,6 +9,18 @@ public class Config {
 	private String googleApiKey;
 	private String tilesServers;
 	private String piwikServer;
+	private int googleTimeout;
+	
+	
+
+	public int getGoogleTimeout() {
+		return googleTimeout;
+	}
+
+	@Value("${googleTimeout}")
+	public void setGoogleTimeout(int googleTimeout) {
+		this.googleTimeout = googleTimeout;
+	}
 
 	public String getPiwikServer() {
 		return piwikServer;
