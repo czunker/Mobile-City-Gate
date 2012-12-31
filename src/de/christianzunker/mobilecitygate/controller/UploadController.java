@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
@@ -28,12 +29,16 @@ import de.christianzunker.mobilecitygate.beans.Client;
 import de.christianzunker.mobilecitygate.dao.ClientDao;
 
 @Controller
-public class UploadController { // NO_UCD
+public class UploadController implements ServletContextAware { // NO_UCD
 	
 		private static final Logger logger = Logger.getLogger(UploadController.class);
 		
-		@Autowired
+		/*
+		replaced @Autowired with "implements ServletContextAware" because of junit tests
+		http://stackoverflow.com/questions/5300444/spring-3-testing-a-controller-autowired-servlet-context
+		*/
 		private ServletContext servletContext;
+		
 		
 		@Autowired
 		private ClientDao clientDao;
@@ -286,4 +291,9 @@ public class UploadController { // NO_UCD
         	        binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
         	        // now Spring knows how to handle multipart object and convert them
         	    }
+
+		@Override
+		public void setServletContext(ServletContext arg0) {
+			this.servletContext = arg0;
+		}
 }

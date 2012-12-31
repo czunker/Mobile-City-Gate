@@ -42,11 +42,15 @@ import de.christianzunker.mobilecitygate.dao.PoiCategoryDao;
 import de.christianzunker.mobilecitygate.dao.PoiDao;
 import de.christianzunker.mobilecitygate.dao.ProfileDao;
 import de.christianzunker.mobilecitygate.dao.RouteDao;
+import de.christianzunker.mobilecitygate.utils.GoogleServices;
 
 @Controller
 public class PoiController { // NO_UCD
 
 	private static final Logger logger = Logger.getLogger(PoiController.class);
+	
+	@Autowired
+	private GoogleServices google;
 	
 	@Autowired
 	private PoiCategoryDao poiCatDao;
@@ -95,7 +99,7 @@ public class PoiController { // NO_UCD
         
 		//get shortened URL for easier Twitter usage
 		String longUrl = "http://" + request.getServerName() + request.getContextPath() + "/" + clientObj.getUrl() + "/" + locale + "/";
-		clientObj.setShortUrl(getGoogleShortUrl(longUrl));
+		clientObj.setShortUrl(google.getShortUrl(longUrl));
 		
 		curtime = cal.getTimeInMillis();
 		logger.trace("PERF: after get short url took ms: " + (curtime - starttime));
@@ -171,6 +175,7 @@ public class PoiController { // NO_UCD
 		return "poi-map";
 	}
 	
+	/*
 	@Cacheable("urls")
 	public String getGoogleShortUrl(String longUrl) {
 		String shortUrl = longUrl;
@@ -209,6 +214,7 @@ public class PoiController { // NO_UCD
 		}
 		return shortUrl;
 	}
+	*/
 	
 	
 	@Cacheable("pois")

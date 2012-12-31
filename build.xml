@@ -5,6 +5,8 @@
       <property name="build.compiler" value="javac1.7"/>
       <property name="build.dir" value="build/classes"/>
       <property name="src.dir" value="src"/>
+      <property name="src.test" value="test"/>
+      <property name="reports.tests" value="reports/junit-tests"/>
       <property name="config.dir" value="/etc/mobile-city-gate"/>
       <property name="lib.dir" value="lib"/>
   	  <property name="resources.dir" value="WebContent/resources"/>
@@ -14,11 +16,20 @@
   	<property name="java.home" value="/opt/java7"/>
       <property name="tomcat.home" value="/var/lib/tomcat6"/>
       <property name="deploy.dir" value="${tomcat.home}/webapps"/>
+      <property name="servlet.home" value="/usr/share/tomcat6"/>
       <property name="servlet.jar" value="lib/servlet-api.jar"/>
   	
   	<path id="master-classpath">
+  	     
   	  	  <fileset dir="${lib.dir}" includes="*.jar"/>
-  	  	  <fileset dir="${tomcat.home}" includes="${servlet.jar}"/>
+  	  	  <fileset dir="${servlet.home}" includes="${servlet.jar}"/>
+  	  	  <!--
+  	  	  <fileset dir="${build.dir}" includes="*.class"/>
+  	  	 
+  	  	  <pathelement location="${lib.dir}"/>
+  	  	  <pathelement location="${tomcat.home}"/>
+  	  	  -->
+  	  	  <pathelement path="${build.dir}"/>
   	</path>
   	
   	<property name="executable-full-path" location="${env.PATH}"/>
@@ -116,7 +127,28 @@
   <target name="stopTomcat">
   	<exec executable="systemctl stop tomcat.service" />
   </target>
-  	
+
+  
+  <target name="unit-tests" >
+
+    <mkdir dir="${reports.tests}"/>
+    <copy file="resources/log4j_junit.properties" tofile="${build.dir}/log4j.properties" />
+
+    <junit printsummary="withOutAndErr" haltonfailure="yes">
+      <classpath refid="master-classpath"/>
+
+      <formatter type="plain"/>
+      <!-- <formatter type="xml"/> -->
+
+      <batchtest fork="yes" todir="${reports.tests}">
+        <fileset dir="${src.test}">
+          <include name="**/tests/**/*Test*.java"/>
+        </fileset>
+      </batchtest>
+
+    </junit>
+
+  </target>	
 
       <target name="cleanWebApp">
   	      <delete file="${deploy.dir}/${war.file.name}"/>
@@ -184,7 +216,7 @@
 		  />
           <war destfile="dist/${war.file}##rhc-${current.time}.war" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
-              <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
+              <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar,org.springframework.test-*.jar,junit.jar"/>
               <classes dir="${build.dir}" includes="**/*.*" excludes="mobile-city-gate-*.xml"/>
           	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.js,**/jquery+mobile-min.*.js,**/cms.js,**/poi-map.js"/>
           	  <!-- <zipfileset dir="WebContent" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" /> -->
@@ -252,7 +284,7 @@
 		  />
           <war destfile="dist/${war.file}##cloudbees-${current.time}.war" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
-              <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
+              <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar,org.springframework.test-*.jar,junit.jar"/>
               <classes dir="${build.dir}" includes="**/*.*" excludes="mobile-city-gate-*.xml"/>
           	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.js,**/jquery+mobile-min.*.js,**/cms.js,**/poi-map.js"/>
           	  <!-- <zipfileset dir="WebContent" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" /> -->
@@ -264,7 +296,7 @@
       <target name="war" depends="clean, prepare-war, minify_js_css, optimize_images">
           <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
-              <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar"/>
+              <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar,org.springframework.test-*.jar,junit.jar"/>
               <classes dir="${build.dir}" includes="**/*.*"/>
           	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.js,**/jquery+mobile-min.*.js,**/cms.js,**/poi-map.js"/>
           	  <zipfileset dir="WebContent" includes="*.jsp" />
