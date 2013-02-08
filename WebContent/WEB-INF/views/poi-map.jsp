@@ -247,7 +247,7 @@
 <script type="text/javascript" src="<c:url value='/resources/global/js/poi-map.js'/>" ></script>
 --%> 
 <%-- needed for map --%>
-<script async type="text/javascript" src="<c:url value='/resources/global/js/map-min.js'/>" ></script>
+<script type="text/javascript" src="<c:url value='/resources/global/js/map-min.js'/>" ></script>
 
 <script async>
 <compress:js>
