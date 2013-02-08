@@ -33,7 +33,7 @@ public class AboutController { // NO_UCD
 	@Autowired
 	private MessageDao messageDao;
 
-	@RequestMapping(value = "/{client}/{locale}/about/")
+	@RequestMapping(value = "/{client}/{locale}/about")
 	public String about(@PathVariable("client") String client, @PathVariable("locale") String locale, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.debug("entering method about");
 		
@@ -47,9 +47,8 @@ public class AboutController { // NO_UCD
 		Client clientObj = clientDao.getClientByUrl(client);
 		HashMap<String, String> hashMessages = messageDao.getMessagesByPageClientIdLocale("about", clientObj.getId(), locale);
 		
-        model.addAttribute("client", clientObj);
         model.addAttribute("config", config);
-        model.addAttribute("messages", hashMessages);
+        model.addAttribute("messagesAbout", hashMessages);
         model.addAttribute("locale", locale);
         logger.debug("leaving method about");
 		return "about";

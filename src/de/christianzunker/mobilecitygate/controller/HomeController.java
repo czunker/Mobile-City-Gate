@@ -55,14 +55,12 @@ public class HomeController { // NO_UCD
 		
 		Client clientObj = clientDao.getClientByUrl(client);
 		HashMap<String, String> hashMessagesHome = messageDao.getMessagesByPageClientIdLocale("home", clientObj.getId(), locale);
-		HashMap<String, String> hashMessagesAbout = messageDao.getMessagesByPageClientIdLocale("about", clientObj.getId(), locale);
 		List<Language> languages = languageDao.getLanguagesByClient(clientObj.getId());
 		
         model.addAttribute("locale", locale);
         model.addAttribute("config", config);
         model.addAttribute("languages", languages);
         model.addAttribute("messagesHome", hashMessagesHome);
-        model.addAttribute("messagesAbout", hashMessagesAbout);
         model.addAttribute("client", clientObj);
         logger.debug("leaving method home");
 		return "home";

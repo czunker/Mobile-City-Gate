@@ -32,7 +32,7 @@
 	</div>
 		<div data-role="page" id="homepage">
 			<div data-role="content" id="homepage-content">
-			<a id="aboutbutton" href="#aboutpage" data-icon="info" data-iconpos="notext" data-role="button"><c:out value="${messagesHome.about}"/></a>
+			<a id="aboutbutton" href="<c:url value="/${client.url}/${locale}/about" />" data-icon="info" data-iconpos="notext" data-role="button"><c:out value="${messagesHome.about}"/></a>
 			<img id="homepageBgImg" class="bg-img" alt="<c:out value="${messagesHome.alttext_startimage}"/>" src="<c:url value="/resources/global/css/images/ajax-loader.png" />" >
 			<c:if test="${fn:length(languages) > 1}" >
 				<div id="language" data-role="controlgroup" data-type="vertical">
@@ -45,32 +45,6 @@
 			</div>
 		</div>
 			
-	<div data-role="page" id="aboutpage">
-		<div data-role="header" data-backbtn="true">';
-			<h1><c:out value="${messagesAbout.header}"/></h1>
-			</div>
-			<div data-role="content">
-			<p>
-			<c:out value="${messagesAbout.responsible}" escapeXml="false" /><br>
-			</p>
-			<p>
-			<c:out value="${messagesAbout.technical}" escapeXml="false" /><br>
-			<a href="http://www.mobile-discovery.com">www.mobile-discovery.com</a>
-			</p>
-			<p>
-			<c:out value="${messagesAbout.privacy}"/>
-			</p>
-			<p>
-			<c:out value="${messagesAbout.license}"/><br>
-			<a href="http://creativecommons.org/licenses/by-sa/2.0/"><img src="<c:url value="/resources/global/images/cc-by-sa.png" />" alt="[CC-BY-SA]" width="88" height="31" style="float:left; margin-right: 1em;"/></a> 
-			</p>
-			<br>
-			<p>
-			<c:out value="${messagesAbout.icons}"/><br>
-			<a href="http://icons.anatom5.de/">http://icons.anatom5.de/</a><br>
-			</p>
-			</div>
-	</div>
 	
 	<%-- 
 	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery-1.5.1.min.js'/>"></script>
