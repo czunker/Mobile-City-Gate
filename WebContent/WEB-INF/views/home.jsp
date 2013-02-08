@@ -76,7 +76,8 @@
 	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery-1.5.1.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery.mobile-1.0a4.min.js'/>"></script>
 	--%>
-	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>" ></script>
+	<%-- TODO: make the async when bg image is set by css --%>
+	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>" ></script>
 	<%-- 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
