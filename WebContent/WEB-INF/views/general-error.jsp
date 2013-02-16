@@ -49,6 +49,6 @@
 	--%>
 	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
 	
-	<jsp:include page="footer.jsp"/>
+	<%@ include file="footer.jsp" %>
 </body>
 </html>
