@@ -11,6 +11,7 @@
 		<meta http-equiv="Content-Language" content="de">
 		<title><c:out value="${messages.title}"/></title>
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
+		<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
 	</head>
 <% out.flush(); %>
 	<body>
@@ -53,8 +54,8 @@
 	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery.mobile-1.0a4.1.min.js'/>"></script>
 	--%>
 	
-	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
-		
-	<jsp:include page="footer.jsp"/>
+	<%-- <jsp:include does not work with <% out.flush(); %> --%>
+	<%@ include file="footer.jsp" %>
 	</body>
 </html>
+<% out.flush(); %>
