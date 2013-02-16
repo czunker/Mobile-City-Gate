@@ -14,7 +14,7 @@
 	</head>
 <% out.flush(); %>
 	<body>
-			
+	<compress:html>		
 	<div data-role="page" id="aboutpage">
 		<div data-role="header" data-backbtn="true">
 			<h1><c:out value="${messagesAbout.header}"/></h1>
@@ -41,7 +41,7 @@
 			</p>
 			</div>
 	</div>
-	
+	</compress:html>
 	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>" ></script>
 	
 	<%@ include file="footer.jsp" %>
