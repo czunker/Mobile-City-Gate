@@ -58,4 +58,3 @@
 	<%@ include file="footer.jsp" %>
 	</body>
 </html>
-<% out.flush(); %>
