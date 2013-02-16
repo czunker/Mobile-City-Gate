@@ -12,6 +12,7 @@
 		<title><c:out value="${messages.title}"/></title>
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 	</head>
+<% out.flush(); %>
 	<body>
 	<compress:html>
 	<div data-role="page">
@@ -52,7 +53,8 @@
 	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery.mobile-1.0a4.1.min.js'/>"></script>
 	--%>
 	
-	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>	
+	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
+		
 	<jsp:include page="footer.jsp"/>
 	</body>
 </html>

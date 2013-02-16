@@ -18,6 +18,7 @@
       <property name="deploy.dir" value="${tomcat.home}/webapps"/>
       <property name="servlet.home" value="/usr/share/tomcat6"/>
       <property name="servlet.jar" value="lib/servlet-api.jar"/>
+  	  <property name="findbugs.home" value="/home/xyz/bin/findbugs" />
   	
   	<path id="master-classpath">
   	     
@@ -32,9 +33,46 @@
   	  	  <pathelement path="${build.dir}"/>
   	</path>
   	
-  	<property name="executable-full-path" location="${env.PATH}"/>
+  	<property name="executable-full-path" location="${env.PATH}" />
   	
-  	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+  	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+  	
+  	<taskdef resource="checkstyletask.properties" classpath="${lib.dir}/checkstyle-5.6-all.jar" />
+  	
+  	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpath="${lib.dir}/pmd-5.0.2.jar:${lib.dir}/jaxen-1.1.1.jar:${lib.dir}/asm-3.3.1.jar" />
+  	
+  	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />
+  	
+  	<target name="pmd">
+  		<pmd shortFilenames="true">
+  			<ruleset>rulesets/java/design.xml</ruleset>
+  			<ruleset>java-basic</ruleset>
+  			<ruleset>java-unusedcode</ruleset>
+  			<formatter type="text" toConsole="true" />
+  			<!-- <formatter type="html" toFile="pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/"/> -->
+  			<fileset dir="${src.dir}">
+  				<include name="**/*.java"/>
+  			</fileset>
+  		</pmd>
+  	</target>
+  	
+  	<target name="checkStyle">
+  		<checkstyle config="sun_checks.xml">
+  			<fileset dir="${src.dir}">
+  				<include name="**/*.java"/>
+  			</fileset>
+  			<formatter type="plain"/>
+  			<!--<formatter type="xml" toFile="checkstyle-result.xml"/>-->
+  		</checkstyle>
+  	</target>
+  	
+  	<target name="findbugs">
+  		<findbugs output="text" home="${findbugs.home}" jvmargs="-Xmx1G">
+  			<auxClasspath refid="master-classpath" />
+  			<sourcePath path="${src.dir}" />
+  			<class location="${build.dir}" />
+  		</findbugs>
+  	</target>
   	
       <target name="backup">
       	  <tstamp/>
@@ -349,7 +387,7 @@
   	</target>
   	
     <!-- <target name="deploy-rhc" depends="war-rhc"> -->
-  	<target name="deploy-rhc">
+  	<target name="deploy-rhc-dev">
   	    <path id="rhc.file.id"> 
     		<fileset dir="dist"> 
         		<include name="mobile-city-gate##rhc*.war"/> 
@@ -366,9 +404,33 @@
         <exec executable="git" dir="${basedir}-rhc/dev">
             <arg value="commit" />
             <arg value="-m" />
-            <arg value="'Deployment ${current.time}'" />
+            <arg value="Deployment ${current.time}" />
         </exec>
         <exec executable="git" dir="${basedir}-rhc/dev">
+            <arg value="push" />
+        </exec>
+  	</target>
+  	
+  	<target name="deploy-rhc-ref">
+  	    <path id="rhc.file.id"> 
+    		<fileset dir="dist"> 
+        		<include name="mobile-city-gate##rhc*.war"/> 
+     		</fileset> 
+		</path>
+		<echo>${rhc.file.id}</echo> 
+		<property name="rhc.file" refid="rhc.file.id"/>
+		<echo>${rhc.file}</echo> 
+  	    <copy file="${rhc.file}" tofile="${basedir}-rhc/ref/webapps/${war.file.name}" />
+        <exec executable="git" dir="${basedir}-rhc/ref">
+            <arg value="add" />
+            <arg value="webapps/${war.file.name}" />
+        </exec>
+        <exec executable="git" dir="${basedir}-rhc/ref">
+            <arg value="commit" />
+            <arg value="-m" />
+            <arg value="Deployment ${current.time}" />
+        </exec>
+        <exec executable="git" dir="${basedir}-rhc/ref">
             <arg value="push" />
         </exec>
   	</target>
