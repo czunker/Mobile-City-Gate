@@ -47,13 +47,6 @@
 	</compress:js>
 	</script>
 	
-	<%-- 
-	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery-1.5.1.min.js'/>"></script>
-	<script async src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
-	<script async src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-	<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery.mobile-1.0a4.1.min.js'/>"></script>
-	--%>
-	
 	<%-- <jsp:include does not work with <% out.flush(); %> --%>
 	<%@ include file="footer.jsp" %>
 	</body>

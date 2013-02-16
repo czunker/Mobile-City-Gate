@@ -26,6 +26,7 @@
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/home-style-min.css'/>" >
 	</head>
 	<body>
+	<compress:html>
 	<div id="loading">
   		<img id="loading-image" src="<c:url value='/resources/global/images/ajax-loader.gif'/>" alt="Loading..." />
   		<span id="loading-text"><c:out value="${messagesHome.loading}"/></span>
@@ -45,17 +46,10 @@
 			</div>
 		</div>
 			
+	</compress:html>
 	
-	<%-- 
-	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery-1.5.1.min.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery.mobile-1.0a4.min.js'/>"></script>
-	--%>
 	<%-- TODO: make the async when bg image is set by css --%>
 	<script type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>" ></script>
-	<%-- 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
-	--%>
 	
 	<script>
 	<compress:js>
