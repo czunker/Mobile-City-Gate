@@ -6,68 +6,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%-- should hide browser address bar --%>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<%-- is needed for screen readers --%>
-<meta http-equiv="Content-Language" content="${locale}">
-<title><c:out value="${messages.title}"/></title>
-<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
-<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/ol-theme/default/style.css'/>" >
-<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/map-style-min.css'/>" >
-<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/poi-map-style-min.css'/>" >
-
-<style type="text/css">
-	<compress:css>
-	<%--can not be externalized, otherwise the map will not be displayed--%>
-	#mapdiv {
-		position: absolute;
-	    top: 0px;
-	    bottom: 0px;
-	    left: 0px;
-	    right: 0px;
-	    <%-- for ie --%>
-	    width:expression((document.documentElement.clientWidth ? document.documentElement.clientWidth : document.body.clientWidth)-200);
-	    height:expression((document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight)-86);
-	    padding: 1px;
-	}
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<%-- should hide browser address bar --%>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<%-- is needed for screen readers --%>
+	<meta http-equiv="Content-Language" content="${locale}">
+	<title><c:out value="${messages.title}"/></title>
+	<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
+	<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/ol-theme/default/style.css'/>" >
+	<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/map-style-min.css'/>" >
+	<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/poi-map-style-min.css'/>" >
 	
-	.ui-icon-phone {
-		background: url("<c:url value='/resources/global/images/phone.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
-	}
-	
-	.ui-icon-notepad {
-		background: url("<c:url value='/resources/global/images/notepad.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
-	}
-	
-	.ui-icon-location {
-		background: url("<c:url value='/resources/${client.url}/images/location.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
-	}
-	
-	.ui-icon-map {
-		background: url("<c:url value='/resources/global/images/compass.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
-	}
-	
-	.ui-icon-twitter {
-		background: url("<c:url value='/resources/global/images/twitter.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
-	}
-	
-	.ui-icon-facebook {
-		background: url("<c:url value='/resources/global/images/facebook.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
-	}
-	
-	.ui-icon-email {
-		background: url("<c:url value='/resources/global/images/email.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
-	}
-	
-	<%--remove then this fix is integrated https://github.com/jquery/jquery-mobile/commit/a881ae79d7310e45294ed2f0e24a825b3191429c --%>
-	.ui-footer .ui-btn-left { position: absolute; left: 10px; top: .4em;  }
-	
-	.ui-footer .ui-btn-right { position: absolute; right: 10px; top: .4em; }
-	</compress:css>
-</style>
+	<style type="text/css">
+		<compress:css>
+		<%--can not be externalized, otherwise the map will not be displayed--%>
+		#mapdiv {
+			position: absolute;
+		    top: 0px;
+		    bottom: 0px;
+		    left: 0px;
+		    right: 0px;
+		    <%-- for ie --%>
+		    width:expression((document.documentElement.clientWidth ? document.documentElement.clientWidth : document.body.clientWidth)-200);
+		    height:expression((document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight)-86);
+		    padding: 1px;
+		}
+		
+		.ui-icon-phone {
+			background: url("<c:url value='/resources/global/images/phone.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
+		}
+		
+		.ui-icon-notepad {
+			background: url("<c:url value='/resources/global/images/notepad.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
+		}
+		
+		.ui-icon-location {
+			background: url("<c:url value='/resources/${client.url}/images/location.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
+		}
+		
+		.ui-icon-map {
+			background: url("<c:url value='/resources/global/images/compass.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
+		}
+		
+		.ui-icon-twitter {
+			background: url("<c:url value='/resources/global/images/twitter.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
+		}
+		
+		.ui-icon-facebook {
+			background: url("<c:url value='/resources/global/images/facebook.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
+		}
+		
+		.ui-icon-email {
+			background: url("<c:url value='/resources/global/images/email.png'/>") no-repeat rgba(0, 0, 0, 0.4) !important;
+		}
+		
+		<%--remove when this fix is integrated https://github.com/jquery/jquery-mobile/commit/a881ae79d7310e45294ed2f0e24a825b3191429c --%>
+		.ui-footer .ui-btn-left { position: absolute; left: 10px; top: .4em;  }
+		
+		.ui-footer .ui-btn-right { position: absolute; right: 10px; top: .4em; }
+		</compress:css>
+	</style>
 </head>
+<% out.flush(); %>
 <body>
 <compress:html>
 	<%-- 

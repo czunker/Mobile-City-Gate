@@ -12,6 +12,7 @@
 		<title><c:out value="${messagesHome.title}"/></title>
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 	</head>
+<% out.flush(); %>
 	<body>
 			
 	<div data-role="page" id="aboutpage">

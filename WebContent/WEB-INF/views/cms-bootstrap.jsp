@@ -100,6 +100,7 @@
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/ol-theme/default/style.css'/>" >
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/colorpicker.css'/>" />
 </head>
+<% out.flush(); %>
 <body style="padding-top: 40px;">
 		<div class="navbar navbar-inverse navbar-fixed-top">
 		    <div class="navbar-inner">

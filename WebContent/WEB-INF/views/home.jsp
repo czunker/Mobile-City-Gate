@@ -25,6 +25,7 @@
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/${client.url}/css/home-style-min.css'/>" >
 	</head>
+<% out.flush(); %>
 	<body>
 	<compress:html>
 	<div id="loading">

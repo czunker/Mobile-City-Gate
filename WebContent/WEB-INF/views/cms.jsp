@@ -76,6 +76,7 @@
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/ol-theme/default/style.css'/>" >
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/colorpicker.css'/>" />
 </head>
+<% out.flush(); %>
 <body>
 	
 	<div>
