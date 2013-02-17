@@ -13,6 +13,8 @@
 	<%-- is needed for screen readers --%>
 	<meta http-equiv="Content-Language" content="${locale}">
 	<title><c:out value="${messages.title}"/></title>
+	<%-- dns prefetch for piwik server --%>
+	<link href="//www.mobiles-stadttor.de" rel="dns-prefetch" />
 	<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 	<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/ol-theme/default/style.css'/>" >
 	<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/map-style-min.css'/>" >

@@ -10,6 +10,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta http-equiv="Content-Language" content="de">
 		<title><c:out value="${messages.title}"/></title>
+		<link href="//www.mobiles-stadttor.de" rel="dns-prefetch" />
 		<link type="text/css" rel="stylesheet" href="<c:url value='/resources/global/css/jquery.mobile-min.css'/>" >
 		<script async type="text/javascript" src="<c:url value='/resources/global/js/jquery+mobile-min.js'/>"></script>
 	</head>
