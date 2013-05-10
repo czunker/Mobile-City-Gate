@@ -98,7 +98,9 @@ public class PoiController { // NO_UCD
 		logger.trace("PERF: after get messages took ms: " + (curtime - starttime));
         
 		//get shortened URL for easier Twitter usage
-		String longUrl = "http://" + request.getServerName() + request.getContextPath() + "/" + clientObj.getUrl() + "/" + locale + "/";
+		//String longUrl = "http://" + request.getServerName() + request.getContextPath() + "/" + clientObj.getUrl() + "/" + locale + "/";
+		// TODO: get correct server name programatically (currently it is localhost)
+		String longUrl = "http://m.mobiles-stadttor.de" + request.getContextPath() + "/" + clientObj.getUrl() + "/" + locale + "/";
 		clientObj.setShortUrl(google.getShortUrl(longUrl));
 		
 		curtime = cal.getTimeInMillis();

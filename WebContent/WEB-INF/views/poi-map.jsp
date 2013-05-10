@@ -12,6 +12,12 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<%-- is needed for screen readers --%>
 	<meta http-equiv="Content-Language" content="${locale}">
+	<%-- 
+	the following line is needed to set the zoom factor on android mobile phones correctly
+	http://stackoverflow.com/questions/6213868/jquery-mobile-android-browser
+	http://engageinteractive.co.uk/blog/tutorial-building-a-website-for-the-iphone
+	--%>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
 	<title><c:out value="${messages.title}"/></title>
 	<%-- dns prefetch for piwik server --%>
 	<link href="//www.mobiles-stadttor.de" rel="dns-prefetch" />
@@ -529,7 +535,9 @@
 		        var social = "";
 		        <c:if test='${client.social}'>
 			        var host =  window.location.hostname;
-			        var twitter = "http://twitter.com/home?status=Das mobile Stadttor%20<c:out value='${client.name}'/>%20<c:out value='${client.shortUrl}'/>";
+			        var twitter = "http://twitter.com/home?status=<c:out value='${messagesMap.socialTitle}'/>%20<c:out value='${client.shortUrl}'/>";
+			        <%--var twitter = "http://twitter.com/home?status=Handy-Kulturführer \"Kultohr\" des Rhein-Kreis Neuss%20<c:out value='${client.shortUrl}'/>";--%>
+			        <%--var twitter = "http://twitter.com/home?status=Das mobile Stadttor%20<c:out value='${client.name}'/>%20<c:out value='${client.shortUrl}'/>";--%>
 				    var facebook = 'http://www.facebook.com/sharer.php?u=http://'+host+"<c:url value='/${client.url}/${locale}/' />";
 				    
 				    social = "<br><a href='mailto:?subject=<c:out value='${client.name}'/>&body=http://"+host+"<c:url value='/${client.url}/${locale}/' />' data-icon='email' data-role='button' rel='external' data-transition='pop'>E-Mail</a>";
