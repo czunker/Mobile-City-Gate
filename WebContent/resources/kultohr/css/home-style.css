@@ -27,6 +27,7 @@
 #loading-text {
   position: absolute;
   top: 50%;
+  left: 0px;
   width: 100%;
   color: #fff;
   background-color: #00adef;
