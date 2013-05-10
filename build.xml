@@ -88,6 +88,10 @@
   	   <arg value="${resources.dir}"/>
   	 </exec>
   	</target>
+
+	<target name="hash2file">
+	  <exec executable="scripts/hash2file.sh" />
+        </target>
   	
   	<target name="minify_js_css">
 	      <exec executable="${java.home}/bin/java">
@@ -255,6 +259,7 @@
 		  />
           <war destfile="dist/${war.file}##rhc-${current.time}.war" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
+              <metainf dir="" includes="git_hash_for_this_build" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar,org.springframework.test-*.jar,junit.jar"/>
               <classes dir="${build.dir}" includes="**/*.*" excludes="mobile-city-gate-*.xml"/>
           	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.js,**/jquery+mobile-min.*.js,**/cms.js,**/poi-map.js"/>
@@ -323,6 +328,7 @@
 		  />
           <war destfile="dist/${war.file}##cloudbees-${current.time}.war" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" excludes="**/mobile-city-gate-security.xml,**/ehcache.xml,**/mobile-city-gate-servlet.xml" />
+              <metainf dir="" includes="git_hash_for_this_build" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar,org.springframework.test-*.jar,junit.jar"/>
               <classes dir="${build.dir}" includes="**/*.*" excludes="mobile-city-gate-*.xml"/>
           	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.js,**/jquery+mobile-min.*.js,**/cms.js,**/poi-map.js"/>
@@ -335,6 +341,7 @@
       <target name="war" depends="clean, prepare-war, minify_js_css, optimize_images">
           <war destfile="dist/${war.file.name}" webxml="WebContent/WEB-INF/web.xml">
               <webinf dir="WebContent/WEB-INF" includes="**/*" />
+              <metainf dir="" includes="git_hash_for_this_build" />
               <lib dir="${lib.dir}" excludes="servlet-api.jar,jsch.jar,ant-contrib-1.0b3.jar,org.springframework.test-*.jar,junit.jar"/>
               <classes dir="${build.dir}" includes="**/*.*"/>
           	  <zipfileset dir="WebContent/resources" prefix="resources" excludes="**/ge*.js,**/poi-map-min.js,**/home-style.css,**/map-style.css,**/jquery.mobile*.min.css,**/Open*mobile.js,**/jquery.mobile*.js,**/jquery-?.?.?.js,**/jquery+mobile-min.*.js,**/cms.js,**/poi-map.js"/>
@@ -355,7 +362,7 @@
         <delete dir="dist"/>
     </target>
     
-  	<target name="prepare-war">
+  	<target name="prepare-war" depends="hash2file">
   	    <mkdir dir="dist"/>
   	    <!-- <mkdir dir="${build.dir}"/> -->
   	    <touch> 
