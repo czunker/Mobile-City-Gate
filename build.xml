@@ -35,13 +35,13 @@
   	
   	<property name="executable-full-path" location="${env.PATH}" />
   	
-  	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+<!--  	<taskdef resource="net/sf/antcontrib/antcontrib.properties" /> -->
   	
   	<taskdef resource="checkstyletask.properties" classpath="${lib.dir}/checkstyle-5.6-all.jar" />
   	
   	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpath="${lib.dir}/pmd-5.0.2.jar:${lib.dir}/jaxen-1.1.1.jar:${lib.dir}/asm-3.3.1.jar" />
   	
-  	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />
+<!--  	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />-->
   	
   	<target name="pmd">
   		<pmd shortFilenames="true">
@@ -66,6 +66,7 @@
   		</checkstyle>
   	</target>
   	
+<!--
   	<target name="findbugs">
   		<findbugs output="text" home="${findbugs.home}" jvmargs="-Xmx1G">
   			<auxClasspath refid="master-classpath" />
@@ -73,7 +74,7 @@
   			<class location="${build.dir}" />
   		</findbugs>
   	</target>
-  	
+-->  	
       <target name="backup">
       	  <tstamp/>
       	  <tar destfile="../../${war.file}.${DSTAMP}.tar.gz" compression="gzip" basedir="./" excludes="dist/${war.file.name}, **/*.class, .git/**" />
