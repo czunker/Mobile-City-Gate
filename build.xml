@@ -2,7 +2,7 @@
 
       <property environment="env"/>
 
-      <property name="build.compiler" value="javac1.7"/>
+      <property name="build.compiler" value="javac1.6"/>
       <property name="build.dir" value="build/classes"/>
       <property name="src.dir" value="src"/>
       <property name="src.test" value="test"/>
@@ -375,7 +375,8 @@
   	</target>
 
     <target name="compile" depends="clean, prepare-war">
-        <javac executable="/opt/java7/bin/javac" compiler="${build.compiler}" srcdir="${src.dir}" destdir="${build.dir}" classpathref="master-classpath"/>
+        <echo message="Using Java version ${ant.java.version}."/>
+        <javac fork="yes" executable="/usr/bin/javac" target="1.6" srcdir="${src.dir}" destdir="${build.dir}" classpathref="master-classpath"/>
     </target>
     
     <target name="deploy-cloudbees">

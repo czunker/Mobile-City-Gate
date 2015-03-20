@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 public class Config {
 	
 	private String googleApiKey;
+    private String googleApiUrl;
 	private String tilesServers;
 	private String piwikServer;
 	private int googleTimeout;
@@ -48,4 +49,13 @@ public class Config {
 	public void setTilesServers(String tilesServers) {
 		this.tilesServers = tilesServers;
 	}
+
+    public String getGoogleApiUrl() {
+        return googleApiUrl;
+    }
+
+    @Value("${googleApiUrl}")
+    public void setGoogleApiUrl(String googleApiUrl) {
+        this.googleApiUrl = googleApiUrl;
+    }
 }

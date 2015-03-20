@@ -28,7 +28,8 @@ public class GoogleServices {
 	public String getShortUrl(String longUrl) {
 		String shortUrl = longUrl;
 		String googleApiKey = config.getGoogleApiKey();
-		String googleUrl = "https://www.googleapis.com/urlshortener/v1/url?" + googleApiKey;
+        String googleUrl = config.getGoogleApiUrl() + googleApiKey;
+		//String googleUrl = "https://www.googleapis.com/urlshortener/v1/url?key=" + googleApiKey;
 		try {
 			com.sun.jersey.api.client.Client jsonClient = com.sun.jersey.api.client.Client.create();
 			int timeout = config.getGoogleTimeout();
@@ -37,7 +38,8 @@ public class GoogleServices {
 				timeout = 200;
 			}
 			logger.trace("Google timeout: " + timeout + "ms");
-			jsonClient.setConnectTimeout(timeout);
+            logger.debug("Google url: " + googleUrl);
+            jsonClient.setConnectTimeout(timeout);
 			WebResource webResource = jsonClient.resource(googleUrl);
 			String jsonRequest = "{ \"longUrl\": \"" + longUrl + "\" }";
 			logger.debug("jsonRequest: " + jsonRequest);
